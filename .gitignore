@@ -1,0 +1,4 @@
+*.war
+*~
+*.class
+dist/
