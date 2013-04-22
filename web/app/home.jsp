@@ -25,6 +25,8 @@
         <script src="../js/mustache.min.js"></script>
         <script src="../js/timeline.min.js"></script>
         <script src="../js/bootstrap.min.js"></script>
+        <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAUC9VWHP1FfCpjU5Rs-wpN7vRwSFp4-bw&sensor=true">
+        </script>
     </head>
     <body>
         <div class="navbar navbar-inverse navbar-fixed-top">
@@ -51,13 +53,14 @@
                     <!--Sidebar content-->
                     <div class="well sidebar-nav">
                         <ul class="nav nav-list">
-                            <li id="yourtrips" class="nav-header">Your Trips</li>
+                            <li class="nav-header">Your Trips</li>
+                            <div id="yourtrips">
+                                
+                            </div>
                             <li class="active"><a href="#">Link</a></li>
-                            
+
                             <li class="nav-header">Sidebar</li>
                             <li><a href="#">Link</a></li>
-                            <li><a href="#">Link</a></li>
-                            <li>Hi</li>
                         </ul>
                     </div><!--/.well -->
                     <div id="setting">
@@ -81,7 +84,7 @@
 
                 <div class="span9">
                     <div class="hero-unit">
-                        
+
                     </div>
                     <div class="row-fluid">
                         <div id="wrap">
@@ -97,21 +100,11 @@
                                 </ul>    
                             </div>
                         </div>
-                        <div class="span4">
-                            <h2>Heading</h2>
-                            <p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui. </p>
-                            <p><a class="btn" href="#">View details &raquo;</a></p>
-                        </div><!--/span-->
-                        <div class="span4">
-                            <h2>Heading</h2>
-                            <p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui. </p>
-                            <p><a class="btn" href="#">View details &raquo;</a></p>
-                        </div><!--/span-->
-                        <div class="span4">
-                            <h2>Heading</h2>
-                            <p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui. </p>
-                            <p><a class="btn" href="#">View details &raquo;</a></p>
-                        </div><!--/span-->
+                        <div class="row-fluid">
+                            <div id="mapwrapper"  class="span12">
+                                <div style="height:500px;" id="map-canvas"/>
+                            </div>
+                        </div>
                     </div><!--/row-->                    
                 </div>
             </div>

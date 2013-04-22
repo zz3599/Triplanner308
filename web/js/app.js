@@ -1,9 +1,13 @@
 ;
 (function(world) {
     var TRIPURL = "trip";
-    var TRIPTEMPLATE = "<li class='atrip' id={{id}}>{{title}}<p id='description'>{{description}}</description><br>\
+    var TRIPTEMPLATE = "<li class='atrip' id={{id}}><a href='#'>{{title}}</a><p id='description'>{{description}}</description><br>\
 From: {{startLocation}} {{startTime}}, End: {{endLocation}} {{endTime}} </li> ";
+    /* Main app */
     var app = {
+        tripid: null,
+        dayid: null,
+        eventid: null,
         init: function() {
             app.initCalendar();
             app.initData();
@@ -15,29 +19,32 @@ From: {{startLocation}} {{startTime}}, End: {{endLocation}} {{endTime}} </li> ";
                 var trips = JSON.parse(data);
                 $.each(trips, function(i, e) {
                     var elem = $(Mustache.render(TRIPTEMPLATE, e));
-                    elem.insertAfter($('#yourtrips'));
+                    elem.appendTo($('#yourtrips'));
                 });
             });
         },
         initHandlers: function() {
-            $('.atrip').click(function() {
+            $('#yourtrips').on('click', 'li', function(e) {
+                $.each($(this).siblings(), function(i, e) {
+                    $(e).removeClass('selected');
+                });
                 var tripid = $(this).attr('id');
+                app.tripid = tripid;
+                $(this).addClass('selected');
                 //send post request
+                //update the hero div
             });
             $('#createtrip').click(function(e) {
                 e.preventDefault();
-                app.post(TRIPURL, $('#newtrip').serialize(),
+                $.post(TRIPURL, $('#newtrip').serialize()).success(
                         function(result) {
                             var json = JSON.parse(result);
-                        },
-                        function(x, f, t) {
-
-                        }
-                );
+                            if ($.isEmptyObject(json))
+                                return;
+                            var elem = $(Mustache.render(TRIPTEMPLATE, json));
+                            elem.appendTo($('#yourtrips'));
+                        });
             });
-        },
-        post: function(url, data, success, fail) {
-            $.post(url, data, success, fail);
         },
         initCalendar: function() {
             var timeline = new Timeline('timeline', new Date("Wed Jul 01 2009"));
@@ -84,6 +91,31 @@ From: {{startLocation}} {{startTime}}, End: {{endLocation}} {{endTime}} </li> ";
     };
     world.app = app;
     app.init();
+    function initialize() {
+        var mapOptions = {
+            center: new google.maps.LatLng(-34.397, 150.644),
+            zoom: 8,
+            mapTypeId: google.maps.MapTypeId.ROADMAP
+        };
+        var map = new google.maps.Map(document.getElementById("map-canvas"), mapOptions);
+        var geocoder = new google.maps.Geocoder();
+        
+        $('#startLocation').keyup(codeAddress);
+        function codeAddress() {
+            var address = document.getElementById("startLocation").value;
+            geocoder.geocode({'address': address}, function(results, status) {
+                if (status == google.maps.GeocoderStatus.OK) {
+                    map.setCenter(results[0].geometry.location);
+                    var marker = new google.maps.Marker({
+                        map: map,
+                        position: results[0].geometry.location
+                    });
+                } else {//squelch
+                }
+            });
+        }
+    }
+    google.maps.event.addDomListener(window, 'load', initialize);
 })(window);
 
 

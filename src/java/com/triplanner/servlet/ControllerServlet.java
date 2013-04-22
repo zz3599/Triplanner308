@@ -92,7 +92,7 @@ public class ControllerServlet extends HttpServlet {
             request.setAttribute("errorMessage", "Invalid username/password");
             request.getRequestDispatcher("index.jsp").forward(request, response);
         } else {
-            request.getSession(true).setAttribute("user", user);
+            request.getSession().setAttribute("user", user);
             response.sendRedirect("app/home");
         }
     }
@@ -120,7 +120,7 @@ public class ControllerServlet extends HttpServlet {
             request.setAttribute("errorMessage", "Invalid registration");
             request.getRequestDispatcher("index.jsp").forward(request, response);
         } else {
-            request.getSession(true).setAttribute("user", user);
+            request.getSession().setAttribute("user", user);
             response.sendRedirect("app/home.jsp");
         }
     }
