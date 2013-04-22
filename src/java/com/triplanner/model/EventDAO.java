@@ -21,8 +21,8 @@ import java.util.List;
  * @author brook
  */
 public class EventDAO implements Serializable{
-    private static final String CREATEEVENT = "Insert into events (tripdayid, starttime, endtime, eventtype, comment)"
-            + " values (?, ?, ?, ?, ?)";
+    private static final String CREATEEVENT = "Insert into events (tripdayid, starttime, endtime, eventtype, comment, startlocation, endlocation)"
+            + " values (?, ?, ?, ?, ?, ?, ?)";
     private static final String UPDATEEVENT = "Update events set starttime=?, endtime=?, eventtype=?, comment=? "
             + "where id=?";
     private static final String SELECTEVENTS = "Select * from events where tripdayid=?";
@@ -45,7 +45,8 @@ public class EventDAO implements Serializable{
         return null;        
     }
     
-    public static Event createEvent(Tripday tripday, Timestamp start, Timestamp end, int eventType, String comment){
+    public static Event createEvent(Tripday tripday, Timestamp start, Timestamp end, int eventType, String comment,
+            String startLocation, String endLocation){
         try {
             Connection connection = DB.getConnection();
             PreparedStatement ps = connection.prepareStatement(CREATEEVENT, Statement.RETURN_GENERATED_KEYS);
@@ -54,10 +55,12 @@ public class EventDAO implements Serializable{
             ps.setTimestamp(3, end);
             ps.setInt(4, eventType);
             ps.setString(5, comment);
+            ps.setString(6, startLocation);
+            ps.setString(7, endLocation);
             int result = ps.executeUpdate();
             ResultSet rs = ps.getGeneratedKeys();
             if(rs.next()){
-               return new Event(rs.getInt(1), tripday.id, start, end, eventType, comment);
+               return new Event(rs.getInt(1), tripday.id, start, end, startLocation, endLocation, eventType, comment);
             }             
         } catch(Exception e){
             e.printStackTrace();
@@ -65,7 +68,8 @@ public class EventDAO implements Serializable{
         return null;        
     }
     
-    public static Event updateEvent(Event event, Timestamp start, Timestamp end, int eventType, String comment){
+    public static Event updateEvent(Event event, Timestamp start, Timestamp end, String startLocation, String endLocation, 
+            int eventType, String comment){
         try {
             Connection connection = DB.getConnection();
             PreparedStatement ps = connection.prepareStatement(UPDATEEVENT);           
@@ -76,7 +80,7 @@ public class EventDAO implements Serializable{
             ps.setInt(5, event.id);
             int result = ps.executeUpdate();
             if(result == 1){
-               return new Event(event.id, event.tripdayid, start, end, eventType, comment);
+               return new Event(event.id, event.tripdayid, start, end, startLocation, endLocation, eventType, comment);
             }             
         } catch(Exception e){
             e.printStackTrace();
@@ -104,9 +108,11 @@ public class EventDAO implements Serializable{
         int tripdayid = rs.getInt("tripdayid");
         Timestamp startTime = rs.getTimestamp("starttime");
         Timestamp endTime = rs.getTimestamp("endtime");
+        String startLocation = rs.getString("startlocation");
+        String endLocation = rs.getString("endlocation");
         int eventType = rs.getInt("eventtype");
         String comment = rs.getString("comment");
-        return new Event(id, tripdayid, startTime, endTime, eventType, comment);
+        return new Event(id, tripdayid, startTime, endTime, startLocation, endLocation, eventType, comment);
     }
 
     

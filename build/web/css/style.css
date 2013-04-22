@@ -7,8 +7,6 @@ body
     font-family: sans-serif;
     font-size: 10px;
     background-color: #eef1f5;
-    min-width: 1400px;
-    max-width: 1550px;
         
     /*background: url(../images/index.png) no-repeat;*/
 }
@@ -39,7 +37,7 @@ h2
 }
 .settingInput{
     padding:5px;
-    width:220px;
+    width:140px;
     margin-left: 10px;
 }
 .search{
@@ -109,7 +107,7 @@ h2
 #leftBar{
     position: relative;
     float:left;
-    width:210px;
+    width:200px;
     height:100%;
     float: top;
     border: solid 1px;
@@ -145,9 +143,8 @@ h2
 }
 #center{
     position: relative;
-    width: 80%;
+    width: 1200px;
     left:220px;
-    height: 900px;
 }
 #del{
     background: url(../images/x.png);

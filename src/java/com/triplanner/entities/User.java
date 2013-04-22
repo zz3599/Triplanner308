@@ -4,6 +4,8 @@
  */
 package com.triplanner.entities;
 
+import org.json.JSONObject;
+
 /**
  *
  * @author brook
@@ -25,6 +27,15 @@ public class User {
         this.authority = authority;
     }
 
+    public JSONObject toJSON(){
+        JSONObject o = new JSONObject();
+        o.put("id", this.id);
+        o.put("email", this.email);
+        o.put("firstname", this.firstname);
+        o.put("lastname", this.lastname);
+        return o;
+    }
+    
     public int getId(){
         return id;
     }

@@ -5,6 +5,7 @@
 package com.triplanner.entities;
 
 import java.sql.Timestamp;
+import org.json.JSONObject;
 
 /**
  *
@@ -18,6 +19,17 @@ public class Tripday {
     public String endLocation;
     public String comment;
     public int daynum;
+    
+    public JSONObject toJSON(){
+        JSONObject o = new JSONObject();
+        o.put("id", this.id);
+        o.put("tripid", this.tripid);
+        o.put("startLocation", this.startLocation);
+        o.put("endLocation", this.endLocation);
+        o.put("comment", this.comment);
+        o.put("daynum", this.daynum);
+        return o;
+    }
     
     public Tripday(int id, int tripid, Timestamp date, String startLocation, String endLocation, String comment, int daynum) {
         this.id = id;
