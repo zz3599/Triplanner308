@@ -5,6 +5,7 @@
 package com.triplanner.entities;
 
 import java.sql.Timestamp;
+import java.util.List;
 import org.json.JSONObject;
 
 /**
@@ -19,6 +20,7 @@ public class Tripday {
     public String endLocation;
     public String comment;
     public int daynum;
+    public List<Event> events;     
     
     public JSONObject toJSON(){
         JSONObject o = new JSONObject();

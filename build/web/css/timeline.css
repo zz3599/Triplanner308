@@ -101,6 +101,7 @@
     text-transform: uppercase;
     text-align: center;
     width: 20px;
+    line-height: normal;
 }
 
 .timeline_top div {
@@ -136,6 +137,7 @@
     position: absolute; 
     font-family: "Lucida Grande", Lucida Sans Unicode, Tahoma, Arial;
     font-size: 8pt;
+    z-index: 1000;
 }
 
 .timeline_bubble .bubble_top,
@@ -187,4 +189,12 @@
     color: #fff;
     font-weight: normal;
     margin: 3px 0px 0px 0px;
+}
+
+.timelineadd{
+    width:22px;
+    height:20px;
+    background-image: url(../images/add.png);  
+    background-position:  0px 0px;
+    background-repeat: no-repeat;
 }

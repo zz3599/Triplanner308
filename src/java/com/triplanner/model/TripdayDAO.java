@@ -98,11 +98,11 @@ public class TripdayDAO implements Serializable {
         return null;
     }
 
-    public static List<Tripday> getAllTripDays(Trip trip) {
+    public static List<Tripday> getAllTripDays(int tripid) {
         try {
             Connection connection = DB.getConnection();
             PreparedStatement ps = connection.prepareStatement(ALLTRIPDAYS);
-            ps.setInt(1, trip.id);
+            ps.setInt(1, tripid);
             ResultSet rs = ps.executeQuery();
             List<Tripday> tripdays = new ArrayList<Tripday>();
             while (rs.next()) {

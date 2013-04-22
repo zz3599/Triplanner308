@@ -91,7 +91,11 @@
                             <div id="timeline">
                                 <ul>            
                                     <li class="July first, don't forget!" title="Wed Jul 1 2009">Microsoft wants to buy yahoo. What do you think?</li>
-                                    <li class="Idependance Day" title="Sat Jul 4 2009">Happy independance day America</li>
+                                    <li class="Bah first, don't forget!" title="Wed Jul 1 2009">Microsoft wants to buy yahoo. What do you think?</li>
+                                    <li class="Bah first, don't forget!" title="Wed Jul 1 2009">Microsoft wants to buy yahoo. What do you think?</li>
+                                    <li class="Bah first, don't forget!" title="Wed Jul 1 2009">Microsoft wants to buy yahoo. What do you think?</li>
+                                    <li class="Bah first, don't forget!" title="Wed Jul 1 2009">Microsoft wants to buy yahoo. What do you think?</li>
+                                    <li class="Independance Day" title="Sat Jul 4 2009">Happy independance day America</li>
                                     <li class="Jenny day" title="Sun Jul 19 2009">Must get the biggest toy I can to make Jenny really happy :)</li>
                                     <li class="American Pie 4 is coming out" title="Thu Jul 23 2009">We really need to watch this movie. The ratings are so high!</li>
                                     <li class="DenonStudio is shows off the new Timeline calendar" title="Wed Jul 22 2009">This script is really hot. Can't wait to have it</li>

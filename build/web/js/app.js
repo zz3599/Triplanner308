@@ -1,13 +1,17 @@
 ;
 (function(world) {
     var TRIPURL = "trip";
-    var TRIPTEMPLATE = "<li class='atrip' id={{id}}><a href='#'>{{title}}</a><p id='description'>{{description}}</description><br>\
+    var TRIPDETAILS = "tripdetails";
+    var TRIPTEMPLATE = "<li class='atrip' id={{id}} start={{startTime}} end={{endTime}}><a href='#'>{{title}}</a><p id='description'>{{description}}</description><br>\
 From: {{startLocation}} {{startTime}}, End: {{endLocation}} {{endTime}} </li> ";
     /* Main app */
     var app = {
+        timelineend: null,
+        timelinestart: null,        
         tripid: null,
         dayid: null,
         eventid: null,
+        timeline: null,
         init: function() {
             app.initCalendar();
             app.initData();
@@ -31,7 +35,15 @@ From: {{startLocation}} {{startTime}}, End: {{endLocation}} {{endTime}} </li> ";
                 var tripid = $(this).attr('id');
                 app.tripid = tripid;
                 $(this).addClass('selected');
-                //send post request
+                //get all events for the trip and update timeline
+                $.get(TRIPDETAILS, {'tripid': tripid}).success(function(result){
+                    var d = JSON.parse(result), event;
+                    if(!d || d.length === 0) return;
+                    //set timeline start and end of the timeline
+                    app.timelinestart = $(this).attr('start');
+                    app.timelineend = $(this).attr('end');
+                    
+                });
                 //update the hero div
             });
             $('#createtrip').click(function(e) {
@@ -47,7 +59,7 @@ From: {{startLocation}} {{startTime}}, End: {{endLocation}} {{endTime}} </li> ";
             });
         },
         initCalendar: function() {
-            var timeline = new Timeline('timeline', new Date("Wed Jul 01 2009"));
+            app.timeline = new Timeline('timeline', new Date("Wed Jul 01 2009"));//new Date());
         },
         initTimepickers: function(startTime, endTime) {
             startTime.datetimepicker({
