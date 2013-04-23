@@ -70,7 +70,7 @@
                             <div>Description</div>
                             <input name="description" class="settingInput"/>
                             <div>Start location</div>
-                            <input id="startLocation" name="startLocation" class="settingInput required"/>
+                            <input id="startLocation" name="startLocation" class="settingInput"/>
                             <div>End location</div>
                             <input id="endLocation" name="endLocation" class="settingInput"/>
                             <div>Start time</div>
@@ -92,9 +92,6 @@
                                 <ul>            
                                     <li class="July first, don't forget!" title="Wed Jul 1 2009">Microsoft wants to buy yahoo. What do you think?</li>
                                     <li class="Bah first, don't forget!" title="Wed Jul 1 2009">Microsoft wants to buy yahoo. What do you think?</li>
-                                    <li class="Bah first, don't forget!" title="Wed Jul 1 2009">Microsoft wants to buy yahoo. What do you think?</li>
-                                    <li class="Bah first, don't forget!" title="Wed Jul 1 2009">Microsoft wants to buy yahoo. What do you think?</li>
-                                    <li class="Bah first, don't forget!" title="Wed Jul 1 2009">Microsoft wants to buy yahoo. What do you think?</li>
                                     <li class="Independance Day" title="Sat Jul 4 2009">Happy independance day America</li>
                                     <li class="Jenny day" title="Sun Jul 19 2009">Must get the biggest toy I can to make Jenny really happy :)</li>
                                     <li class="American Pie 4 is coming out" title="Thu Jul 23 2009">We really need to watch this movie. The ratings are so high!</li>
@@ -102,6 +99,11 @@
                                     <li class="ThemeForest launches the JavaScript component" title="Fri Jul 31 2009">Make sure to check regularly for hot new scripts</li>
                                     <li class="Dentist appointment" title="Wed Jul 22 2009">4:35 pm. Make sure not to eat anything for the last 24 hours. Got I hope I don't die :|</li>
                                 </ul>    
+                            </div>
+                            <div id="timelineinfo" style="display:none;">
+                                Start: <input id="daystart" name="daystart" class="settingInput" /><br>
+                                Destination: <input id="dayend" name="dayend" class="settingInput" /> <br>
+                                Plans? <input id="comment" name="comment" class="settingInput"/> <br>
                             </div>
                         </div>
                         <div class="row-fluid">

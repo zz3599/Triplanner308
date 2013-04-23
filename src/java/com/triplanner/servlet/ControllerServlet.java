@@ -14,9 +14,7 @@ import com.triplanner.model.TripdayDAO;
 import com.triplanner.model.UserDAO;
 import java.io.IOException;
 import java.sql.Timestamp;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -37,11 +35,12 @@ import org.json.JSONObject;
     "/register",
     "/app/home",
     "/app/trip",
-    "/app/tripdetails"
+    "/app/events",
+    "/app/tripday"
 },
         asyncSupported = true)
 public class ControllerServlet extends HttpServlet {
-
+    
     /**
      * All get requests for the url patterns
      */
@@ -53,23 +52,39 @@ public class ControllerServlet extends HttpServlet {
             request.getRequestDispatcher("home.jsp").forward(request, response);
         } else if (resource.equals("/trip")) {
             doTripsGet(request, response);
-        } else if (resource.contains("/tripdetails")) {
+        } else if (resource.contains("/events")) {
             doTripsEventsGet(request, response);
+        } else if (resource.contains("/tripday")) {
+            doTripdaysGet(request, response);
         }
     }
+
+    protected void doTripdaysGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        Long timemillis = Long.parseLong(request.getParameter("date"));
+        Timestamp tripdaystart = new Timestamp(timemillis);
+        int tripid = Integer.parseInt(request.getParameter("tripid"));
+        Tripday tripday = TripdayDAO.getDay(tripid, tripdaystart);
+        JSONObject o = new JSONObject();
+        if(tripday != null){
+            o = tripday.toJSON();
+        } 
+        response.getWriter().println(o);
+    }
+    
 
     protected void doTripsEventsGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         int tripid = Integer.parseInt(request.getParameter("tripid"));
         List<Event> events = EventDAO.selectAllEventsByTrip(tripid);
         JSONArray o = new JSONArray();
-        if(events != null || !events.isEmpty()){
-            for(Event e : events){
+        if (events != null || !events.isEmpty()) {
+            for (Event e : events) {
                 o.put(e.toJSON());
             }
         }
         response.getWriter().println(o);
-        
+
     }
 
     protected void doTripsGet(HttpServletRequest request, HttpServletResponse response)
@@ -96,8 +111,32 @@ public class ControllerServlet extends HttpServlet {
             doRegisterPost(request, response);
         } else if (resource.equals("/trip")) {
             doCreateTripPost(request, response);
-        } else if (resource.equals("/tripdetails")) {
+        } else if (resource.equals("/events")) {
+            doCreateEventPost(request, response);
+        } else if (resource.equals("/tripday")) {
+            doCreateTripdayPost(request, response);
         }
+    }
+
+    private void doCreateTripdayPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+    }
+
+    private void doCreateEventPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        int tripid = Integer.parseInt(request.getParameter("tripid"));
+        int tripdayid = Integer.parseInt(request.getParameter("tripdayid"));
+        String startLocation = request.getParameter("startLocation");
+        String endLocation = request.getParameter("endLocation");
+        Timestamp startTime = Timestamp.valueOf(request.getParameter("startTime"));
+        Timestamp endTime = Timestamp.valueOf(request.getParameter("endTime"));
+        String comment = request.getParameter("comment");
+        Event newEvent = EventDAO.createEvent(tripid, tripdayid, startTime, endTime, tripdayid, comment, startLocation, endLocation);
+        JSONObject o = new JSONObject();
+        if (newEvent != null) {
+            o = newEvent.toJSON();
+        }
+        response.getWriter().println(o);
     }
 
     /**

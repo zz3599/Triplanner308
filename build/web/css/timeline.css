@@ -192,8 +192,8 @@
 }
 
 .timelineadd{
-    width:22px;
-    height:20px;
+    width:22px !important;
+    height:22px !important;
     background-image: url(../images/add.png);  
     background-position:  0px 0px;
     background-repeat: no-repeat;

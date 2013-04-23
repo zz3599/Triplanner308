@@ -28,7 +28,24 @@ public class TripdayDAO implements Serializable {
             + "date=?, startlocation=?, endlocation=?, comment=?, daynum=? "
             + "where id=?";
     private static final String ALLTRIPDAYS = "SELECT * from tripdays where tripid=?";
+    private static final String GETDAY  = "SELECT * from tripdays where tripid=? and date=?";
     
+    public static Tripday getDay(int tripid, Timestamp date){
+        try {
+            Connection connection = DB.getConnection();
+            PreparedStatement ps = connection.prepareStatement(GETDAY);            
+            ps.setInt(1, tripid);
+            ps.setTimestamp(2, date);
+            ResultSet rs = ps.executeQuery();
+            connection.close();      
+            if(rs.first()){
+                return extractTripday(rs);
+            }            
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 
     public static boolean createDaysForTrip(Trip trip) {
         Timestamp tripstart = trip.startTime;
