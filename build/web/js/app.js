@@ -3,8 +3,8 @@
     var TRIPURL = "trip";
     var TRIPEVENTS = "events";
     var TRIPDAY = "tripday";
-    var TRIPTEMPLATE = "<li class='atrip' id={{id}} start={{startTime}} end={{endTime}} startLocation='{{startLocation}}'><a href='#'>{{title}}</a><p id='description'>{{description}}</description><br>\
-From: {{startLocation}} {{startTime}}, End: {{endLocation}} {{endTime}} </li> ";
+    var TRIPTEMPLATE = "<li class='atrip' id={{id}} title='{{title}}' start={{startTime}} end={{endTime}} startLocation='{{startLocation}}' endLocation='{{endLocation}}' description='{{description}}'>\
+<a href='#'>{{title}}</a></li> ";
     /* Main app */
     var app = {
         timelineend: null,
@@ -40,12 +40,17 @@ From: {{startLocation}} {{startTime}}, End: {{endLocation}} {{endTime}} </li> ";
                 $.each($(this).siblings(), function(i, e) {
                     $(e).removeClass('selected');
                 });
+                $('#timelineinfo').hide(100);
                 app.tripid = $(this).attr('id');
                 app.timelinestart = new Date($(this).attr('start'));
                 app.timelineend = new Date($(this).attr('end'));
                 app.startLocation = $(this).attr('startLocation');
+                app.endLocation = $(this).attr('endLocation');
+                $('#daystart').val(app.startLocation).trigger('change');
+                $('#dayend').val(app.endLocation).trigger('change');
                 //$('#daystart').val(app.startLocation).trigger('change');
                 $(this).addClass('selected');
+                
                 //get all events for the trip and update timeline
                 $.get(TRIPEVENTS, {'tripid': app.tripid}).success(function(result) {
                     var d = JSON.parse(result), event;
@@ -56,6 +61,14 @@ From: {{startLocation}} {{startTime}}, End: {{endLocation}} {{endTime}} </li> ";
                     app.timeline.updateIntervalAndEvents(app.timelinestart, app.timelineend, app.tripid, d);
                 });
                 //update the hero div
+                $('.hero-unit').text("Trip: "+$(this).attr('title'));
+                
+                $('.hero-unit').append("<br>"+"Start Date: "+$(this).attr('start')+ "<br>");
+                
+                $('.hero-unit').append("End Date: "+$(this).attr('end')+ "<br>");
+                $('.hero-unit').append("Staring Location: "+$(this).attr('startlocation')+"<br>");
+                $('.hero-unit').append("Ending Location: "+$(this).attr('endLocation') + '<br>');
+                $('.hero-unit').append("Description: " + $(this).attr('description'))
             });
             //create new trip handler
             $('#createtrip').click(function(e) {
@@ -100,12 +113,7 @@ From: {{startLocation}} {{startTime}}, End: {{endLocation}} {{endTime}} </li> ";
                     endTime.datetimepicker('option', 'minDate', startTime.datetimepicker('getDate'));
                 }
             };
-            if (minDate)
-                startTimeProps.minDate = minDate;
-            if (maxDate)
-                startTimeProps.maxDate = maxDate;
-            startTime.datetimepicker(startTimeProps);
-            endTime.datetimepicker({
+            var endTimeProps = {
                 dateFormat: "yy-mm-dd",
                 timeFormat: "H:mm:ss",
                 onClose: function(dateText, inst) {
@@ -122,7 +130,17 @@ From: {{startLocation}} {{startTime}}, End: {{endLocation}} {{endTime}} </li> ";
                 onSelect: function(selectedDateTime) {
                     startTime.datetimepicker('option', 'maxDate', endTime.datetimepicker('getDate'));
                 }
-            });
+            };
+            if (minDate){
+                startTimeProps.minDate = minDate;
+                endTimeProps.minDate = minDate;
+            }
+            if (maxDate){
+                startTimeProps.maxDate = maxDate;
+                endTimeProps.maxDate = maxDate;
+            }
+            startTime.datetimepicker(startTimeProps);
+            endTime.datetimepicker(endTimeProps);
         },
         initMap: function() {
             var self = this;
@@ -136,19 +154,26 @@ From: {{startLocation}} {{startTime}}, End: {{endLocation}} {{endTime}} </li> ";
             this.directionsService = new google.maps.DirectionsService();
             this.directionsDisplay = new google.maps.DirectionsRenderer();
             this.directionsDisplay.setMap(this.map);
-            $('#startLocation').keyup(codeAddress);
-            $('#daystart').keyup(codeAddress).change(codeAddress);
-            $('#dayend').keyup(codeAddress).change(codeAddress);
+            $('#startLocation').keyup(codeAddress).change(codeAddress).focus(codeAddress);
+            $('#endLocation').keyup(codeAddress).change(codeAddress).focus(codeAddress);
+            $('#daystart').keyup(codeAddress).change(codeAddress).focus(codeAddress);
+            $('#dayend').keyup(codeAddress).change(codeAddress).focus(codeAddress);
             function codeAddress() {
-                var startaddress = $('#daystart').val();
-                var endaddress = $('#dayend').val();
+                var startaddress, endaddress;
+                if(this.name.toLowerCase().indexOf('day') !== -1){
+                    startaddress = $('#daystart').val();
+                    endaddress = $('#dayend').val();
+                } else {
+                    startaddress = $('#startLocation').val();
+                    endaddress = $('#endLocation').val();
+                }                
                 var request = {
                     origin: startaddress,
                     destination: endaddress,
                     travelMode: google.maps.DirectionsTravelMode.DRIVING
                 };
                 self.directionsService.route(request, function(response, status) {
-                    if (status == google.maps.DirectionsStatus.OK) {
+                    if (status === google.maps.DirectionsStatus.OK) {
                         self.directionsDisplay.setDirections(response);
                     }
                 });

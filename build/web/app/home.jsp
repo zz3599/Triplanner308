@@ -62,7 +62,7 @@
 
         <div class="container-fluid">
             <div class="row-fluid">
-                <div class="span3">
+                <div class="span2">
                     <!--Sidebar content-->
                     <div class="well sidebar-nav">
                         <ul class="nav nav-list">
@@ -95,7 +95,7 @@
                     </div>
                 </div>
 
-                <div class="span9">
+                <div class="span10">
                     <div class="hero-unit">
 
                     </div>
@@ -121,8 +121,10 @@
                             </div>
                             <div id="dialog-form" title="Plan event">
                                 <p class="validateTips">All form fields are required.</p>
-                                <form>
+                                <form id="neweventform">
                                     <fieldset>
+                                        <input type="hidden" id="eventtripid" name="eventtripid"/>
+                                        <input type="hidden" id="eventtripdayid" name="eventtripdayid"/>
                                         <label for="eventdescription">Description</label>
                                         <input type="text" name="eventdescription" id="eventdescription" class="text ui-widget-content ui-corner-all" />
                                         <label for="eventstartLocation">Start Location</label>

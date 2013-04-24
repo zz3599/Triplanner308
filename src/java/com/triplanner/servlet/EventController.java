@@ -35,14 +35,15 @@ public class EventController {
     
     public static void doCreateEventPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        int tripid = Integer.parseInt(request.getParameter("tripid"));
-        int tripdayid = Integer.parseInt(request.getParameter("tripdayid"));
+        int tripid = Integer.parseInt(request.getParameter("eventtripid"));
+        int tripdayid = Integer.parseInt(request.getParameter("eventtripdayid"));
         String startLocation = request.getParameter("eventstartLocation");
         String endLocation = request.getParameter("eventendLocation");
-        Timestamp startTime = Timestamp.valueOf(request.getParameter("eventstartTime"));
-        Timestamp endTime = Timestamp.valueOf(request.getParameter("eventendTime"));
+        String tt = request.getParameter("eventStart");
+        Timestamp startTime = Timestamp.valueOf(request.getParameter("eventStart"));
+        Timestamp endTime = Timestamp.valueOf(request.getParameter("eventEnd"));
         String comment = request.getParameter("eventdescription");
-        Event newEvent = EventDAO.createEvent(tripid, tripdayid, startTime, endTime, tripdayid, comment, startLocation, endLocation);
+        Event newEvent = EventDAO.createEvent(tripid, tripdayid, startTime, endTime, 0, comment, startLocation, endLocation);
         JSONObject o = new JSONObject();
         if (newEvent != null) {
             o = newEvent.toJSON();
