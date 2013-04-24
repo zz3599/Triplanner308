@@ -3,9 +3,8 @@
     var TRIPURL = "trip";
     var TRIPEVENTS = "events";
     var TRIPDAY = "tripday";
-    var TRIPTEMPLATE = "<li class='atrip' id={{id}} start={{startTime}} end={{endTime}} startLocation='{{startLocation}}' endLocation='{{endLocation}}'>\
-<a href='#'>{{title}}</a><p id='description'>{{description}}</description><br>\
-From: {{startLocation}} {{startTime}}, End: {{endLocation}} {{endTime}} </li> ";
+    var TRIPTEMPLATE = "<li class='atrip' id={{id}} title='{{title}}' start={{startTime}} end={{endTime}} startLocation='{{startLocation}}' endLocation='{{endLocation}}'>\
+<a href='#'>{{title}}</a></li> ";
     /* Main app */
     var app = {
         timelineend: null,
@@ -62,6 +61,14 @@ From: {{startLocation}} {{startTime}}, End: {{endLocation}} {{endTime}} </li> ";
                     app.timeline.updateIntervalAndEvents(app.timelinestart, app.timelineend, app.tripid, d);
                 });
                 //update the hero div
+                $('.hero-unit').text("Trip: "+$(this).attr('title'));
+                
+                $('.hero-unit').append("<br>"+"Start Date: "+$(this).attr('start')+ "<br>");
+                
+                $('.hero-unit').append("End Date: "+$(this).attr('end')+ "<br>");
+                $('.hero-unit').append("Staring Location: "+$(this).attr('startlocation')+"<br>");
+                $('.hero-unit').append("Ending Location: "+$(this).attr('endLocation') + '<br>');
+                $('.hero-unit').append("Description: " + $(this).attr('description'))
             });
             //create new trip handler
             $('#createtrip').click(function(e) {
@@ -90,7 +97,7 @@ From: {{startLocation}} {{startTime}}, End: {{endLocation}} {{endTime}} </li> ";
         initTimepickers: function(startTime, endTime, minDate, maxDate) {
             var startTimeProps = {
                 dateFormat: "yy-mm-dd",
-                timeFormat: "H:mm:ss",
+                timeFormat: "H:mm",
                 onClose: function(dateText, inst) {
                     if (endTime.val() !== '') {
                         var testStartDate = startTime.datetimepicker('getDate');
@@ -106,12 +113,7 @@ From: {{startLocation}} {{startTime}}, End: {{endLocation}} {{endTime}} </li> ";
                     endTime.datetimepicker('option', 'minDate', startTime.datetimepicker('getDate'));
                 }
             };
-            if (minDate)
-                startTimeProps.minDate = minDate;
-            if (maxDate)
-                startTimeProps.maxDate = maxDate;
-            startTime.datetimepicker(startTimeProps);
-            endTime.datetimepicker({
+            var endTimeProps = {
                 dateFormat: "yy-mm-dd",
                 timeFormat: "H:mm:ss",
                 onClose: function(dateText, inst) {
@@ -128,7 +130,17 @@ From: {{startLocation}} {{startTime}}, End: {{endLocation}} {{endTime}} </li> ";
                 onSelect: function(selectedDateTime) {
                     startTime.datetimepicker('option', 'maxDate', endTime.datetimepicker('getDate'));
                 }
-            });
+            };
+            if (minDate){
+                startTimeProps.minDate = minDate;
+                endTimeProps.minDate = minDate;
+            }
+            if (maxDate){
+                startTimeProps.maxDate = maxDate;
+                endTimeProps.maxDate = maxDate;
+            }
+            startTime.datetimepicker(startTimeProps);
+            endTime.datetimepicker(endTimeProps);
         },
         initMap: function() {
             var self = this;
