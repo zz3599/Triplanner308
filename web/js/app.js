@@ -3,7 +3,8 @@
     var TRIPURL = "trip";
     var TRIPEVENTS = "events";
     var TRIPDAY = "tripday";
-    var TRIPTEMPLATE = "<li class='atrip' id={{id}} start={{startTime}} end={{endTime}} startLocation='{{startLocation}}'><a href='#'>{{title}}</a><p id='description'>{{description}}</description><br>\
+    var TRIPTEMPLATE = "<li class='atrip' id={{id}} start={{startTime}} end={{endTime}} startLocation='{{startLocation}}' endLocation='{{endLocation}}'>\
+<a href='#'>{{title}}</a><p id='description'>{{description}}</description><br>\
 From: {{startLocation}} {{startTime}}, End: {{endLocation}} {{endTime}} </li> ";
     /* Main app */
     var app = {
@@ -40,12 +41,17 @@ From: {{startLocation}} {{startTime}}, End: {{endLocation}} {{endTime}} </li> ";
                 $.each($(this).siblings(), function(i, e) {
                     $(e).removeClass('selected');
                 });
+                $('#timelineinfo').hide(100);
                 app.tripid = $(this).attr('id');
                 app.timelinestart = new Date($(this).attr('start'));
                 app.timelineend = new Date($(this).attr('end'));
                 app.startLocation = $(this).attr('startLocation');
+                app.endLocation = $(this).attr('endLocation');
+                $('#daystart').val(app.startLocation).trigger('change');
+                $('#dayend').val(app.endLocation).trigger('change');
                 //$('#daystart').val(app.startLocation).trigger('change');
                 $(this).addClass('selected');
+                
                 //get all events for the trip and update timeline
                 $.get(TRIPEVENTS, {'tripid': app.tripid}).success(function(result) {
                     var d = JSON.parse(result), event;
@@ -136,19 +142,26 @@ From: {{startLocation}} {{startTime}}, End: {{endLocation}} {{endTime}} </li> ";
             this.directionsService = new google.maps.DirectionsService();
             this.directionsDisplay = new google.maps.DirectionsRenderer();
             this.directionsDisplay.setMap(this.map);
-            $('#startLocation').keyup(codeAddress);
-            $('#daystart').keyup(codeAddress).change(codeAddress);
-            $('#dayend').keyup(codeAddress).change(codeAddress);
+            $('#startLocation').keyup(codeAddress).change(codeAddress).focus(codeAddress);
+            $('#endLocation').keyup(codeAddress).change(codeAddress).focus(codeAddress);
+            $('#daystart').keyup(codeAddress).change(codeAddress).focus(codeAddress);
+            $('#dayend').keyup(codeAddress).change(codeAddress).focus(codeAddress);
             function codeAddress() {
-                var startaddress = $('#daystart').val();
-                var endaddress = $('#dayend').val();
+                var startaddress, endaddress;
+                if(this.name.toLowerCase().indexOf('day') !== -1){
+                    startaddress = $('#daystart').val();
+                    endaddress = $('#dayend').val();
+                } else {
+                    startaddress = $('#startLocation').val();
+                    endaddress = $('#endLocation').val();
+                }                
                 var request = {
                     origin: startaddress,
                     destination: endaddress,
                     travelMode: google.maps.DirectionsTravelMode.DRIVING
                 };
                 self.directionsService.route(request, function(response, status) {
-                    if (status == google.maps.DirectionsStatus.OK) {
+                    if (status === google.maps.DirectionsStatus.OK) {
                         self.directionsDisplay.setDirections(response);
                     }
                 });
