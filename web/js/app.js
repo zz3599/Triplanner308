@@ -3,7 +3,7 @@
     var TRIPURL = "trip";
     var TRIPEVENTS = "events";
     var TRIPDAY = "tripday";
-    var TRIPTEMPLATE = "<li class='atrip' id={{id}} title='{{title}}' start={{startTime}} end={{endTime}} startLocation='{{startLocation}}' endLocation='{{endLocation}}'>\
+    var TRIPTEMPLATE = "<li class='atrip' id={{id}} title='{{title}}' start={{startTime}} end={{endTime}} startLocation='{{startLocation}}' endLocation='{{endLocation}}' description='{{description}}'>\
 <a href='#'>{{title}}</a></li> ";
     /* Main app */
     var app = {
