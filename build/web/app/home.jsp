@@ -55,7 +55,7 @@
                         <ul class="nav nav-list">
                             <li class="nav-header">Your Trips</li>
                             <div id="yourtrips">
-                                
+
                             </div>
                             <li class="active"><a href="#">Link</a></li>
 
@@ -91,14 +91,24 @@
                             <div id="timeline">
                                 <ul>            
                                     <li class="July first, don't forget!" title="Wed Jul 1 2009">Microsoft wants to buy yahoo. What do you think?</li>
-                                    <li class="Bah first, don't forget!" title="Wed Jul 1 2009">Microsoft wants to buy yahoo. What do you think?</li>
-                                    <li class="Independance Day" title="Sat Jul 4 2009">Happy independance day America</li>
-                                    <li class="Jenny day" title="Sun Jul 19 2009">Must get the biggest toy I can to make Jenny really happy :)</li>
-                                    <li class="American Pie 4 is coming out" title="Thu Jul 23 2009">We really need to watch this movie. The ratings are so high!</li>
-                                    <li class="DenonStudio is shows off the new Timeline calendar" title="Wed Jul 22 2009">This script is really hot. Can't wait to have it</li>
-                                    <li class="ThemeForest launches the JavaScript component" title="Fri Jul 31 2009">Make sure to check regularly for hot new scripts</li>
-                                    <li class="Dentist appointment" title="Wed Jul 22 2009">4:35 pm. Make sure not to eat anything for the last 24 hours. Got I hope I don't die :|</li>
                                 </ul>    
+                            </div>
+                            <div id="dialog-form" title="Plan event">
+                                <p class="validateTips">All form fields are required.</p>
+                                <form>
+                                    <fieldset>
+                                        <label for="description">Description</label>
+                                        <input type="text" name="description" id="description" class="text ui-widget-content ui-corner-all" />
+                                        <label for="startLocation">Start Location</label>
+                                        <input type="text" name="startLocation" id="startLocation" value="" class="text ui-widget-content ui-corner-all" />
+                                        <label for="endLocation">End Location</label>
+                                        <input type="text" name="endLocation" id="endLocation" value="" class="text ui-widget-content ui-corner-all" />
+                                        <label for="eventStart">Start Time</label>
+                                        <input type="text" name="eventStart" id="eventStart" value="" class="text ui-widget-content ui-corner-all" />
+                                        <label for="eventEnd">End Time</label>
+                                        <input type="text" name="eventEnd" id="eventEnd" value="" class="text ui-widget-content ui-corner-all" />
+                                    </fieldset>
+                                </form>
                             </div>
                             <div id="timelineinfo" style="display:none;">
                                 Start: <input id="daystart" name="daystart" class="settingInput" /><br>
@@ -115,8 +125,8 @@
                 </div>
             </div>
         </div>
-
         <script src="../js/app.js"></script>
+        <script src="../js/timeline.min.js"></script>
     </body>
 </html>
 

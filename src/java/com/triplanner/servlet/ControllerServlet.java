@@ -120,6 +120,7 @@ public class ControllerServlet extends HttpServlet {
 
     private void doCreateTripdayPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        
     }
 
     private void doCreateEventPost(HttpServletRequest request, HttpServletResponse response)

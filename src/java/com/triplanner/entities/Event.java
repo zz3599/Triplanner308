@@ -31,6 +31,8 @@ public class Event {
         o.put("tripdayid", tripdayid);
         o.put("startTime", formatter.format(startTime));
         o.put("endTime", formatter.format(endTime));
+        o.put("startLocation", startLocation);
+        o.put("endLocation", endLocation);
         o.put("eventType", eventType);
         o.put("comment", comment);
         return o;

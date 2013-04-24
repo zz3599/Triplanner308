@@ -122,7 +122,8 @@ From: {{startLocation}} {{startTime}}, End: {{endLocation}} {{endTime}} </li> ";
                             map.setCenter(results[0].geometry.location);
                             var marker = new google.maps.Marker({
                                 map: map,
-                                position: results[0].geometry.location
+                                position: results[0].geometry.location,
+                                title: 'Start!'
                             });
                         } else {//squelch
                         }
