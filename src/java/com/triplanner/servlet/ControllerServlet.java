@@ -113,25 +113,40 @@ public class ControllerServlet extends HttpServlet {
             doCreateTripPost(request, response);
         } else if (resource.equals("/events")) {
             doCreateEventPost(request, response);
-        } else if (resource.equals("/tripday")) {
+        } else if (resource.contains("/tripday")) {
             doCreateTripdayPost(request, response);
         }
     }
 
     private void doCreateTripdayPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
+        String action = request.getParameter("action");
+        int id = Integer.parseInt(request.getParameter("id"));
+        int tripid = Integer.parseInt(request.getParameter("tripid"));
+        int daynum = Integer.parseInt(request.getParameter("daynum"));
+        String startLocation = request.getParameter("daystart");
+        String endLocation = request.getParameter("dayend");
+        String comment = request.getParameter("comment");
+        JSONObject o = new JSONObject();
+        if(action.equals("update")){
+            Tripday updatedday = TripdayDAO.updateTripday(id, tripid, startLocation, endLocation, comment, daynum);
+            if(updatedday != null)
+                o = updatedday.toJSON();
+        } else if(action.equals("create")){
+            
+        }
+        response.getWriter().println(o);
     }
 
     private void doCreateEventPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         int tripid = Integer.parseInt(request.getParameter("tripid"));
         int tripdayid = Integer.parseInt(request.getParameter("tripdayid"));
-        String startLocation = request.getParameter("startLocation");
-        String endLocation = request.getParameter("endLocation");
-        Timestamp startTime = Timestamp.valueOf(request.getParameter("startTime"));
-        Timestamp endTime = Timestamp.valueOf(request.getParameter("endTime"));
-        String comment = request.getParameter("comment");
+        String startLocation = request.getParameter("eventstartLocation");
+        String endLocation = request.getParameter("eventendLocation");
+        Timestamp startTime = Timestamp.valueOf(request.getParameter("eventstartTime"));
+        Timestamp endTime = Timestamp.valueOf(request.getParameter("eventendTime"));
+        String comment = request.getParameter("eventdescription");
         Event newEvent = EventDAO.createEvent(tripid, tripdayid, startTime, endTime, tripdayid, comment, startLocation, endLocation);
         JSONObject o = new JSONObject();
         if (newEvent != null) {
@@ -209,6 +224,7 @@ public class ControllerServlet extends HttpServlet {
         JSONObject result = new JSONObject();
         if (trip != null) {
             result = trip.toJSON();
+            boolean createTripdays = TripdayDAO.createDaysForTrip(trip);
         }
         response.getWriter().println(result);
 

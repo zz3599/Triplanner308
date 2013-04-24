@@ -88,6 +88,18 @@
                     </div>
                     <div class="row-fluid">
                         <div id="wrap">
+                            <div id="timelineinfo" style="display:none;">
+                                <form id="tripdayform">
+                                    Plan the day: <br>
+                                    <input id="id" name="id" type="hidden" />
+                                    <input id="tripid" name="tripid" type="hidden"/>
+                                    Date number: <input id="daynum" name="daynum" class="settingInput"/><br>
+                                    Start: <input id="daystart" name="daystart" class="settingInput" /><br>
+                                    Destination: <input id="dayend" name="dayend" class="settingInput" /> <br>
+                                    Plans? <input id="comment" name="comment" class="settingInput"/> <br>
+                                    <input id="editday" class="submit" type="submit" value="Save"/>
+                                </form>
+                            </div>
                             <div id="timeline">
                                 <ul>            
                                     <li class="July first, don't forget!" title="Wed Jul 1 2009">Microsoft wants to buy yahoo. What do you think?</li>
@@ -97,12 +109,12 @@
                                 <p class="validateTips">All form fields are required.</p>
                                 <form>
                                     <fieldset>
-                                        <label for="description">Description</label>
-                                        <input type="text" name="description" id="description" class="text ui-widget-content ui-corner-all" />
-                                        <label for="startLocation">Start Location</label>
-                                        <input type="text" name="startLocation" id="startLocation" value="" class="text ui-widget-content ui-corner-all" />
-                                        <label for="endLocation">End Location</label>
-                                        <input type="text" name="endLocation" id="endLocation" value="" class="text ui-widget-content ui-corner-all" />
+                                        <label for="eventdescription">Description</label>
+                                        <input type="text" name="eventdescription" id="eventdescription" class="text ui-widget-content ui-corner-all" />
+                                        <label for="eventstartLocation">Start Location</label>
+                                        <input type="text" name="eventstartLocation" id="eventstartLocation" value="" class="text ui-widget-content ui-corner-all" />
+                                        <label for="eventendLocation">End Location</label>
+                                        <input type="text" name="eventendLocation" id="eventendLocation" value="" class="text ui-widget-content ui-corner-all" />
                                         <label for="eventStart">Start Time</label>
                                         <input type="text" name="eventStart" id="eventStart" value="" class="text ui-widget-content ui-corner-all" />
                                         <label for="eventEnd">End Time</label>
@@ -110,11 +122,7 @@
                                     </fieldset>
                                 </form>
                             </div>
-                            <div id="timelineinfo" style="display:none;">
-                                Start: <input id="daystart" name="daystart" class="settingInput" /><br>
-                                Destination: <input id="dayend" name="dayend" class="settingInput" /> <br>
-                                Plans? <input id="comment" name="comment" class="settingInput"/> <br>
-                            </div>
+
                         </div>
                         <div class="row-fluid">
                             <div id="mapwrapper"  class="span12">

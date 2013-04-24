@@ -2,6 +2,7 @@
 (function(world) {
     var TRIPURL = "trip";
     var TRIPEVENTS = "events";
+    var TRIPDAY = "tripday";
     var TRIPTEMPLATE = "<li class='atrip' id={{id}} start={{startTime}} end={{endTime}} startLocation='{{startLocation}}'><a href='#'>{{title}}</a><p id='description'>{{description}}</description><br>\
 From: {{startLocation}} {{startTime}}, End: {{endLocation}} {{endTime}} </li> ";
     /* Main app */
@@ -22,6 +23,10 @@ From: {{startLocation}} {{startTime}}, End: {{endLocation}} {{endTime}} </li> ";
         initData: function() {
             $.get(TRIPURL, function(data) {
                 var trips = JSON.parse(data);
+                if(trips.length === 0){
+                    $('<p>', {text: 'No trips'}).appendTo($('#yourtrips'));
+                    return;
+                }                
                 $.each(trips, function(i, e) {
                     var elem = $(Mustache.render(TRIPTEMPLATE, e));
                     elem.appendTo($('#yourtrips'));
@@ -29,6 +34,8 @@ From: {{startLocation}} {{startTime}}, End: {{endLocation}} {{endTime}} </li> ";
             });
         },
         initHandlers: function() {
+            var self = this;
+            //update the page to show the data for the particular trip
             $('#yourtrips').on('click', 'li', function(e) {
                 $.each($(this).siblings(), function(i, e) {
                     $(e).removeClass('selected');
@@ -37,7 +44,7 @@ From: {{startLocation}} {{startTime}}, End: {{endLocation}} {{endTime}} </li> ";
                 app.timelinestart = new Date($(this).attr('start'));
                 app.timelineend = new Date($(this).attr('end'));
                 app.startLocation = $(this).attr('startLocation');
-                $('#daystart').val(app.startLocation).trigger('change');
+                //$('#daystart').val(app.startLocation).trigger('change');
                 $(this).addClass('selected');
                 //get all events for the trip and update timeline
                 $.get(TRIPEVENTS, {'tripid': app.tripid}).success(function(result) {
@@ -50,6 +57,7 @@ From: {{startLocation}} {{startTime}}, End: {{endLocation}} {{endTime}} </li> ";
                 });
                 //update the hero div
             });
+            //create new trip handler
             $('#createtrip').click(function(e) {
                 e.preventDefault();
                 $.post(TRIPURL, $('#newtrip').serialize()).success(
@@ -59,6 +67,14 @@ From: {{startLocation}} {{startTime}}, End: {{endLocation}} {{endTime}} </li> ";
                                 return;
                             var elem = $(Mustache.render(TRIPTEMPLATE, json));
                             elem.appendTo($('#yourtrips'));
+                        });
+            });
+            //edit the information for a day
+            $('#editday').click(function(e) {
+                e.preventDefault();
+                $.post(TRIPDAY + '?action=update', $('#tripdayform').serialize()).success(
+                        function(result) {
+                            self.timeline.updateDayForm(result);
                         });
             });
         },

@@ -5,6 +5,7 @@
 package com.triplanner.entities;
 
 import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.util.List;
 import org.json.JSONObject;
 
@@ -13,6 +14,7 @@ import org.json.JSONObject;
  * @author brook
  */
 public class Tripday {
+    private static final SimpleDateFormat formatter = new SimpleDateFormat("M-d-yyyy");
     public int id;
     public int tripid;
     public Timestamp date;
@@ -20,12 +22,13 @@ public class Tripday {
     public String endLocation;
     public String comment;
     public int daynum;
-    public List<Event> events;     
+    public List<Event> events;   
     
     public JSONObject toJSON(){
         JSONObject o = new JSONObject();
         o.put("id", this.id);
         o.put("tripid", this.tripid);
+        if(this.date != null) o.put("date", formatter.format(this.date));
         o.put("startLocation", this.startLocation);
         o.put("endLocation", this.endLocation);
         o.put("comment", this.comment);
