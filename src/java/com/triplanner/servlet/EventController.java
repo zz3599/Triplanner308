@@ -39,6 +39,7 @@ public class EventController {
         int tripdayid = Integer.parseInt(request.getParameter("eventtripdayid"));
         String startLocation = request.getParameter("eventstartLocation");
         String endLocation = request.getParameter("eventendLocation");
+        String tt = request.getParameter("eventStart");
         Timestamp startTime = Timestamp.valueOf(request.getParameter("eventStart"));
         Timestamp endTime = Timestamp.valueOf(request.getParameter("eventEnd"));
         String comment = request.getParameter("eventdescription");

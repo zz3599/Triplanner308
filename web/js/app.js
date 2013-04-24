@@ -97,7 +97,7 @@
         initTimepickers: function(startTime, endTime, minDate, maxDate) {
             var startTimeProps = {
                 dateFormat: "yy-mm-dd",
-                timeFormat: "H:mm",
+                timeFormat: "H:mm:ss",
                 onClose: function(dateText, inst) {
                     if (endTime.val() !== '') {
                         var testStartDate = startTime.datetimepicker('getDate');

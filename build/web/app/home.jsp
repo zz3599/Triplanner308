@@ -49,7 +49,7 @@
 
         <div class="container-fluid">
             <div class="row-fluid">
-                <div class="span3">
+                <div class="span2">
                     <!--Sidebar content-->
                     <div class="well sidebar-nav">
                         <ul class="nav nav-list">
@@ -82,7 +82,7 @@
                     </div>
                 </div>
 
-                <div class="span9">
+                <div class="span10">
                     <div class="hero-unit">
 
                     </div>
