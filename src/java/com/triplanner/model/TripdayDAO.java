@@ -25,7 +25,7 @@ public class TripdayDAO implements Serializable {
     private static final String CREATEDAY = "INSERT into tripdays(tripid, date, startlocation, endlocation, comment, daynum)"
             + "values (?, ?, ?, ?, ?, ?)";
     private static final String UPDATEDAY = "Update tripdays set "
-            + "startlocation=?, endlocation=?, comment=?, daynum=? "
+            + "date=?, startlocation=?, endlocation=?, comment=?, daynum=? "
             + "where id=?";
     private static final String ALLTRIPDAYS = "SELECT * from tripdays where tripid=? ORDER BY date";
     private static final String GETDAY  = "SELECT * from tripdays where tripid=? and date=?";
@@ -94,18 +94,19 @@ public class TripdayDAO implements Serializable {
         return null;
     }
 
-    public static Tripday updateTripday(int tripdayid, int tripid, String start, String end, String comment, int daynum) {
+    public static Tripday updateTripday(int tripdayid, int tripid, Timestamp date, String start, String end, String comment, int daynum) {
         try {
             Connection connection = DB.getConnection();
             PreparedStatement ps = connection.prepareStatement(UPDATEDAY);
-            ps.setString(1, start);
-            ps.setString(2, end);
-            ps.setString(3, comment);
-            ps.setInt(4, daynum);
-            ps.setInt(5, tripdayid);
+            ps.setTimestamp(1, date);
+            ps.setString(2, start);
+            ps.setString(3, end);
+            ps.setString(4, comment);
+            ps.setInt(5, daynum);
+            ps.setInt(6, tripdayid);
             int result = ps.executeUpdate();
             if (result == 1) {
-                return new Tripday(tripdayid, tripid, null, start, end, comment, daynum);
+                return new Tripday(tripdayid, tripid, date, start, end, comment, daynum);
             }
         } catch (Exception e) {
             e.printStackTrace();

@@ -14,6 +14,8 @@ import com.triplanner.model.TripdayDAO;
 import com.triplanner.model.UserDAO;
 import java.io.IOException;
 import java.sql.Timestamp;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -40,7 +42,7 @@ import org.json.JSONObject;
 },
         asyncSupported = true)
 public class ControllerServlet extends HttpServlet {
-    
+    private static final SimpleDateFormat jsDateFormat = new SimpleDateFormat("M-d-yyyy");
     /**
      * All get requests for the url patterns
      */
@@ -103,7 +105,7 @@ public class ControllerServlet extends HttpServlet {
      */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+            throws ServletException, IOException{
         String resource = getResource(request);
         if (resource.equals("/login")) {
             doLoginPost(request, response);
@@ -127,9 +129,13 @@ public class ControllerServlet extends HttpServlet {
         String startLocation = request.getParameter("daystart");
         String endLocation = request.getParameter("dayend");
         String comment = request.getParameter("comment");
+        String date = request.getParameter("date");
+        Timestamp t = null; 
+        try { t = new Timestamp(jsDateFormat.parse(date).getTime());        }
+        catch(Exception e){}
         JSONObject o = new JSONObject();
-        if(action.equals("update")){
-            Tripday updatedday = TripdayDAO.updateTripday(id, tripid, startLocation, endLocation, comment, daynum);
+        if(action.equals("update") && t != null){
+            Tripday updatedday = TripdayDAO.updateTripday(id, tripid, t, startLocation, endLocation, comment, daynum);
             if(updatedday != null)
                 o = updatedday.toJSON();
         } else if(action.equals("create")){

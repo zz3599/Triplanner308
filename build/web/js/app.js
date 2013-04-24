@@ -18,15 +18,15 @@ From: {{startLocation}} {{startTime}}, End: {{endLocation}} {{endTime}} </li> ";
             app.initMap();
             app.initData();
             app.initHandlers();
-            app.initTimepickers($('#startTime'), $('#endTime'));
+            app.initTimepickers($('#startTime'), $('#endTime'), null, null);
         },
         initData: function() {
             $.get(TRIPURL, function(data) {
                 var trips = JSON.parse(data);
-                if(trips.length === 0){
+                if (trips.length === 0) {
                     $('<p>', {text: 'No trips'}).appendTo($('#yourtrips'));
                     return;
-                }                
+                }
                 $.each(trips, function(i, e) {
                     var elem = $(Mustache.render(TRIPTEMPLATE, e));
                     elem.appendTo($('#yourtrips'));
@@ -81,8 +81,8 @@ From: {{startLocation}} {{startTime}}, End: {{endLocation}} {{endTime}} </li> ";
         initCalendar: function() {
             app.timeline = new Timeline('timeline', new Date());//new Date());
         },
-        initTimepickers: function(startTime, endTime) {
-            startTime.datetimepicker({
+        initTimepickers: function(startTime, endTime, minDate, maxDate) {
+            var startTimeProps = {
                 dateFormat: "yy-mm-dd",
                 timeFormat: "H:mm:ss",
                 onClose: function(dateText, inst) {
@@ -99,7 +99,12 @@ From: {{startLocation}} {{startTime}}, End: {{endLocation}} {{endTime}} </li> ";
                 onSelect: function(selectedDateTime) {
                     endTime.datetimepicker('option', 'minDate', startTime.datetimepicker('getDate'));
                 }
-            });
+            };
+            if (minDate)
+                startTimeProps.minDate = minDate;
+            if (maxDate)
+                startTimeProps.maxDate = maxDate;
+            startTime.datetimepicker(startTimeProps);
             endTime.datetimepicker({
                 dateFormat: "yy-mm-dd",
                 timeFormat: "H:mm:ss",
@@ -120,36 +125,37 @@ From: {{startLocation}} {{startTime}}, End: {{endLocation}} {{endTime}} </li> ";
             });
         },
         initMap: function() {
-            function initialize() {
-                var mapOptions = {
-                    center: new google.maps.LatLng(-34.397, 150.644),
-                    zoom: 8,
-                    mapTypeId: google.maps.MapTypeId.ROADMAP
+            var self = this;
+            var mapOptions = {
+                center: new google.maps.LatLng(40.7, -74.1),
+                zoom: 5,
+                mapTypeId: google.maps.MapTypeId.ROADMAP
+            };
+            this.map = new google.maps.Map(document.getElementById("map-canvas"), mapOptions);
+            this.geocoder = new google.maps.Geocoder();
+            this.directionsService = new google.maps.DirectionsService();
+            this.directionsDisplay = new google.maps.DirectionsRenderer();
+            this.directionsDisplay.setMap(this.map);
+            $('#startLocation').keyup(codeAddress);
+            $('#daystart').keyup(codeAddress).change(codeAddress);
+            $('#dayend').keyup(codeAddress).change(codeAddress);
+            function codeAddress() {
+                var startaddress = $('#daystart').val();
+                var endaddress = $('#dayend').val();
+                var request = {
+                    origin: startaddress,
+                    destination: endaddress,
+                    travelMode: google.maps.DirectionsTravelMode.DRIVING
                 };
-                var map = new google.maps.Map(document.getElementById("map-canvas"), mapOptions);
-                var geocoder = new google.maps.Geocoder();
-
-                $('#startLocation').keyup(codeAddress);
-                $('#daystart').keyup(codeAddress).change(codeAddress);
-                function codeAddress() {
-                    var address = $(this).val();
-                    geocoder.geocode({'address': address}, function(results, status) {
-                        if (status == google.maps.GeocoderStatus.OK) {
-                            map.setCenter(results[0].geometry.location);
-                            var marker = new google.maps.Marker({
-                                map: map,
-                                position: results[0].geometry.location,
-                                title: 'Start!'
-                            });
-                        } else {//squelch
-                        }
-                    });
-                }
+                self.directionsService.route(request, function(response, status) {
+                    if (status == google.maps.DirectionsStatus.OK) {
+                        self.directionsDisplay.setDirections(response);
+                    }
+                });
             }
-            google.maps.event.addDomListener(window, 'load', initialize);
-        }
-
+        },
     };
+
     world.app = app;
     app.init();
 

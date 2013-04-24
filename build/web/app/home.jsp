@@ -94,6 +94,7 @@
                                     <input id="id" name="id" type="hidden" />
                                     <input id="tripid" name="tripid" type="hidden"/>
                                     Date number: <input id="daynum" name="daynum" class="settingInput"/><br>
+                                    Date: <input id="date" name="date" class="settingInput"/><br>
                                     Start: <input id="daystart" name="daystart" class="settingInput" /><br>
                                     Destination: <input id="dayend" name="dayend" class="settingInput" /> <br>
                                     Plans? <input id="comment" name="comment" class="settingInput"/> <br>
