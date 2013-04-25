@@ -28,15 +28,15 @@
         <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAUC9VWHP1FfCpjU5Rs-wpN7vRwSFp4-bw&sensor=true">
         </script>
         <script type="text/javascript">
-        function search(){
-            var input = document.getElementById("search").value;
-            window.open("search.jsp?NAME="+input,'','directories=0,titlebar=0,toolbar=0,location=0,status=0,menubar=0,scrollbars=yes,resizable=no,width=800,height=800');
-            //window.open("/search.jsp?NAME="+input,'newwindow','toolbar=yes,location=no,menubar=no,width=450,height=200,resizable=yes,scrollbars=yes,top=200,left=250');return false;;
-            
-        }
+            function search() {
+                var input = document.getElementById("search").value;
+                window.open("search.jsp?NAME=" + input, '', 'directories=0,titlebar=0,toolbar=0,location=0,status=0,menubar=0,scrollbars=yes,resizable=no,width=800,height=800');
+                //window.open("/search.jsp?NAME="+input,'newwindow','toolbar=yes,location=no,menubar=no,width=450,height=200,resizable=yes,scrollbars=yes,top=200,left=250');return false;;
+
+            }
         </script>
-        
-        
+
+
     </head>
     <body>
         <div class="navbar navbar-inverse navbar-fixed-top">
@@ -77,21 +77,37 @@
                         </ul>
                     </div><!--/.well -->
                     <div id="setting">
-                        <form id="newtrip">
-                            <div>Title: </div>
-                            <input name="title" class="settingInput"/>
-                            <div>Description</div>
-                            <input name="description" class="settingInput"/>
-                            <div>Start location</div>
-                            <input id="startLocation" name="startLocation" class="settingInput"/>
-                            <div>End location</div>
-                            <input id="endLocation" name="endLocation" class="settingInput"/>
-                            <div>Start time</div>
-                            <input id="startTime" name="startTime" class="settingInput startTime required"/>
-                            <div>End time</div>
-                            <input id="endTime" name="endTime" class="settingInput endTime required"/><br>
-                            <input id="createtrip" type="submit" value="Create" class="submit"/>
-                        </form>
+                        <input type="button" id="newtripbutton" value="Create Trip"/>
+                        <div id="newtripinfo" style="display:none;">
+                            <form id="newtrip">
+                                <div>Title: </div>
+                                <input name="title" class="settingInput"/>
+                                <div>Description</div>
+                                <input name="description" class="settingInput"/>
+                                <div>Start location</div>
+                                <input id="startLocation" name="startLocation" class="settingInput"/>
+                                <div>End location</div>
+                                <input id="endLocation" name="endLocation" class="settingInput"/>
+                                <div>Start time</div>
+                                <input id="startTime" name="startTime" class="settingInput startTime required"/>
+                                <div>End time</div>
+                                <input id="endTime" name="endTime" class="settingInput endTime required"/><br>
+                                <input id="createtrip" type="submit" value="Create" class="submit"/>
+                            </form>
+                        </div>
+                        <div id="timelineinfo" style="display:none;">
+                            <form id="tripdayform">
+                                Plan the day: <br>
+                                <input id="id" name="id" type="hidden" />
+                                <input id="tripid" name="tripid" type="hidden"/>
+                                Date number: <input id="daynum" name="daynum" class="settingInput"/><br>
+                                Date: <input id="date" name="date" class="settingInput"/><br>
+                                Start: <input id="daystart" name="daystart" class="settingInput" /><br>
+                                Destination: <input id="dayend" name="dayend" class="settingInput" /> <br>
+                                Plans? <input id="comment" name="comment" class="settingInput"/> <br>
+                                <input id="editday" class="submit" type="submit" value="Save"/>
+                            </form>
+                        </div>
                     </div>
                 </div>
 
@@ -101,19 +117,7 @@
                     </div>
                     <div class="row-fluid">
                         <div id="wrap">
-                            <div id="timelineinfo" style="display:none;">
-                                <form id="tripdayform">
-                                    Plan the day: <br>
-                                    <input id="id" name="id" type="hidden" />
-                                    <input id="tripid" name="tripid" type="hidden"/>
-                                    Date number: <input id="daynum" name="daynum" class="settingInput"/><br>
-                                    Date: <input id="date" name="date" class="settingInput"/><br>
-                                    Start: <input id="daystart" name="daystart" class="settingInput" /><br>
-                                    Destination: <input id="dayend" name="dayend" class="settingInput" /> <br>
-                                    Plans? <input id="comment" name="comment" class="settingInput"/> <br>
-                                    <input id="editday" class="submit" type="submit" value="Save"/>
-                                </form>
-                            </div>
+
                             <div id="timeline">
                                 <ul>            
                                     <li class="July first, don't forget!" title="Wed Jul 1 2009">Microsoft wants to buy yahoo. What do you think?</li>

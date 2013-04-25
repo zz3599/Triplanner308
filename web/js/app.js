@@ -35,6 +35,9 @@
         },
         initHandlers: function() {
             var self = this;
+            $('#newtripbutton').click(function(){
+                $('#newtripinfo').toggle(100);
+            });
             //update the page to show the data for the particular trip
             $('#yourtrips').on('click', 'li', function(e) {
                 $.each($(this).siblings(), function(i, e) {
@@ -62,13 +65,7 @@
                 });
                 //update the hero div
                 $('.hero-unit').text("Trip: "+$(this).attr('title'));
-                
-                $('.hero-unit').append("<br>"+"Start Date: "+$(this).attr('start')+ "<br>");
-                
-                $('.hero-unit').append("End Date: "+$(this).attr('end')+ "<br>");
-                $('.hero-unit').append("Staring Location: "+$(this).attr('startlocation')+"<br>");
-                $('.hero-unit').append("Ending Location: "+$(this).attr('endLocation') + '<br>');
-                $('.hero-unit').append("Description: " + $(this).attr('description'))
+                $('.hero-unit').append("<br>"+"Start Date: "+$(this).attr('start')+ "<br> End Date: "+$(this).attr('end')+ "<br>Staring Location: "+$(this).attr('startlocation')+"<br>Ending Location: "+$(this).attr('endLocation') + "<br>Description: " + $(this).attr('description'));
             });
             //create new trip handler
             $('#createtrip').click(function(e) {

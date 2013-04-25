@@ -27,6 +27,8 @@ public class TripdayDAO implements Serializable {
     private static final String UPDATEDAY = "Update tripdays set "
             + "date=?, startlocation=?, endlocation=?, comment=?, daynum=? "
             + "where id=?";
+    private static final String UPDATENEXTDAY = "Update tripdays set "
+            + "startlocation=? where tripid=? and daynum=?";
     private static final String ALLTRIPDAYS = "SELECT * from tripdays where tripid=? ORDER BY date";
     private static final String GETDAY  = "SELECT * from tripdays where tripid=? and date=?";
     
@@ -106,6 +108,12 @@ public class TripdayDAO implements Serializable {
             ps.setInt(6, tripdayid);
             int result = ps.executeUpdate();
             if (result == 1) {
+                //update the next tripday
+                ps = connection.prepareStatement(UPDATENEXTDAY);
+                ps.setString(1, end);
+                ps.setInt(2, tripid);
+                ps.setInt(3, daynum+1);
+                int r = ps.executeUpdate();
                 return new Tripday(tripdayid, tripid, date, start, end, comment, daynum);
             }
         } catch (Exception e) {
