@@ -119,11 +119,7 @@
 
                 <div class="span10">
                     <div class="hero-unit">
-                        <form action="photo" method="post" enctype="multipart/form-data">
-                                Photo Description<input type="text" name="description" />
-                                <input type="file" name="file" />
-                                <input type="submit" value="Add photo"/>
-                            </form>
+                        
                     </div>
                     <div class="row-fluid">
                         <div id="wrap">

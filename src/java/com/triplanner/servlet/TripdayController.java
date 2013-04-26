@@ -24,6 +24,7 @@ public class TripdayController {
         Timestamp tripdaystart = new Timestamp(timemillis);
         int tripid = Integer.parseInt(request.getParameter("tripid"));
         Tripday tripday = TripdayDAO.getDay(tripid, tripdaystart);
+        request.getSession().setAttribute("tripday", tripday);
         JSONObject o = new JSONObject();
         if(tripday != null){
             o = tripday.toJSON();

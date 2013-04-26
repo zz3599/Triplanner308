@@ -23,6 +23,7 @@ public class EventController {
     public static void doTripsEventsGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         int tripid = Integer.parseInt(request.getParameter("tripid"));
+        request.getSession().setAttribute("tripid", tripid);
         List<Event> events = EventDAO.selectAllEventsByTrip(tripid);
         JSONArray o = new JSONArray();
         if (events != null || !events.isEmpty()) {
