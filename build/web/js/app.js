@@ -3,6 +3,7 @@
     var TRIPURL = "trip";
     var TRIPEVENTS = "events";
     var TRIPDAY = "tripday";
+    var PHOTO = "photo";
     var TRIPTEMPLATE = "<li class='atrip' id={{id}} title='{{title}}' start={{startTime}} end={{endTime}} startLocation='{{startLocation}}' endLocation='{{endLocation}}' description='{{description}}'>\
 <a href='#'>{{title}}</a></li> ";
     /* Main app */
@@ -35,8 +36,10 @@
         },
         initHandlers: function() {
             $('#newtripbutton').click(function() {
-                $('#newtripinfo').toggle(100);
-                $('#timelineinfo').hide();
+                $('#newtripinfo').toggle(100).siblings().hide();
+            });
+            $('#newphoto').click(function() {
+                $('#uploadphotodiv').toggle(100).siblings().hide();
             });
             //update the page to show the data for the particular trip
             $('#yourtrips').on('click', 'li', function(e) {
@@ -71,17 +74,23 @@
                         '</p><p>Start: ' + $(this).attr('startLocation') + '(' + $(this).attr('start') + ')' +
                         '</p><p>Destination: ' + $(this).attr('endLocation') + '(' + $(this).attr('end') + ')' +
                         '</p><p>Description: ' + $(this).attr('description') + '</p></div>')
-                        .append("<form action='photo' method='post' enctype='multipart/form-data'>\
-                                Photo Description<input type='text' name='description' />\
-                                <input type='file' name='file' />\
-                                <input type='hidden' name='eventid' id='photoeventid'/>\
-                                <input type='hidden' name='tripdayid' id='phototripdayid'/>\
-                                <input type='text' name='eventdescription' id='eventdescription' readonly>\
-                                <input type='submit' value='Add photo'></form>"
+                        .append("<div class='span6'>\
+                                <span id='photoprogress'></span>\
+                                <label for=thumbnails'>Photos</label><div id='thumbnails' class='span12'></div></div>"
                         );
-
                 $('.hero-unit').append(row);
-
+                //load all photos
+                app.loadPhotos('trip', app.tripid);
+                //ajax file upload handler
+                $('#addphoto').click(function(e) {
+                    e.preventDefault();
+                    var formdata = new FormData(), file = document.getElementById('photofile').files[0], xhr;
+                    formdata.append('file', file);
+                    formdata.append('eventid', $('#photoeventid').val());
+                    formdata.append('tripdayid', $('#phototripdayid').val());
+                    formdata.append('description', $('#photodescription').val());
+                    app.postPhoto(formdata);
+                });
             });
             //create new trip handler
             $('#createtrip').click(function(e) {
@@ -103,6 +112,43 @@
                             app.timeline.updateDayForm(result);
                         });
             });
+        },
+        loadPhotos: function(type, id) {
+            $.get(PHOTO, {'type': type, 'id': id}).success(function(d) {
+                var data = JSON.parse(d);
+                if ($.isEmptyObject(data))
+                    return;
+                $.each(data, function(i, e) {
+                    $('#thumbnails').append($('<img>', {
+                        src: e.url,
+                        class: 'thumb'
+                    }));
+                });
+            });
+        },
+        postPhoto: function(formdata) {
+            var xhr = new XMLHttpRequest();
+            function onProgressHandler(e) {
+                if (e.lengthComputable) {
+                    var progress = e.loaded / e.total;
+                    $('#photoprogress').text(progress + '%');
+                }
+            }
+            function onCompleteHandler(e) {
+                if (e.target.status === 200 && e.target.responseText) {
+                    $('#photoprogress').text('done');
+                    var photo = JSON.parse(e.target.responseText);
+                    if($.isEmptyObject(photo)) return;
+                    $('#thumbnails').append($('<img>', {
+                        src: photo.url,
+                        class: 'thumb'
+                    }));
+                }
+            }
+            xhr.open('POST', PHOTO, true);
+            xhr.upload.addEventListener('progress', onProgressHandler);
+            xhr.addEventListener('readystatechange', onCompleteHandler);
+            xhr.send(formdata);
         },
         initCalendar: function() {
             app.timeline = new Timeline('timeline', new Date());//new Date());

@@ -49,6 +49,8 @@ public class ControllerServlet extends HttpServlet {
             EventController.doTripsEventsGet(request, response);
         } else if (resource.contains("/tripday")) {
             TripdayController.doTripdaysGet(request, response);
+        } else if (resource.contains("/photo")){
+            PhotoController.doPhotoGet(request, response);
         }
     }
     

@@ -76,8 +76,12 @@
                             <li><a href="#">Link</a></li>
                         </ul>
                     </div><!--/.well -->
-                    <div id="setting">
+                    <div id="controls">
                         <input type="button" id="newtripbutton" value="Create Trip"/>
+                        <input type="button" id="newphoto" value="Upload photos"/>
+                    </div>
+                    <div id="setting">
+
                         <div id="newtripinfo" style="display:none;">
                             <form id="newtrip">
                                 <div>Title: </div>
@@ -94,6 +98,16 @@
                                 <input id="endTime" name="endTime" class="settingInput endTime required"/><br>
                                 <input id="createtrip" type="submit" value="Create" class="submit"/>
                             </form>
+                        </div>                        
+                        <div id="uploadphotodiv" style="display:none;">
+                            <form enctype='multipart/form-data'>
+                                <label for='description'>Photo Description</label>
+                                <input type='text' id='photodescription' name='description' class="settingInput"/>
+                                <input type='file' id='photofile' name='file' />
+                                <input type='hidden' name='eventid' id='photoeventid' class="settingInput"/>
+                                <input type='hidden' name='tripdayid' id='phototripdayid' class="settingInput"/>
+                                <input type='text' name='eventdescription' id='eventdescription' class="settingInput" readonly>
+                                <input type='submit' id='addphoto' value='Add photo'></form>
                         </div>
                         <div id="timelineinfo" style="display:none;">
                             <form id="tripdayform">
@@ -106,20 +120,14 @@
                                 Destination: <input id="dayend" name="dayend" class="settingInput" /> <br>
                                 Plans? <input id="comment" name="comment" class="settingInput"/> <br>
                                 <input id="editday"  type="submit" value="Save"/>
-                            </form>
-                            <hr>
-<!--                            <form action="photo" method="post" enctype="multipart/form-data">
-                                Photo Description<input type="text" name="description" />
-                                <input type="file" name="file" />
-                                <input type="submit" value="Add photo"/>
-                            </form>-->
+                            </form>                            
                         </div>
                     </div>
                 </div>
 
                 <div class="span10">
-                    <div class="hero-unit">
-                        
+                    <div class="hero-unit" id="hero">
+
                     </div>
                     <div class="row-fluid">
                         <div id="wrap">

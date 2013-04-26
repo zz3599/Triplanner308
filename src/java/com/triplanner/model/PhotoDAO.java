@@ -22,14 +22,16 @@ import java.util.List;
  * @author brook
  */
 public class PhotoDAO implements Serializable {
-    public static final String UPLOADPHOTO = "Insert into photos (url, userid, tripid, tripdayid, eventid, comment, uploadtime) values"
-            + "(?, ?, ?, ?, ?, ?, ?)";
+    public static final String UPLOADPHOTO = "Insert into photos "
+            + "(url, userid, tripid, tripdayid, eventid, comment, originalname, uploadtime) values"
+            + "(?, ?, ?, ?, ?, ?, ?, ?)";
     public static final String EVENTPHOTOS = "Select * from photos where eventid=? order by uploadtime";
     public static final String DAYPHOTOS = "Select * from photos where tripdayid=? order by uploadtime";
     public static final String TRIPPHOTOS = "Select * from photos where tripid=? order by uploadtime";
     public static final String USERPHOTOS = "Select * from photos where userid=? order by uploadtime";  
     
-    public static Photo uploadPhoto(String url, int userid, int tripid, Integer tripdayid, Integer eventid, String comment){
+    public static Photo uploadPhoto(String url, int userid, int tripid, Integer tripdayid, Integer eventid, 
+            String comment, String originalName){
         Timestamp now = new Timestamp(new Date().getTime());
         try {
             Connection con = DB.getConnection();
@@ -43,11 +45,12 @@ public class PhotoDAO implements Serializable {
                 else ps.setNull(5, Types.INTEGER);
             
             ps.setString(6, comment);
-            ps.setTimestamp(7, now);
+            ps.setString(7, originalName);
+            ps.setTimestamp(8, now);
             ps.executeUpdate();
             ResultSet rs = ps.getGeneratedKeys();
             if(rs.first()) {
-                return new Photo(rs.getInt(1), url, userid, tripid, tripdayid, eventid, comment, now);
+                return new Photo(rs.getInt(1), url, userid, tripid, tripdayid, eventid, comment, originalName, now);
             }
         } catch(Exception e){
             e.printStackTrace();
@@ -114,8 +117,10 @@ public class PhotoDAO implements Serializable {
         Integer tripdayid = rs.getInt("tripdayid");
         int eventid = rs.getInt("eventid");
         String comment = rs.getString("comment");
+        String originalName = rs.getString("originalname");
         Timestamp uploadtime = rs.getTimestamp("uploadtime");
-        return new Photo(id, url, userid, tripid, tripdayid, eventid, comment, uploadtime);        
+        
+        return new Photo(id, url, userid, tripid, tripdayid, eventid, comment, originalName, uploadtime);        
     }
 
     

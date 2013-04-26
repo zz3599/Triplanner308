@@ -23,6 +23,7 @@ public class Photo {
     public Integer eventid;
     public String comment;
     public Timestamp uploadtime;
+    public String originalname; 
 
     public JSONObject toJSON() {
         JSONObject o = new JSONObject();
@@ -32,11 +33,13 @@ public class Photo {
         o.put("tripid", tripdayid);
         o.put("eventid", eventid);
         o.put("comment", comment);
+        o.put("originalname", originalname);
         o.put("uploadtime", formatter.format(uploadtime));
         return o;
     }
 
-    public Photo(int id, String url, int userid, int tripid, Integer tripdayid, Integer eventid, String comment, Timestamp uploadtime) {
+    public Photo(int id, String url, int userid, int tripid, Integer tripdayid, Integer eventid, String comment, 
+            String originalname, Timestamp uploadtime) {
         this.id = id;
         this.url = url;
         this.userid = userid;
@@ -44,6 +47,7 @@ public class Photo {
         this.tripdayid = tripdayid;
         this.eventid = eventid;
         this.comment = comment;
+        this.originalname = originalname;
         this.uploadtime = uploadtime;
     }
 
@@ -78,4 +82,10 @@ public class Photo {
     public Timestamp getUploadtime() {
         return uploadtime;
     }
+
+    public String getOriginalname() {
+        return originalname;
+    }
+    
+    
 }

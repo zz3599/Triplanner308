@@ -15,11 +15,15 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Part;
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 /**
@@ -48,10 +52,13 @@ public class PhotoController {
         int tripid = ((Integer) request.getSession().getAttribute("tripid")).intValue();
         Integer tripdayid = Utils.isNullOrEmpty(tripdayidString) ? null : Integer.parseInt(tripdayidString);
         Integer eventid = Utils.isNullOrEmpty(eventidString) ? null : Integer.parseInt(eventidString);
-        Part filePart = request.getPart("file"); // Retrieves <input type="file" name="file">
-        String filename = getFilename(filePart);
-        InputStream filecontent = filePart.getInputStream();
         
+        Part filePart = request.getPart("file"); // Retrieves <input type="file" name="file">
+        String originalName = getFilename(filePart);
+        String uuid = UUID.randomUUID().toString().replace("-", "");
+        String filename = uuid + originalName.substring(originalName.lastIndexOf("."));
+        
+        InputStream filecontent = filePart.getInputStream();
         InputStream is = null;
         OutputStream os = null;
         String dirPath = context.getRealPath(ROOTDIR + "/" + userid);
@@ -71,9 +78,9 @@ public class PhotoController {
             e.printStackTrace();
         }
         finally{
-            is.close(); os.close();
-            //response.sendRedirect(url);
-            Photo photo = PhotoDAO.uploadPhoto(url, userid, tripid, tripdayid, eventid, description);
+            if(is != null) is.close(); 
+            if(os != null) os.close();
+            Photo photo = PhotoDAO.uploadPhoto(url, userid, tripid, tripdayid, eventid, description, originalName);
             JSONObject o = new JSONObject();
             if(photo != null){
                 o = photo.toJSON();
@@ -82,6 +89,28 @@ public class PhotoController {
         }
     }
 
+    public static void doPhotoGet (HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {  
+        String requestFor = request.getParameter("type").toLowerCase();
+        int id = Integer.parseInt(request.getParameter("id"));
+        List<Photo> photos = new ArrayList<Photo>();
+        if(requestFor.contains("trip")){
+            photos = PhotoDAO.getTripPhotos(id);
+        } else if(requestFor.contains("tripday")){
+            photos = PhotoDAO.getDayPhotos(id);
+        } else if(requestFor.contains("event")){
+            photos = PhotoDAO.getEventPhotos(id);
+        }
+        JSONArray a = new JSONArray();
+        for(Photo photo : photos){
+            a.put(photo.toJSON());
+        }
+        response.getWriter().println(a);
+    }
+    
+    
+    
+    
     private static String getFilename(Part part) {
         for (String cd : part.getHeader("content-disposition").split(";")) {
             if (cd.trim().startsWith("filename")) {
