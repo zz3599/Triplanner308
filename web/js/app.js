@@ -15,11 +15,13 @@
         eventid: null,
         timeline: null,
         init: function() {
+            app.initSpinner();
             app.initCalendar();
             app.initMap();
             app.initData();
             app.initHandlers();
             app.initTimepickers($('#startTime'), $('#endTime'), null, null);
+            app.stopSpinner();
         },
         initData: function() {
             $.get(TRIPURL, function(data) {
@@ -66,9 +68,10 @@
                 $('#dayend').val(app.endLocation).trigger('change');
                 //$('#daystart').val(app.startLocation).trigger('change');
                 $(this).addClass('selected');
-
                 //get all events for the trip and update timeline
+                app.initSpinner();
                 $.get(TRIPEVENTS, {'tripid': app.tripid}).success(function(result) {
+                    app.stopSpinner();
                     var d = JSON.parse(result), event;
                     if (!d) {/*no events - show error*/
                         return;
@@ -91,13 +94,14 @@
                 $('.hero-unit').append(row);
                 //load all photos
                 app.loadPhotos('trip', app.tripid);
-
             });
             //create new trip handler
             $('#createtrip').click(function(e) {
                 e.preventDefault();
+                app.initSpinner();
                 $.post(TRIPURL, $('#newtrip').serialize()).success(
                         function(result) {
+                            app.stopSpinner();
                             var json = JSON.parse(result);
                             if ($.isEmptyObject(json))
                                 return;
@@ -108,14 +112,18 @@
             //edit the information for a day
             $('#editday').click(function(e) {
                 e.preventDefault();
+                app.initSpinner();
                 $.post(TRIPDAY + '?action=update', $('#tripdayform').serialize()).success(
                         function(result) {
+                            app.stopSpinner();
                             app.timeline.updateDayForm(result);
                         });
             });
         },
         loadPhotos: function(type, id) {
+            app.initSpinner();
             $.get(PHOTO, {'type': type, 'id': id}).success(function(d) {
+                app.stopSpinner();
                 var data = JSON.parse(d);
                 if ($.isEmptyObject(data))
                     return;
@@ -137,6 +145,7 @@
             }
             function onCompleteHandler(e) {
                 if (e.target.status === 200 && e.target.responseText && !completed) {
+                    app.stopSpinner();
                     $('#photoprogress').text('done');
                     completed = true;
                     var photo = JSON.parse(e.target.responseText);
@@ -148,13 +157,14 @@
                     }));
                 }
             }
+            app.initSpinner();
             xhr.open('POST', PHOTO, true);
             xhr.upload.addEventListener('progress', onProgressHandler);
             xhr.addEventListener('readystatechange', onCompleteHandler);
             xhr.send(formdata);
         },
         initCalendar: function() {
-            app.timeline = new Timeline('timeline', new Date());//new Date());
+            app.timeline = new Timeline('timeline', new Date()); //new Date());
         },
         initTimepickers: function(startTime, endTime, minDate, maxDate) {
             var startTimeProps = {
@@ -241,11 +251,34 @@
                 });
             }
         },
+        initSpinner: function() {
+            var opts = {
+                lines: 13, // The number of lines to draw
+                length: 20, // The length of each line
+                width: 10, // The line thickness
+                radius: 30, // The radius of the inner circle
+                corners: 1, // Corner roundness (0..1)
+                rotate: 0, // The rotation offset
+                direction: 1, // 1: clockwise, -1: counterclockwise
+                color: '#000', // #rgb or #rrggbb
+                speed: 1.8, // Rounds per second
+                trail: 60, // Afterglow percentage
+                shadow: false, // Whether to render a shadow
+                hwaccel: false, // Whether to use hardware acceleration
+                className: 'spinner', // The CSS class to assign to the spinner
+                zIndex: 2e9, // The z-index (defaults to 2000000000)
+                top: 'auto', // Top position relative to parent in px
+                left: 'auto' // Left position relative to parent in px
+            };
+            var target = document.getElementById('hero');
+            app.spinner = new Spinner(opts).spin(target);
+        },
+        stopSpinner: function() {
+            app.spinner.stop();
+        }
     };
-
     world.app = app;
     app.init();
-
 })(window);
 
 

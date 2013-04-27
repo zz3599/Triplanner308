@@ -25,6 +25,7 @@
         <script src="../js/mustache.min.js"></script>
         <script src="../js/timeline.min.js"></script>
         <script src="../js/bootstrap.min.js"></script>
+        <script src="../js/spin.min.js"></script>
         <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAUC9VWHP1FfCpjU5Rs-wpN7vRwSFp4-bw&sensor=true">
         </script>
         <script type="text/javascript">
@@ -35,8 +36,6 @@
 
             }
         </script>
-
-
     </head>
     <body>
         <div class="navbar navbar-inverse navbar-fixed-top">
@@ -60,7 +59,7 @@
             </div>
         </div>
 
-        <div class="container-fluid">
+        <div class="container-fluid" id="container-fluid">
             <div class="row-fluid">
                 <div class="span2">
                     <!--Sidebar content-->
