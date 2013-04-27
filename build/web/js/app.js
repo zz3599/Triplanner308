@@ -41,6 +41,16 @@
             $('#newphoto').click(function() {
                 $('#uploadphotodiv').toggle(100).siblings().hide();
             });
+            //ajax file upload handler
+            $('#addphoto').click(function(e) {
+                e.preventDefault();
+                var formdata = new FormData(), file = document.getElementById('photofile').files[0], xhr;
+                formdata.append('file', file);
+                formdata.append('eventid', $('#photoeventid').val());
+                formdata.append('tripdayid', $('#phototripdayid').val());
+                formdata.append('description', $('#photodescription').val());
+                app.postPhoto(formdata);
+            });
             //update the page to show the data for the particular trip
             $('#yourtrips').on('click', 'li', function(e) {
                 $.each($(this).siblings(), function(i, e) {
@@ -81,16 +91,7 @@
                 $('.hero-unit').append(row);
                 //load all photos
                 app.loadPhotos('trip', app.tripid);
-                //ajax file upload handler
-                $('#addphoto').click(function(e) {
-                    e.preventDefault();
-                    var formdata = new FormData(), file = document.getElementById('photofile').files[0], xhr;
-                    formdata.append('file', file);
-                    formdata.append('eventid', $('#photoeventid').val());
-                    formdata.append('tripdayid', $('#phototripdayid').val());
-                    formdata.append('description', $('#photodescription').val());
-                    app.postPhoto(formdata);
-                });
+
             });
             //create new trip handler
             $('#createtrip').click(function(e) {
@@ -127,7 +128,7 @@
             });
         },
         postPhoto: function(formdata) {
-            var xhr = new XMLHttpRequest();
+            var xhr = new XMLHttpRequest(), completed = false;
             function onProgressHandler(e) {
                 if (e.lengthComputable) {
                     var progress = e.loaded / e.total;
@@ -135,10 +136,12 @@
                 }
             }
             function onCompleteHandler(e) {
-                if (e.target.status === 200 && e.target.responseText) {
+                if (e.target.status === 200 && e.target.responseText && !completed) {
                     $('#photoprogress').text('done');
+                    completed = true;
                     var photo = JSON.parse(e.target.responseText);
-                    if($.isEmptyObject(photo)) return;
+                    if ($.isEmptyObject(photo))
+                        return;
                     $('#thumbnails').append($('<img>', {
                         src: photo.url,
                         class: 'thumb'
