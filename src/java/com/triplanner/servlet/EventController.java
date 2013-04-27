@@ -43,7 +43,7 @@ public class EventController {
         String tt = request.getParameter("eventStart");
         Timestamp startTime = Timestamp.valueOf(request.getParameter("eventStart"));
         Timestamp endTime = Timestamp.valueOf(request.getParameter("eventEnd"));
-        String comment = request.getParameter("eventdescription");
+        String comment = request.getParameter("description");
         Event newEvent = EventDAO.createEvent(tripid, tripdayid, startTime, endTime, 0, comment, startLocation, endLocation);
         JSONObject o = new JSONObject();
         if (newEvent != null) {

@@ -143,8 +143,8 @@
                                     <fieldset>
                                         <input type="hidden" id="eventtripid" name="eventtripid"/>
                                         <input type="hidden" id="eventtripdayid" name="eventtripdayid"/>
-                                        <label for="eventdescription">Description</label>
-                                        <input type="text" name="eventdescription" id="eventdescription" class="text ui-widget-content ui-corner-all" />
+                                        <label for="description">Description</label>
+                                        <input type="text" name="description" id="description" class="text ui-widget-content ui-corner-all" />
                                         <label for="eventstartLocation">Start Location</label>
                                         <input type="text" name="eventstartLocation" id="eventstartLocation" value="" class="text ui-widget-content ui-corner-all" />
                                         <label for="eventendLocation">End Location</label>
