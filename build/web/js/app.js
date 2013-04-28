@@ -175,7 +175,7 @@
                         src: photo.url,
                         height: '70px'
                     }))).hide();
-                    if ($.isEmptyObject(parent.children('div')))
+                    if (parent.children('div').length === 0)
                         img.show();
                     img.appendTo(parent);
 
