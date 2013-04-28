@@ -306,7 +306,7 @@
             uploadphotodiv.find('input[type=hidden]').removeAttr('value');
             var neweventdiv = $('#neweventform');
             neweventdiv.find('input[type=text]').val('');
-            neweveventdiv.find('input[type=hidden]').removeAttr('value');
+            neweventdiv.find('input[type=hidden]').removeAttr('value');
 
         }
     };
