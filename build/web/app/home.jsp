@@ -10,6 +10,7 @@
         <link type-="text/css" rel="stylesheet" href="../css/jquery-ui-1.9.2.custom.min.css"/>
         <link type-="text/css" rel="stylesheet" href="../css/timeline.css"/>
         <link type-="text/css" rel="stylesheet" href="../css/bootstrap.min.css"/>
+        <link type="text/css" rel="stylesheet" href="../css/lightbox.css"/>
         <style type="text/css">
             body {
                 padding-top: 60px;
@@ -19,13 +20,14 @@
                 padding: 9px 0;
             }
         </style>
-        <script src="../js/jquery-1.9.1.min.js"></script>
+        <script src="../js/jquery-1.8.3.min.js"></script>
         <script src="../js/jquery-ui-1.9.2.custom.min.js"></script>
         <script src="../js/jquery-ui-timepicker-addon.js"></script>
         <script src="../js/mustache.min.js"></script>
         <script src="../js/timeline.min.js"></script>
         <script src="../js/bootstrap.min.js"></script>
         <script src="../js/spin.min.js"></script>
+        <script src="../js/lightbox.js"></script>
         <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAUC9VWHP1FfCpjU5Rs-wpN7vRwSFp4-bw&sensor=true">
         </script>
         <script type="text/javascript">

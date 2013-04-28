@@ -128,10 +128,22 @@
                 if ($.isEmptyObject(data))
                     return;
                 $.each(data, function(i, e) {
-                    $('#thumbnails').append($('<img>', {
+                    var img = $('<div>', {
+                        class: 'single',
+                        style: 'float:left;'
+                    }).append($('<a>', {
+                        href: e.url,
+                        rel: 'lightbox[album]',
+                        title: e.comment
+                    }).append($('<img>', {
                         src: e.url,
-                        class: 'thumb'
-                    }));
+                        width: '50px',
+                        height: '70px'
+                    })));
+                    $('#thumbnails').append(img);
+                    if(i !== 0)
+                        img.hide();
+                    i++;
                 });
             });
         },
