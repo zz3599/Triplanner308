@@ -58,6 +58,7 @@
                 $.each($(this).siblings(), function(i, e) {
                     $(e).removeClass('selected');
                 });
+                app.clearForms();
                 $('#timelineinfo').hide(100);
                 app.tripid = $(this).attr('id');
                 app.timelinestart = new Date($(this).attr('start'));
@@ -89,7 +90,7 @@
                         '</p><p>Description: ' + $(this).attr('description') + '</p></div>')
                         .append("<div class='span6'>\
                                 <span id='photoprogress'></span>\
-                                <label for=thumbnails'>Photos</label><div id='thumbnails' class='span12'></div></div>"
+                                <label for=thumbnails'>Photo (click for album)</label><div id='thumbnails' class='span12'></div></div>"
                         );
                 $('.hero-unit').append(row);
                 //load all photos
@@ -141,9 +142,8 @@
                         height: '70px'
                     })));
                     $('#thumbnails').append(img);
-                    if(i !== 0)
+                    if (i !== 0) //only need to show the first image as the thumbnail
                         img.hide();
-                    i++;
                 });
             });
         },
@@ -159,14 +159,26 @@
                 if (e.target.status === 200 && e.target.responseText && !completed) {
                     app.stopSpinner();
                     $('#photoprogress').text('done');
+                    var parent = $('#thumbnails');
                     completed = true;
                     var photo = JSON.parse(e.target.responseText);
                     if ($.isEmptyObject(photo))
                         return;
-                    $('#thumbnails').append($('<img>', {
+                    var img = $('<div>', {
+                        class: 'single',
+                        style: 'float:left;'
+                    }).append($('<a>', {
+                        href: photo.url,
+                        rel: 'lightbox[album]',
+                        title: photo.comment
+                    }).append($('<img>', {
                         src: photo.url,
-                        class: 'thumb'
-                    }));
+                        height: '70px'
+                    }))).hide();
+                    if ($.isEmptyObject(parent.children('div')))
+                        img.show();
+                    img.appendTo(parent);
+
                 }
             }
             app.initSpinner();
@@ -287,6 +299,15 @@
         },
         stopSpinner: function() {
             app.spinner.stop();
+        },
+        clearForms: function() {
+            var uploadphotodiv = $('#uploadphotodiv');
+            uploadphotodiv.find('input[type=text]').val("");
+            uploadphotodiv.find('input[type=hidden]').removeAttr('value');
+            var neweventdiv = $('#neweventform');
+            neweventdiv.find('input[type=text]').val('');
+            neweveventdiv.find('input[type=hidden]').removeAttr('value');
+
         }
     };
     world.app = app;
