@@ -43,7 +43,9 @@ public class TripdayController {
         String comment = request.getParameter("comment");
         String date = request.getParameter("date");
         Timestamp t = null; 
-        try { t = new Timestamp(ControllerServlet.jsDateFormat.parse(date).getTime());        }
+        try { 
+            t = new Timestamp(ControllerServlet.jsDateFormat.parse(date).getTime());        
+        }
         catch(Exception e){}
         JSONObject o = new JSONObject();
         if(action.equals("update") && t != null){
@@ -51,7 +53,6 @@ public class TripdayController {
             if(updatedday != null)
                 o = updatedday.toJSON();
         } else if(action.equals("create")){
-            
         }
         response.getWriter().println(o);
     }

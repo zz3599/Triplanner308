@@ -19,8 +19,12 @@ import org.json.JSONObject;
  * @author brook
  */
 public class WaypointController {
-
-    public void doWaypointsGet(HttpServletRequest request, HttpServletResponse response)
+    /*
+     * Need to cache the waypoints for quick batch updates
+     */
+    private static List<Waypoint> cachedWaypoints = null;
+    
+    public static void doWaypointsGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         int tripid = Integer.parseInt(request.getParameter("tripid"));
         String tripdayid_str = request.getParameter("tripdayid");
@@ -33,6 +37,7 @@ public class WaypointController {
         }
         JSONArray a = new JSONArray();
         if (waypoints != null) {
+            cachedWaypoints = waypoints;
             for (Waypoint point : waypoints) {
                 a.put(point.toJSON());
             }
@@ -40,7 +45,7 @@ public class WaypointController {
         response.getWriter().println(a);
     }
 
-    public void doWaypointsPost(HttpServletRequest request, HttpServletResponse response)
+    public static void doWaypointsPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String action = request.getParameter("action");
         int tripid = Integer.parseInt(request.getParameter("tripid"));
@@ -56,9 +61,11 @@ public class WaypointController {
                 o = waypoint.toJSON();
             }
         } else if (action.equals("update")) {
-            //TODO: update just one waypoint
-        } else if (action.equals("updateall")){
-            //TODO: add facility to update the waypoints in any arbitrary fashion
+            //add facility to update the waypoints in any arbitrary fashion - delete, switch, add
+            String[] locations = request.getParameterValues("locations[]");
+            int numberwaypoints = WaypointDAO.getWaypointsCountByDay(tripid, tripdayid);
+            boolean success = WaypointDAO.updateAll(locations, tripid, tripdayid, numberwaypoints);
+            System.out.println(success);
         }
         response.getWriter().println(o);
 

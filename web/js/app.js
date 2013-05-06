@@ -1,13 +1,16 @@
 ;
 (function(world) {
-    var TRIPURL = "trip";
-    var TRIPEVENTS = "events";
-    var TRIPDAY = "tripday";
-    var PHOTO = "photo";
+
     var TRIPTEMPLATE = "<li class='atrip' id={{id}} title='{{title}}' start={{startTime}} end={{endTime}} startLocation='{{startLocation}}' endLocation='{{endLocation}}' description='{{description}}'>\
 <a href='#'>{{title}}</a></li> ";
     /* Main app */
     var app = {
+        TRIPURL: "trip",
+        TRIPEVENTS: "events",
+        TRIPDAY: "tripday",
+        PHOTO: "photo",
+        WAYPOINT: "waypoint",
+        HOTEL: "hotel",
         timelineend: null,
         timelinestart: null,
         tripid: null,
@@ -24,7 +27,7 @@
             app.stopSpinner();
         },
         initData: function() {
-            $.get(TRIPURL, function(data) {
+            $.get(app.TRIPURL, function(data) {
                 var trips = JSON.parse(data);
                 if (trips.length === 0) {
                     $('<p>', {text: 'No trips'}).appendTo($('#yourtrips'));
@@ -37,6 +40,31 @@
             });
         },
         initHandlers: function() {
+            $('#waypointsortable').sortable()
+                    .on('click', '.deletestop', function(e) {
+                e.preventDefault();
+                $(this).parent().remove();
+            });
+            $('#updatewaypoints').click(function(e) {
+                e.preventDefault();
+                var waypointform = $('#waypointform');
+                var locations = waypointform.find('input[name="locations[]"]');
+                for (var i = 0; i < locations.length; i++) {
+                    if (locations[i].value.length === 0) {
+                        waypointform.find('#errors').text('Cannot submit with empty location');
+                        return;
+                    }
+                }
+                $.post(app.WAYPOINT + "?action=update&tripid=" + app.timeline.tripid + "&tripdayid=" + app.timeline.tripdayid,
+                        waypointform.serialize()).
+                        success(function(d) {
+                            //h
+                });
+            });
+            $('#createwaypoint').click(function() {
+                $(Mustache.render(app.timeline.WAYPOINTTEMPLATE, {location: ''})).
+                        appendTo($('#waypointsortable'));
+            });
             $('#newtripbutton').click(function() {
                 $('#newtripinfo').toggle(100).siblings().hide();
             });
@@ -71,7 +99,7 @@
                 $(this).addClass('selected');
                 //get all events for the trip and update timeline
                 app.initSpinner();
-                $.get(TRIPEVENTS, {'tripid': app.tripid}).success(function(result) {
+                $.get(app.TRIPEVENTS, {'tripid': app.tripid}).success(function(result) {
                     app.stopSpinner();
                     var d = JSON.parse(result), event;
                     if (!d) {/*no events - show error*/
@@ -100,7 +128,7 @@
             $('#createtrip').click(function(e) {
                 e.preventDefault();
                 app.initSpinner();
-                $.post(TRIPURL, $('#newtrip').serialize()).success(
+                $.post(app.TRIPURL, $('#newtrip').serialize()).success(
                         function(result) {
                             app.stopSpinner();
                             var json = JSON.parse(result);
@@ -114,7 +142,7 @@
             $('#editday').click(function(e) {
                 e.preventDefault();
                 app.initSpinner();
-                $.post(TRIPDAY + '?action=update', $('#tripdayform').serialize()).success(
+                $.post(app.TRIPDAY + '?action=update', $('#tripdayform').serialize()).success(
                         function(result) {
                             app.stopSpinner();
                             app.timeline.updateDayForm(result);
@@ -123,7 +151,7 @@
         },
         loadPhotos: function(type, id) {
             app.initSpinner();
-            $.get(PHOTO, {'type': type, 'id': id}).success(function(d) {
+            $.get(app.PHOTO, {'type': type, 'id': id}).success(function(d) {
                 app.stopSpinner();
                 var data = JSON.parse(d);
                 if ($.isEmptyObject(data))
@@ -182,7 +210,7 @@
                 }
             }
             app.initSpinner();
-            xhr.open('POST', PHOTO, true);
+            xhr.open('POST', app.PHOTO, true);
             xhr.upload.addEventListener('progress', onProgressHandler);
             xhr.addEventListener('readystatechange', onCompleteHandler);
             xhr.send(formdata);

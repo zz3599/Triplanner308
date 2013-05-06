@@ -4,13 +4,14 @@
  */
 package com.triplanner.entities;
 
+import java.io.Serializable;
 import org.json.JSONObject;
 
 /**
  *
  * @author Brook
  */
-public abstract class AbstractEntity {
+public abstract class AbstractEntity implements Serializable{
     public int id;
     
     public int getId(){

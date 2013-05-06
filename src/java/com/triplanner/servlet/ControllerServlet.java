@@ -27,7 +27,9 @@ import javax.servlet.http.HttpServletResponse;
     "/app/trip",
     "/app/events",
     "/app/tripday",
-    "/app/photo"
+    "/app/photo",
+    "/app/waypoint",
+    "/app/hotel"
 },
         asyncSupported = true)
 @MultipartConfig
@@ -51,6 +53,10 @@ public class ControllerServlet extends HttpServlet {
             TripdayController.doTripdaysGet(request, response);
         } else if (resource.contains("/photo")){
             PhotoController.doPhotoGet(request, response);
+        } else if (resource.contains("/waypoint")){
+            WaypointController.doWaypointsGet(request, response);
+        } else if(resource.contains("/hotel")){
+            HotelController.doHotelsGet(request, response);
         }
     }
     
@@ -73,6 +79,10 @@ public class ControllerServlet extends HttpServlet {
             TripdayController.doCreateTripdayPost(request, response);
         } else if (resource.contains("/photo")){
             PhotoController.doUploadPost(request, response, getServletContext());
+        } else if (resource.contains("/waypoint")){
+            WaypointController.doWaypointsPost(request, response);
+        } else if(resource.contains("/hotel")){
+            HotelController.doHotelsPost(request, response);
         }
     }
     

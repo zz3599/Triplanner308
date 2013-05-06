@@ -80,6 +80,7 @@
                     <div id="controls">
                         <input type="button" id="newtripbutton" value="Create Trip"/>
                         <input type="button" id="newphoto" value="Upload photos"/>
+
                     </div>
                     <div id="setting">
 
@@ -113,15 +114,23 @@
                         <div id="timelineinfo" style="display:none;">
                             <form id="tripdayform">
                                 Plan the day: <br>
-                                <input id="id" name="id" type="hidden" />
+                                <input id="tripdayid" name="id" type="hidden" />
                                 <input id="tripid" name="tripid" type="hidden"/>
-                                <input id="daynum" type="hidden" name="daynum" class="settingInput"/><br>
+                                <input id="daynum" type="hidden" name="daynum" class="settingInput"/>
                                 Date: <input id="date" name="date" class="settingInput"/><br>
                                 Start: <input id="daystart" name="daystart" class="settingInput" /><br>
                                 Destination: <input id="dayend" name="dayend" class="settingInput" /> <br>
                                 Plans? <input id="comment" name="comment" class="settingInput"/> <br>
                                 <input id="editday"  type="submit" value="Save"/>
-                            </form>                            
+                            </form>              
+                            <form id="waypointform">
+                                Waypoints: <br>
+                                <ul id="waypointsortable">
+                                </ul>
+                                <input type="button" id="createwaypoint" value="Add waypoint">
+                                <input type="submit" id="updatewaypoints">
+                                <div id="errors"></div>
+                            </form>
                         </div>
                     </div>
                 </div>
@@ -134,9 +143,7 @@
                         <div id="wrap">
 
                             <div id="timeline">
-                                <ul>            
-                                    <li class="July first, don't forget!" title="Wed Jul 1 2009">Microsoft wants to buy yahoo. What do you think?</li>
-                                </ul>    
+
                             </div>
                             <div id="dialog-form" title="Plan event">
                                 <p class="validateTips">All form fields are required.</p>
