@@ -12,9 +12,8 @@ import org.json.JSONObject;
  * Object to represent a trip
  * @author brook
  */
-public class Trip {
+public class Trip extends AbstractEntity{
     private static SimpleDateFormat formatter = new SimpleDateFormat("M-d-yyyy");
-    public int id;
     public int userid;
     public String title;
     public String description;
@@ -24,6 +23,7 @@ public class Trip {
     public String endLocation;
     public boolean shared;
 
+    @Override
     public JSONObject toJSON(){
         JSONObject o = new JSONObject();
         o.put("id", this.id);
@@ -37,11 +37,7 @@ public class Trip {
         o.put("shared", this.shared);
         return o;
     }
-    
-    public int getId() {
-        return id;
-    }
-
+  
     public int getUserid() {
         return userid;
     }

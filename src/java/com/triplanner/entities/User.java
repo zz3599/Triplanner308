@@ -10,8 +10,7 @@ import org.json.JSONObject;
  *
  * @author brook
  */
-public class User {
-    public int id;
+public class User extends AbstractEntity{
     public String email;
     public String firstname;
     public String lastname; 
@@ -27,6 +26,7 @@ public class User {
         this.authority = authority;
     }
 
+    @Override
     public JSONObject toJSON(){
         JSONObject o = new JSONObject();
         o.put("id", this.id);
@@ -36,9 +36,6 @@ public class User {
         return o;
     }
     
-    public int getId(){
-        return id;
-    }
     
     public String getEmail() {
         return email;

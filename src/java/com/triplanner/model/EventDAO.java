@@ -29,7 +29,7 @@ public class EventDAO implements Serializable{
     private static final String SELECTEVENTSBYTRIP  = "Select * from events where tripid=?";
     private static final String DELETEEVENT = "Delete from events where id=?";
     
-    public  static List<Event> selectAllEventsByDay(int dayid){
+    public  static List<Event> getAllEventsByDay(int dayid){
         try {
             Connection connection = DB.getConnection();
             PreparedStatement ps = connection.prepareStatement(SELECTEVENTSBYDAY);
@@ -46,7 +46,7 @@ public class EventDAO implements Serializable{
         return null;        
     }
     
-    public  static List<Event> selectAllEventsByTrip(int tripid){
+    public  static List<Event> getAllEventsByTrip(int tripid){
         try {
             Connection connection = DB.getConnection();
             PreparedStatement ps = connection.prepareStatement(SELECTEVENTSBYTRIP);

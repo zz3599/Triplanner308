@@ -24,7 +24,7 @@ public class EventController {
             throws ServletException, IOException {
         int tripid = Integer.parseInt(request.getParameter("tripid"));
         request.getSession().setAttribute("tripid", tripid);
-        List<Event> events = EventDAO.selectAllEventsByTrip(tripid);
+        List<Event> events = EventDAO.getAllEventsByTrip(tripid);
         JSONArray o = new JSONArray();
         if (events != null || !events.isEmpty()) {
             for (Event e : events) {

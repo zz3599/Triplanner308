@@ -12,8 +12,10 @@ import org.json.JSONObject;
  */
 public abstract class AbstractEntity {
     public int id;
-    public abstract JSONObject toJSON();
+    
     public int getId(){
         return id;
     }
+    
+    public abstract JSONObject toJSON();
 }

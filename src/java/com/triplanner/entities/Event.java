@@ -12,8 +12,7 @@ import org.json.JSONObject;
  *
  * @author brook
  */
-public class Event {
-    public int id;
+public class Event extends AbstractEntity{
     public int tripid;
     public int tripdayid;
     public Timestamp startTime;
@@ -24,6 +23,7 @@ public class Event {
     public String comment;
     private static final SimpleDateFormat formatter = new SimpleDateFormat("M-dd-yyyy hh:mm");
     
+    @Override
     public JSONObject toJSON(){
         JSONObject o = new JSONObject();
         o.put("id", id);

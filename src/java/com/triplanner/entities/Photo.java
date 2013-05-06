@@ -12,10 +12,9 @@ import org.json.JSONObject;
  *
  * @author brook
  */
-public class Photo {
+public class Photo extends AbstractEntity{
 
     private static final SimpleDateFormat formatter = new SimpleDateFormat("M-d-yyyy hh:mm");
-    public int id;
     public String url;
     public int userid;
     public int tripid;
@@ -25,6 +24,7 @@ public class Photo {
     public Timestamp uploadtime;
     public String originalname; 
 
+    @Override
     public JSONObject toJSON() {
         JSONObject o = new JSONObject();
         o.put("id", id);
@@ -49,10 +49,6 @@ public class Photo {
         this.comment = comment;
         this.originalname = originalname;
         this.uploadtime = uploadtime;
-    }
-
-    public int getId() {
-        return id;
     }
 
     public String getUrl() {
