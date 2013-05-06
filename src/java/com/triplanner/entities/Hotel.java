@@ -8,34 +8,29 @@ import org.json.JSONObject;
 
 /**
  *
- * @author Brook
+ * @author brook
  */
-public class Waypoint extends AbstractEntity{
+public class Hotel extends AbstractEntity{
     public int tripid;
     public int tripdayid;
-    public String location;
-    public int pointnum;
-    
+    public String location; 
+
+    public Hotel(int id, int tripid, int tripdayid, String location) {
+        this.id = id;
+        this.tripid = tripid;
+        this.tripdayid = tripdayid;
+        this.location = location;
+    }
+
     @Override
-    public JSONObject toJSON() {
+    public JSONObject toJSON(){
         JSONObject o = new JSONObject();
         o.put("id", id);
         o.put("tripid", tripid);
         o.put("tripdayid", tripdayid);
         o.put("location", location);
-        o.put("pointnum", pointnum);
         return o;
     }
-
-    public Waypoint(int id, int tripid, int tripdayid, String location, int pointnum) {
-        this.id = id;
-        this.tripid = tripid;
-        this.tripdayid = tripdayid;
-        this.location = location;
-        this.pointnum = pointnum;
-    }
-
-    
     public int getTripid() {
         return tripid;
     }
@@ -47,9 +42,6 @@ public class Waypoint extends AbstractEntity{
     public String getLocation() {
         return location;
     }
-
-    public int getPointnum() {
-        return pointnum;
-    }
+    
     
 }

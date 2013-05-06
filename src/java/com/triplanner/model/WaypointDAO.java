@@ -4,12 +4,14 @@
  */
 package com.triplanner.model;
 
+import com.triplanner.entities.Hotel;
 import com.triplanner.entities.Waypoint;
 import static com.triplanner.model.EventDAO.extractEvent;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,6 +22,27 @@ import java.util.List;
 public class WaypointDAO {
     private static final String SELECTBYDAY = "Select * from waypoints where tripid=? and tripdayid=?";
     private static final String SELECTBYTRIP = "Select * from waypoints where tripid=?";
+    private static final String CREATEWAYPOINT = "Insert into waypoints (tripid, tripdayid, location, pointnum) "
+            + "values(?, ?, ?, ?)";
+    
+    public Waypoint createWaypoint(int tripid, int tripdayid, String location, int pointnum){
+        try {
+            Connection connection = DB.getConnection();
+            PreparedStatement ps = connection.prepareStatement(CREATEWAYPOINT, Statement.RETURN_GENERATED_KEYS);
+            ps.setInt(1, tripid);
+            ps.setInt(2, tripdayid);
+            ps.setString(3, location);
+            ps.setInt(4, pointnum);
+            int result = ps.executeUpdate();
+            ResultSet rs = ps.getGeneratedKeys();         
+            if(rs.next()){
+                return new Waypoint(rs.getInt(1), tripid, tripdayid, location, pointnum);
+            }
+        } catch(Exception e){
+            e.printStackTrace();
+        }
+        return null;
+    }
     
     public List<Waypoint> getWaypointsByDay(int tripid, int tripdayid){
         try {
