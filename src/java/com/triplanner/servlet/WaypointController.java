@@ -1,0 +1,66 @@
+/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package com.triplanner.servlet;
+
+import com.triplanner.entities.Waypoint;
+import com.triplanner.model.WaypointDAO;
+import java.io.IOException;
+import java.util.List;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+/**
+ *
+ * @author brook
+ */
+public class WaypointController {
+
+    public void doWaypointsGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        int tripid = Integer.parseInt(request.getParameter("tripid"));
+        String tripdayid_str = request.getParameter("tripdayid");
+        List<Waypoint> waypoints = null;
+        if (tripdayid_str == null || tripdayid_str.equals("")) {
+            waypoints = WaypointDAO.getWaypointsByTrip(tripid);
+        } else {
+            int tripdayid = Integer.parseInt(tripdayid_str);
+            waypoints = WaypointDAO.getWaypointsByDay(tripid, tripdayid);
+        }
+        JSONArray a = new JSONArray();
+        if (waypoints != null) {
+            for (Waypoint point : waypoints) {
+                a.put(point.toJSON());
+            }
+        }
+        response.getWriter().println(a);
+    }
+
+    public void doWaypointsPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        String action = request.getParameter("action");
+        int tripid = Integer.parseInt(request.getParameter("tripid"));
+        int tripdayid = Integer.parseInt(request.getParameter("tripdayid"));
+        JSONObject o = new JSONObject();
+        if (action.equals("add")) {
+            String location = request.getParameter("location");
+            //we keep track of the ordering of the waypoints
+            int numberwaypoints = WaypointDAO.getWaypointsCountByDay(tripid, tripdayid);
+            int pointnum = numberwaypoints + 1;
+            Waypoint waypoint = WaypointDAO.createWaypoint(tripid, tripdayid, location, pointnum);
+            if (waypoint != null) {
+                o = waypoint.toJSON();
+            }
+        } else if (action.equals("update")) {
+            //TODO: update just one waypoint
+        } else if (action.equals("updateall")){
+            //TODO: add facility to update the waypoints in any arbitrary fashion
+        }
+        response.getWriter().println(o);
+
+    }
+}

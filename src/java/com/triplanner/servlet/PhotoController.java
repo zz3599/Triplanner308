@@ -52,7 +52,6 @@ public class PhotoController {
 
     public static void doUploadPost(HttpServletRequest request, HttpServletResponse response, ServletContext context)
             throws ServletException, IOException {
-        //String root = getRoot(request);
         JSONObject o = new JSONObject();
         User user = (User) request.getSession().getAttribute("user");
         int userid = user.id;
@@ -97,12 +96,6 @@ public class PhotoController {
         }
         try {
             ImageIO.write(resizedImage, extension, file);
-//            is = new BufferedInputStream(filecontent, BUFFERSZ);
-//            os = new BufferedOutputStream(new FileOutputStream(file), BUFFERSZ);
-//            byte[] buffer = new byte[BUFFERSZ];
-//            for (int read = 0; (read = is.read(buffer)) > 0;) {
-//                os.write(buffer, 0, read);
-//            }
         } catch (Exception e) {
             e.printStackTrace();
         } finally {

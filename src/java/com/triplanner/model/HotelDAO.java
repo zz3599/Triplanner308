@@ -4,9 +4,7 @@
  */
 package com.triplanner.model;
 
-import com.triplanner.entities.Event;
 import com.triplanner.entities.Hotel;
-import static com.triplanner.model.EventDAO.extractEvent;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -25,7 +23,7 @@ public class HotelDAO {
     private static final String SELECTHOTELBYDAY = "select * from hotels where tripid=? amd tripdayid=?";
     private static final String SELECTHOTELBYTRIP = "select * from hotels where tripid=?";
     
-    public List<Hotel> getAllHotelsByDay(int tripid, int tripdayid){
+    public static List<Hotel> getAllHotelsByDay(int tripid, int tripdayid){
         try {
             Connection connection = DB.getConnection();
             PreparedStatement ps = connection.prepareStatement(SELECTHOTELBYDAY);
@@ -43,7 +41,7 @@ public class HotelDAO {
         return null;        
     }
     
-    public List<Hotel> getAllHotelsByTrip(int tripid){
+    public static List<Hotel> getAllHotelsByTrip(int tripid){
         try {
             Connection connection = DB.getConnection();
             PreparedStatement ps = connection.prepareStatement(SELECTHOTELBYTRIP);
@@ -60,7 +58,7 @@ public class HotelDAO {
         return null;        
     }
     
-    public Hotel createHotel(int tripid, int tripdayid, String location){
+    public static Hotel createHotel(int tripid, int tripdayid, String location){
         try {
             Connection connection = DB.getConnection();
             PreparedStatement ps = connection.prepareStatement(CREATEHOTEL, Statement.RETURN_GENERATED_KEYS);
@@ -78,7 +76,7 @@ public class HotelDAO {
         return null;
     }
     
-    public Hotel extractHotel(ResultSet rs) throws SQLException{
+    public static Hotel extractHotel(ResultSet rs) throws SQLException{
         int id = rs.getInt("id");
         int tripid = rs.getInt("tripid");
         int tripdayid = rs.getInt("tripdayid");

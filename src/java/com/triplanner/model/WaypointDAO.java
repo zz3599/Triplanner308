@@ -4,9 +4,7 @@
  */
 package com.triplanner.model;
 
-import com.triplanner.entities.Hotel;
 import com.triplanner.entities.Waypoint;
-import static com.triplanner.model.EventDAO.extractEvent;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -24,8 +22,9 @@ public class WaypointDAO {
     private static final String SELECTBYTRIP = "Select * from waypoints where tripid=?";
     private static final String CREATEWAYPOINT = "Insert into waypoints (tripid, tripdayid, location, pointnum) "
             + "values(?, ?, ?, ?)";
+    private static final String GETCOUNTBYDAY = "Select count(*) from waypoints where tripid=? and tripdayid=?";
     
-    public Waypoint createWaypoint(int tripid, int tripdayid, String location, int pointnum){
+    public static Waypoint createWaypoint(int tripid, int tripdayid, String location, int pointnum){
         try {
             Connection connection = DB.getConnection();
             PreparedStatement ps = connection.prepareStatement(CREATEWAYPOINT, Statement.RETURN_GENERATED_KEYS);
@@ -44,7 +43,7 @@ public class WaypointDAO {
         return null;
     }
     
-    public List<Waypoint> getWaypointsByDay(int tripid, int tripdayid){
+    public static List<Waypoint> getWaypointsByDay(int tripid, int tripdayid){
         try {
             Connection connection = DB.getConnection();
             PreparedStatement ps = connection.prepareStatement(SELECTBYDAY);
@@ -62,7 +61,41 @@ public class WaypointDAO {
         return null;  
     }
     
-    public Waypoint extractWaypoint(ResultSet rs) throws SQLException{
+    public static int getWaypointsCountByDay(int tripid, int tripdayid){
+        try {
+            Connection connection = DB.getConnection();
+            PreparedStatement ps = connection.prepareStatement(GETCOUNTBYDAY);
+            ps.setInt(1, tripid);
+            ps.setInt(2, tripdayid);
+            ResultSet rs = ps.executeQuery();
+            if(rs.next()){
+               return rs.getInt(1);
+            } 
+            return 0;
+        } catch(Exception e){
+            e.printStackTrace();
+        }
+        return 0; 
+    }
+    
+    public static List<Waypoint> getWaypointsByTrip(int tripid){
+        try {
+            Connection connection = DB.getConnection();
+            PreparedStatement ps = connection.prepareStatement(SELECTBYTRIP);
+            ps.setInt(1, tripid);
+            ResultSet rs = ps.executeQuery();
+            List<Waypoint> waypoints = new ArrayList<Waypoint>();
+            while(rs.next()){
+               waypoints.add(extractWaypoint(rs));
+            }             
+            return waypoints;
+        } catch(Exception e){
+            e.printStackTrace();
+        }
+        return null;  
+    }
+    
+    public static Waypoint extractWaypoint(ResultSet rs) throws SQLException{
         int id = rs.getInt("id");
         int tripid = rs.getInt("tripid");
         int tripdayid = rs.getInt("tripdayid");

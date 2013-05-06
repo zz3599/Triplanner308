@@ -26,7 +26,7 @@ public class EventController {
         request.getSession().setAttribute("tripid", tripid);
         List<Event> events = EventDAO.getAllEventsByTrip(tripid);
         JSONArray o = new JSONArray();
-        if (events != null || !events.isEmpty()) {
+        if (events != null && !events.isEmpty()) {
             for (Event e : events) {
                 o.put(e.toJSON());
             }
