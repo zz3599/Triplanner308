@@ -5,6 +5,8 @@
 <a href='#'>{{title}}</a></li> ";
     /* Main app */
     var app = {
+        waypoints: [], //the waypoints of the stopovers - will be on map
+        markers: [], //markers of the stopovers for any given day -- should stop using this 
         TRIPURL: "trip",
         TRIPEVENTS: "events",
         TRIPDAY: "tripday",
@@ -40,11 +42,17 @@
             });
         },
         initHandlers: function() {
-            $('#waypointsortable').sortable()
-                    .on('click', '.deletestop', function(e) {
+            var first = 0, elapsed = 0;
+            $('#waypointsortable').sortable({
+                update: function(e, ui){
+                    app.updateAddresses();
+                }
+            })
+              .on('click', '.deletestop', function(e) {
                 e.preventDefault();
                 $(this).parent().remove();
-            });
+                app.updateAddresses();
+            }).on('blur', 'input:text', app.updateAddresses);
             $('#updatewaypoints').click(function(e) {
                 e.preventDefault();
                 var waypointform = $('#waypointform');
@@ -55,16 +63,18 @@
                         return;
                     }
                 }
+                app.initSpinner();
                 $.post(app.WAYPOINT + "?action=update&tripid=" + app.timeline.tripid + "&tripdayid=" + app.timeline.tripdayid,
                         waypointform.serialize()).
                         success(function(d) {
-                            //h
+                    app.stopSpinner();
                 });
             });
             $('#createwaypoint').click(function() {
                 $(Mustache.render(app.timeline.WAYPOINTTEMPLATE, {location: ''})).
                         appendTo($('#waypointsortable'));
             });
+
             $('#newtripbutton').click(function() {
                 $('#newtripinfo').toggle(100).siblings().hide();
             });
@@ -282,6 +292,7 @@
             $('#endLocation').keyup(codeAddress).change(codeAddress).focus(codeAddress);
             $('#daystart').keyup(codeAddress).change(codeAddress).focus(codeAddress);
             $('#dayend').keyup(codeAddress).change(codeAddress).focus(codeAddress);
+
             function codeAddress() {
                 var startaddress, endaddress;
                 if (this.name.toLowerCase().indexOf('day') !== -1) {
@@ -294,6 +305,8 @@
                 var request = {
                     origin: startaddress,
                     destination: endaddress,
+                    waypoints: app.waypoints,
+                    optimizeWaypoints: false,
                     travelMode: google.maps.DirectionsTravelMode.DRIVING
                 };
                 self.directionsService.route(request, function(response, status) {
@@ -302,6 +315,36 @@
                     }
                 });
             }
+        },
+        updateAddresses: function() {
+            //submit a geocoding request for each address and add it to the map
+            var locations = $('#waypointsortable input:text');
+//            for (var i = 0; i < app.markers.length; i++) {
+//                app.markers[i].setMap(null);
+//            }
+            //app.markers = [];
+            app.waypoints = [];
+            for (var i = 0; i < locations.length; i++) {
+                var location = locations[i].value;
+                app.waypoints.push({
+                    location: location,
+                    stopover: true
+                });
+                //app.geocodeAddress(location);
+            }
+            $('#daystart').trigger('change'); //update map
+
+        },
+        geocodeAddress: function(address) {
+            app.geocoder.geocode({'address': address}, function(results, status) {
+                if (status === google.maps.GeocoderStatus.OK) {
+                    var marker = new google.maps.Marker({
+                        map: app.map,
+                        position: results[0].geometry.location
+                    });
+                    app.markers.push(marker);
+                }
+            });
         },
         initSpinner: function() {
             var opts = {
@@ -335,7 +378,6 @@
             var neweventdiv = $('#neweventform');
             neweventdiv.find('input[type=text]').val('');
             neweventdiv.find('input[type=hidden]').removeAttr('value');
-
         }
     };
     world.app = app;
