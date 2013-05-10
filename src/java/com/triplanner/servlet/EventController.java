@@ -34,7 +34,7 @@ public class EventController {
         response.getWriter().println(o);
     }
     
-    public static void doCreateEventPost(HttpServletRequest request, HttpServletResponse response)
+    public static void doEventPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         int tripid = Integer.parseInt(request.getParameter("eventtripid"));
         int tripdayid = Integer.parseInt(request.getParameter("eventtripdayid"));

@@ -32,7 +32,7 @@ public class TripdayController {
         response.getWriter().println(o);
     }
     
-    public static void doCreateTripdayPost(HttpServletRequest request, HttpServletResponse response)
+    public static void doTripdayPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String action = request.getParameter("action");
         int id = Integer.parseInt(request.getParameter("id"));

@@ -24,6 +24,7 @@ import org.json.JSONObject;
  * @author brook
  */
 public class TripController {
+
     public static void doTripsGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         User user = (User) request.getSession().getAttribute("user");
@@ -34,9 +35,10 @@ public class TripController {
         }
         response.getWriter().println(result);
     }
-    
-    public static void doCreateTripPost(HttpServletRequest request, HttpServletResponse response)
+
+    public static void doTripPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        String action = request.getParameter("action");
         String title = request.getParameter("title");
         String description = request.getParameter("description");
         String startLocation = request.getParameter("startLocation");
@@ -49,11 +51,22 @@ public class TripController {
         Timestamp startTime = Timestamp.valueOf(s);
         Timestamp endTime = Timestamp.valueOf(e);
         User user = (User) request.getSession().getAttribute("user");
-        Trip trip = TripDAO.createTrip(user, title, description, startTime, endTime, startLocation, endLocation, false);
+        Trip trip = null;
         JSONObject result = new JSONObject();
-        if (trip != null) {
-            result = trip.toJSON();
-            boolean createTripdays = TripdayDAO.createDaysForTrip(trip);
+        
+        if (action.equals("add")) {
+            trip = TripDAO.createTrip(user, title, description, startTime, endTime, startLocation, endLocation, false);
+            if (trip != null) {
+                result = trip.toJSON();
+                boolean createTripdays = TripdayDAO.createDaysForTrip(trip);
+            }
+        } else if (action.equals("update")) {
+            int tripid = Integer.parseInt((String) request.getSession().getAttribute("tripid"));
+            trip = TripDAO.updateTrip(user, title, description, startTime, endTime, startLocation, endLocation, false, tripid);
+            if(trip != null){
+                result = trip.toJSON();
+                
+            }
         }
         response.getWriter().println(result);
 

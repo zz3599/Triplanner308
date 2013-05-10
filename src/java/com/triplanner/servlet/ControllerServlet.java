@@ -72,11 +72,11 @@ public class ControllerServlet extends HttpServlet {
         } else if (resource.equals("/register")) {
             UserController.doRegisterPost(request, response);
         } else if (resource.equals("/trip")) {
-            TripController.doCreateTripPost(request, response);
+            TripController.doTripPost(request, response);
         } else if (resource.equals("/events")) {
-            EventController.doCreateEventPost(request, response);
+            EventController.doEventPost(request, response);
         } else if (resource.contains("/tripday")) {
-            TripdayController.doCreateTripdayPost(request, response);
+            TripdayController.doTripdayPost(request, response);
         } else if (resource.contains("/photo")){
             PhotoController.doUploadPost(request, response, getServletContext());
         } else if (resource.contains("/waypoint")){

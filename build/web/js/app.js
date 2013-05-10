@@ -97,13 +97,14 @@
                     $(e).removeClass('selected');
                 });
                 app.clearForms();
+                app.waypoints = [];
                 $('#timelineinfo').hide(100);
                 app.tripid = $(this).attr('id');
                 app.timelinestart = new Date($(this).attr('start'));
                 app.timelineend = new Date($(this).attr('end'));
                 app.startLocation = $(this).attr('startLocation');
                 app.endLocation = $(this).attr('endLocation');
-                $('#daystart').val(app.startLocation).trigger('change');
+                $('#daystart').val(app.startLocation);
                 $('#dayend').val(app.endLocation).trigger('change');
                 //$('#daystart').val(app.startLocation).trigger('change');
                 $(this).addClass('selected');
@@ -138,7 +139,7 @@
             $('#createtrip').click(function(e) {
                 e.preventDefault();
                 app.initSpinner();
-                $.post(app.TRIPURL, $('#newtrip').serialize()).success(
+                $.post(app.TRIPURL + '?action=add', $('#newtrip').serialize()).success(
                         function(result) {
                             app.stopSpinner();
                             var json = JSON.parse(result);
