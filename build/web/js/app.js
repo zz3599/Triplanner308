@@ -1,7 +1,7 @@
 ;
 (function(world) {
 
-    var TRIPTEMPLATE = "<li class='atrip' id={{id}} title='{{title}}' start={{startTime}} end={{endTime}} startLocation='{{startLocation}}' endLocation='{{endLocation}}' description='{{description}}'>\
+    var TRIPTEMPLATE = "<li class='atrip' id={{id}} title='{{title}}' start='{{startTime}}' end='{{endTime}}' startLocation='{{startLocation}}' endLocation='{{endLocation}}' description='{{description}}'>\
 <a href='#'>{{title}}</a></li> ";
     /* Main app */
     var app = {
@@ -42,13 +42,30 @@
             });
         },
         initHandlers: function() {
-            var first = 0, elapsed = 0;
+            $('#tripeditform').hide();
+            $('#edittrip').click(function() {
+                var parent = $('#tripeditform');
+                app.initTimepickers(parent.find('input#tripsd'), parent.find('input#triped'), null, null);
+                $('#tripeditform input').attr('readonly', function(i, attr) {
+                    if(attr==='readonly') app.edittrip = true;
+                    else app.edittrip = false;
+                    return !attr;
+                });
+            });
+            $('#submitedittrip').click(function(e) {
+                e.preventDefault();
+                if(!app.edittrip) return;
+                app.initSpinner();
+                $.post(app.TRIPURL + '?action=update', $('#tripeditform').serialize()).success(function(e) {
+                    app.stopSpinner();
+                });
+            });
             $('#waypointsortable').sortable({
-                update: function(e, ui){
+                update: function(e, ui) {
                     app.updateAddresses();
                 }
             })
-              .on('click', '.deletestop', function(e) {
+                    .on('click', '.deletestop', function(e) {
                 e.preventDefault();
                 $(this).parent().remove();
                 app.updateAddresses();
@@ -120,19 +137,21 @@
                     app.timeline.updateIntervalAndEvents(app.timelinestart, app.timelineend, app.tripid, d);
                 });
                 //update the hero div
-                $('.hero-unit').empty();
-                var row = $('<div>', {
-                    class: 'row-fluid'
-                }).append("<div class='span6 tripcontent'><p>Trip: " + $(this).attr('title') +
-                        '</p><p>Start: ' + $(this).attr('startLocation') + '(' + $(this).attr('start') + ')' +
-                        '</p><p>Destination: ' + $(this).attr('endLocation') + '(' + $(this).attr('end') + ')' +
-                        '</p><p>Description: ' + $(this).attr('description') + '</p></div>')
-                        .append("<div class='span6'>\
-                                <span id='photoprogress'></span>\
-                                <label for=thumbnails'>Photo (click for album)</label><div id='thumbnails' class='span12'></div></div>"
-                        );
-                $('.hero-unit').append(row);
-                //load all photos
+                var parent = $('.hero-unit');
+                parent.find('input').attr('readonly', true);
+                parent.find('input#triptitle').val(this.getAttribute('title'));
+                parent.find('input#tripsl').val(this.getAttribute('startLocation'));
+                parent.find('input#tripel').val(this.getAttribute('endLocation'));
+                parent.find('input#tripsd').val(this.getAttribute('start')).removeClass('hasDatepicker');
+                parent.find('input#triped').val(this.getAttribute('end')).removeClass('hasDatepicker');
+                parent.find('input#tripdesc').val(this.getAttribute('description'));
+                $('#tripeditform').show();
+
+//                        .append("<div class='span6'>\
+//                                <span id='photoprogress'></span>\
+//                                <label for=thumbnails'>Photo (click for album)</label><div id='thumbnails' class='span12'></div></div>"
+//                        );
+                //load all photos - put on separate page
                 app.loadPhotos('trip', app.tripid);
             });
             //create new trip handler
@@ -161,9 +180,7 @@
             });
         },
         loadPhotos: function(type, id) {
-            app.initSpinner();
             $.get(app.PHOTO, {'type': type, 'id': id}).success(function(d) {
-                app.stopSpinner();
                 var data = JSON.parse(d);
                 if ($.isEmptyObject(data))
                     return;

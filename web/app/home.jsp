@@ -76,7 +76,7 @@
                             <li class="nav-header">Sidebar</li>
                             <li><a href="#">Link</a></li>
                         </ul>
-                    </div><!--/.well -->
+                    </div>
                     <div id="controls">
                         <input type="button" id="newtripbutton" value="Create Trip"/>
                         <input type="button" id="newphoto" value="Upload photos"/>
@@ -137,7 +137,20 @@
 
                 <div class="span10">
                     <div class="hero-unit" id="hero">
-
+                        <form id="tripeditform">
+                            <div class="span6">
+                                Trip: </label><input id="triptitle" name="title" readonly><br>
+                                Starting point:<input id="tripsl" name="startLocation" readonly><br>
+                                Ending point: <input id="tripel" name="endLocation" readonly><br>
+                            </div>
+                            <div class="span6">
+                                Starting date: <input id="tripsd" name="startTime" readonly><br>
+                                Ending date: <input id="triped" name="endTime" readonly><br>
+                                Description: <input id="tripdesc" name="description" readonly><br>
+                            </div>
+                            <button type="button" id="edittrip">Edit trip</button>
+                            <button type="button" id="submitedittrip">Done</button>
+                        </form>
                     </div>
                     <div class="row-fluid">
                         <div id="wrap">

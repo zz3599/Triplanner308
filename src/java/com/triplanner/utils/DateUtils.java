@@ -17,15 +17,29 @@ import java.util.concurrent.TimeUnit;
 public class DateUtils {
 
     private static final SimpleDateFormat dateformat = new SimpleDateFormat("MM/dd/yyyy");
+    private static final SimpleDateFormat inputformat = new SimpleDateFormat("yyyy-MM-dd");
+
+    public static Timestamp toTimestamp(String string) {
+        Timestamp result = null;
+        try {
+            result = Timestamp.valueOf(string);
+        } catch (Exception e) {
+            try {
+                result = new Timestamp(inputformat.parse(string).getTime());
+            } catch (Exception ex) {
+            }
+        }
+        return result;
+    }
 
     public static String toDate(Date timestamp) {
         return dateformat.format(timestamp.getTime());
     }
-    
-    public static int diffDays(Timestamp a, Timestamp b){
+
+    public static int diffDays(Timestamp a, Timestamp b) {
         long adays = TimeUnit.MILLISECONDS.toDays(a.getTime());
         long bdays = TimeUnit.MILLISECONDS.toDays(b.getTime());
-        return (int)(bdays-adays);
+        return (int) (bdays - adays);
     }
 
     public static Timestamp incrementDay(Timestamp expectedDt, int numdays) {

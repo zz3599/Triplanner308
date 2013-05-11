@@ -13,7 +13,6 @@ import org.json.JSONObject;
  * @author brook
  */
 public class Trip extends AbstractEntity{
-    private static SimpleDateFormat formatter = new SimpleDateFormat("M-d-yyyy");
     public int userid;
     public String title;
     public String description;
@@ -30,8 +29,8 @@ public class Trip extends AbstractEntity{
         o.put("userid", this.userid);
         o.put("title", this.title);
         o.put("description", this.description);
-        o.put("startTime", formatter.format(this.startTime));
-        o.put("endTime", formatter.format(this.endTime));
+        o.put("startTime", this.startTime);
+        o.put("endTime", this.endTime);
         o.put("startLocation", this.startLocation);
         o.put("endLocation", this.endLocation);
         o.put("shared", this.shared);

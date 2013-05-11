@@ -10,6 +10,7 @@ import com.triplanner.entities.User;
 import com.triplanner.model.EventDAO;
 import com.triplanner.model.TripDAO;
 import com.triplanner.model.TripdayDAO;
+import com.triplanner.utils.DateUtils;
 import java.io.IOException;
 import java.sql.Timestamp;
 import java.util.List;
@@ -48,8 +49,8 @@ public class TripController {
         if (startLocation.isEmpty() || s.isEmpty() || e.isEmpty()) {
             return;
         }
-        Timestamp startTime = Timestamp.valueOf(s);
-        Timestamp endTime = Timestamp.valueOf(e);
+        Timestamp startTime = DateUtils.toTimestamp(s);
+        Timestamp endTime = DateUtils.toTimestamp(e);
         User user = (User) request.getSession().getAttribute("user");
         Trip trip = null;
         JSONObject result = new JSONObject();
@@ -61,11 +62,11 @@ public class TripController {
                 boolean createTripdays = TripdayDAO.createDaysForTrip(trip);
             }
         } else if (action.equals("update")) {
-            int tripid = Integer.parseInt((String) request.getSession().getAttribute("tripid"));
+            int tripid = (Integer) request.getSession().getAttribute("tripid");
             trip = TripDAO.updateTrip(user, title, description, startTime, endTime, startLocation, endLocation, false, tripid);
             if(trip != null){
                 result = trip.toJSON();
-                
+                boolean success = TripdayDAO.updateTripday(trip);
             }
         }
         response.getWriter().println(result);

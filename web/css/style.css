@@ -315,8 +315,8 @@ span.required:after{
 }
 
 #hero{
-    max-height: 60px;
     padding: 60px;
+    overflow: auto;
 }
 
 .tripcontent{

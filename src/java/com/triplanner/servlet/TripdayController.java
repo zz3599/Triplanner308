@@ -49,9 +49,7 @@ public class TripdayController {
         catch(Exception e){}
         JSONObject o = new JSONObject();
         if(action.equals("update") && t != null){
-            Tripday updatedday = TripdayDAO.updateTripday(id, tripid, t, startLocation, endLocation, comment, daynum);
-            if(updatedday != null)
-                o = updatedday.toJSON();
+            
         } else if(action.equals("create")){
         }
         response.getWriter().println(o);
