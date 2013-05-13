@@ -31,8 +31,6 @@ public class TripdayDAO implements Serializable {
             + "where id=?";
     private static final String UPDATETIME = "Update tripdays set "
             + "date=? where tripid=? and daynum=?";
-    private static final String UPDATENEXTDAY = "Update tripdays set "
-            + "startlocation=? where tripid=? and daynum=?";
     private static final String ALLTRIPDAYS = "SELECT * from tripdays where tripid=? ORDER BY daynum";
     private static final String GETDAY = "SELECT * from tripdays where tripid=? and date=?";
 

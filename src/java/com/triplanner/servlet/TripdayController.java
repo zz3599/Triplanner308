@@ -4,10 +4,13 @@
  */
 package com.triplanner.servlet;
 
+import com.triplanner.entities.Event;
 import com.triplanner.entities.Tripday;
+import com.triplanner.model.EventDAO;
 import com.triplanner.model.TripdayDAO;
 import java.io.IOException;
 import java.sql.Timestamp;
+import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -24,12 +27,9 @@ public class TripdayController {
         Timestamp tripdaystart = new Timestamp(timemillis);
         int tripid = Integer.parseInt(request.getParameter("tripid"));
         Tripday tripday = TripdayDAO.getDay(tripid, tripdaystart);
+        List<Event> events = EventDAO.getAllEventsByDay(tripday.id);       
         request.getSession().setAttribute("tripday", tripday);
-        JSONObject o = new JSONObject();
-        if(tripday != null){
-            o = tripday.toJSON();
-        } 
-        response.getWriter().println(o);
+        request.getSession().setAttribute("events", events);
     }
     
     public static void doTripdayPost(HttpServletRequest request, HttpServletResponse response)

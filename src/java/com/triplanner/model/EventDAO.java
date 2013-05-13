@@ -25,8 +25,8 @@ public class EventDAO implements Serializable{
             + " values (?, ?, ?, ?, ?, ?, ?, ?)";
     private static final String UPDATEEVENT = "Update events set starttime=?, endtime=?, eventtype=?, comment=? "
             + "where id=?";
-    private static final String SELECTEVENTSBYDAY = "Select * from events where tripdayid=?";
-    private static final String SELECTEVENTSBYTRIP  = "Select * from events where tripid=?";
+    private static final String SELECTEVENTSBYDAY = "Select * from events where tripdayid=? order by starttime";
+    private static final String SELECTEVENTSBYTRIP  = "Select * from events where tripid=? order by starttime";
     private static final String DELETEEVENT = "Delete from events where id=?";
     
     public  static List<Event> getAllEventsByDay(int dayid){

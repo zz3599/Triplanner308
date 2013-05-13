@@ -56,8 +56,10 @@
                 e.preventDefault();
                 if(!app.edittrip) return;
                 app.initSpinner();
-                $.post(app.TRIPURL + '?action=update', $('#tripeditform').serialize()).success(function(e) {
+                $.post(app.TRIPURL + '?action=update', $('#tripeditform').serialize()).success(function(d) {
                     app.stopSpinner();
+                    var tripdata = JSON.parse(d);
+                    app.timeline.updateInterval(new Date(tripdata.startTime), new Date(tripdata.endTime));
                 });
             });
             $('#waypointsortable').sortable({
@@ -110,8 +112,8 @@
             });
             //update the page to show the data for the particular trip
             $('#yourtrips').on('click', 'li', function(e) {
-                $.each($(this).siblings(), function(i, e) {
-                    $(e).removeClass('selected');
+                $.each($(this).siblings(), function(i, elem) {
+                    $(elem).removeClass('selected');
                 });
                 app.clearForms();
                 app.waypoints = [];

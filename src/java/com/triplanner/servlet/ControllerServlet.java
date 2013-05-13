@@ -29,7 +29,8 @@ import javax.servlet.http.HttpServletResponse;
     "/app/tripday",
     "/app/photo",
     "/app/waypoint",
-    "/app/hotel"
+    "/app/hotel",
+    "/app/daydetails"
 },
         asyncSupported = true)
 @MultipartConfig
@@ -57,6 +58,8 @@ public class ControllerServlet extends HttpServlet {
             WaypointController.doWaypointsGet(request, response);
         } else if(resource.contains("/hotel")){
             HotelController.doHotelsGet(request, response);
+        } else if(resource.contains("daydetails")){
+            TripdayController.doTripdaysGet(request, response);
         }
     }
     
