@@ -30,14 +30,6 @@
         <script src="../js/lightbox.js"></script>
         <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAUC9VWHP1FfCpjU5Rs-wpN7vRwSFp4-bw&sensor=true&libraries=places">
         </script>
-        <script type="text/javascript">
-            function search() {
-                var input = document.getElementById("search").value;
-                window.open("search.jsp?NAME=" + input, '', 'directories=0,titlebar=0,toolbar=0,location=0,status=0,menubar=0,scrollbars=yes,resizable=no,width=800,height=800');
-                //window.open("/search.jsp?NAME="+input,'newwindow','toolbar=yes,location=no,menubar=no,width=450,height=200,resizable=yes,scrollbars=yes,top=200,left=250');return false;;
-
-            }
-        </script>
     </head>
     <body>
         <div class="navbar navbar-inverse navbar-fixed-top">
@@ -46,7 +38,7 @@
                     <a class="brand" href="home">Triplanner</a>
                     <div class="nav-collapse collapse">
                         <p class="navbar-text pull-left" style="margin-top:5px;">
-                            <span><input id="search" type="text" class="search square" style="background-color:#353232; border-color: #b3b3b3;"><input type="button" value="Search" onclick="search()"></span>
+                            <span><input id="search" type="text" class="search square" style="background-color:#353232; border-color: #b3b3b3;"><input id="searchsubmit" type="button" value="Search"></span>
                         </p>
                         <p class="navbar-text pull-right">
                             Logged in as <a href="#" class="navbar-link"><c:out value="${user.firstname}"/></a>

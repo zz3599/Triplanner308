@@ -48,7 +48,7 @@
                     <a class="brand" href="home">Triplanner</a>
                     <div class="nav-collapse collapse">
                         <p class="navbar-text pull-left" style="margin-top:5px;">
-                            <span><input id="search" type="text" class="search square" style="background-color:#353232; border-color: #b3b3b3;"><input type="button" value="Search" onclick="search()"></span>
+                            <span><input id="search" type="text" class="search square" style="background-color:#353232; border-color: #b3b3b3;"><input type="button" value="Search" id="searchsubmit"></span>
                         </p>
                         <p class="navbar-text pull-right">
                             Logged in as <a href="#" class="navbar-link"><c:out value="${user.firstname}"/></a>

@@ -30,13 +30,13 @@ import javax.servlet.http.HttpServletResponse;
     "/app/photo",
     "/app/waypoint",
     "/app/hotel",
-    "/app/daydetails"
+    "/app/daydetails",
+    "/app/search"
 },
         asyncSupported = true)
 @MultipartConfig
 
 public class ControllerServlet extends HttpServlet {
-    public static final SimpleDateFormat jsDateFormat = new SimpleDateFormat("M-d-yyyy");
     /**
      * All get requests for the url patterns
      */
@@ -60,6 +60,8 @@ public class ControllerServlet extends HttpServlet {
             HotelController.doHotelsGet(request, response);
         } else if(resource.contains("daydetails")){
             TripdayController.doTripdaysGet(request, response);
+        } else if(resource.contains("search")){
+            SearchController.doSearchGet(request, response);
         }
     }
     

@@ -23,6 +23,12 @@
             daydetails.initMap();
         },
         initHandlers: function() {
+            $('#search').keyup(function() {
+                var input = $("#search").val();
+                $.get('search', {'search': input}).success(function(data) {
+                    console.log(data);
+                });
+            });
             $('#viewalbum').click(function() {
                 daydetails.firstimage.find('a').trigger('click');
             });

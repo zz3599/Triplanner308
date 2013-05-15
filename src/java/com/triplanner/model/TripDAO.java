@@ -30,6 +30,24 @@ public class TripDAO implements Serializable {
     private static final String UPDATETRIP = "Update trips set "
             + "title=?, description=?, starttime=?, endtime=?, startlocation=?, endlocation=? "
             + "where id=?";    
+    private static final String SEARCHTRIP = "Select * from trips where title like ?";
+    
+    public static List<Trip> searchTrip(String search){
+        try {
+            Connection connection = DB.getConnection();
+            PreparedStatement ps = connection.prepareStatement(SEARCHTRIP);
+            ps.setString(1, search);
+            List<Trip> trips = new ArrayList<Trip>();
+            ResultSet rs = ps.executeQuery();
+            while(rs.next()){
+                trips.add(extractTrip(rs));
+            }
+            return trips;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
     
     public static Trip getTrip(int tripid){
         try {

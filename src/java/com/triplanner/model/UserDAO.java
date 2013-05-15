@@ -7,6 +7,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Manages the users table and users objects
@@ -20,11 +22,31 @@ public class UserDAO implements Serializable {
     private static final String UPDATEUSER = "UPDATE users "
             + "Set email=?, firstname=?, lastname=?, password=? "
             + "where id=?";
-    
+    private static final String SEARCHUSER = "Select * from users where (firstname like ? or lastname like ?) "
+            + "and authority=1";
     
     //User type enum 
     enum Authority{
         ADMIN, USER
+    }
+    
+    
+    public static List<User>searchUser(String search){
+        try {
+            Connection connection = DB.getConnection();
+            PreparedStatement ps = connection.prepareStatement(SEARCHUSER);
+            ps.setString(1, "%" + search + "%");
+            ps.setString(2, "%" + search + "%");
+            List<User> users = new ArrayList<User>();
+            ResultSet rs = ps.executeQuery();
+            while(rs.next()){
+               users.add(extractUser(rs));
+            }             
+            return users;
+        } catch(Exception e){
+            e.printStackTrace();
+        }
+        return null;  
     }
     
     public static User loginUser(String email, String password){
