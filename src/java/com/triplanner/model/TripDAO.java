@@ -31,6 +31,23 @@ public class TripDAO implements Serializable {
             + "title=?, description=?, starttime=?, endtime=?, startlocation=?, endlocation=? "
             + "where id=?";    
     private static final String SEARCHTRIP = "Select * from trips where title like ?";
+    private static final String UPDATESHARE = "Update trips set shared=? where id=?";
+    
+    public static boolean updateShareTrip(int tripid, int shareval){
+        try {
+            Connection connection = DB.getConnection();
+            PreparedStatement ps = connection.prepareStatement(UPDATESHARE);
+            ps.setInt(1, shareval);
+            ps.setInt(2, tripid);
+            int r = ps.executeUpdate();
+            if(r == 1){
+                return true;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
     
     public static List<Trip> searchTrip(String search){
         try {

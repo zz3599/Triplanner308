@@ -4,14 +4,19 @@
  */
 package com.triplanner.servlet;
 
+import com.triplanner.entities.Friendrequest;
+import com.triplanner.entities.User;
+import com.triplanner.model.FriendrequestDAO;
+import com.triplanner.service.PollService;
 import java.io.IOException;
-import java.text.SimpleDateFormat;
+import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.json.JSONArray;
 
 /**
  * This controller servlet provides interface between the web page and the
@@ -32,12 +37,23 @@ import javax.servlet.http.HttpServletResponse;
     "/app/waypoint",
     "/app/hotel",
     "/app/daydetails",
-    "/app/search"
+    "/app/search",
+    "/app/friendpoll",
+    "/app/friendrequests"
 },
         asyncSupported = true)
 @MultipartConfig
 
 public class ControllerServlet extends HttpServlet {
+    private PollService pollService;
+    
+    @Override
+    public void init() throws ServletException{
+        //manages all long poll requests
+        pollService = new PollService();
+    }
+    
+    
     /**
      * All get requests for the url patterns
      */
@@ -66,6 +82,19 @@ public class ControllerServlet extends HttpServlet {
         } else if(resource.contains("logout")){
             request.getSession().invalidate();
             response.sendRedirect("../");
+        } else if(resource.contains("friendpoll")){
+            //fetch all the friend requests for with this user as the receiver
+            FriendpollController.doPollGet(request, response, pollService);
+        } else if(resource.contains("friendrequests")){
+            //get all friend requests from db
+            int userid = ((User)request.getSession().getAttribute("user")).id;
+            List<Friendrequest> requests = FriendrequestDAO.getAllFriendrequests(userid);
+            JSONArray a = new JSONArray();
+            for(Friendrequest r : requests){
+                a.put(r.toJSON());
+            }
+            response.setContentType("application/json");
+            response.getWriter().println(a);
         }
     }
     
@@ -92,6 +121,9 @@ public class ControllerServlet extends HttpServlet {
             WaypointController.doWaypointsPost(request, response);
         } else if(resource.contains("/hotel")){
             HotelController.doHotelsPost(request, response);
+        } else if(resource.contains("friendpoll")){
+            //submit a friend request with this user as the sender
+            FriendpollController.doPollPost(request, response, pollService);
         }
     }
     

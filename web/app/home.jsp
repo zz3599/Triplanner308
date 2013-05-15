@@ -42,7 +42,7 @@
                             <span><input id="search" type="text" class="search square" style="background-color:#353232; border-color: #b3b3b3;"><input id="searchsubmit" type="button" value="Search"></span>
                         </p>
                         <p class="navbar-text pull-right">
-                            Logged in as <a href="logout" class="navbar-link"><c:out value="${user.firstname}"/></a>
+                            <span id="loggedin">Logged in as</span> <a href="#" class="navbar-link"><c:out value="${user.firstname}"/></a>
                         </p>
                         <!--                        <ul class="nav">
                                                     <li class="active"><a href="#">Home</a></li>
@@ -153,6 +153,7 @@
                             </div>
                             <button type="button" id="edittrip">Edit trip</button>
                             <button type="button" id="submitedittrip">Done</button>
+                            <button type="button" id="sharetrip">Share </button>
                         </form>
                     </div>
                     <div class="row-fluid">
@@ -170,6 +171,17 @@
                             </div>
                         </div>
                         <div id="thumbnails"></div>
+                        <div id="sharedialog-form" title="Share your trip">
+                            <p class="validateTips">Select one.</p>
+                            <form id="sharetripform">
+                                <fieldset>
+                                    <input type="radio" name="level" value="all">Everyone<br>
+                                    <input type="radio" name="level" value="friend">Friends<br>
+                                    <input type="radio" name="level" value="me">Me<br>
+                                </fieldset>
+                                <div id="sharetriperrors"></div>
+                            </form>
+                        </div>
                     </div><!--/row-->                    
                 </div>
             </div>

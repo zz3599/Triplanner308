@@ -41,6 +41,25 @@ public class TripController {
     public static void doTripPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String action = request.getParameter("action");
+        if(action.equals("share")){
+            int tripid = (Integer) request.getSession().getAttribute("tripid");
+            String type = request.getParameter("level");
+            int sharelevel = -1;
+            if(type.equals("all")){
+                sharelevel = 2;
+            } else if(type.equals("friend")){
+                sharelevel = 1;
+            } else if(type.equals("me")){
+                sharelevel = 0;
+            }
+            boolean success = TripDAO.updateShareTrip(tripid, sharelevel);
+            if(success){
+                response.getWriter().write("success");
+            } else {
+                response.getWriter().write("fail");
+            }
+            return;
+        }
         String title = request.getParameter("title");
         String description = request.getParameter("description");
         String startLocation = request.getParameter("startLocation");
@@ -69,7 +88,7 @@ public class TripController {
                 result = trip.toJSON();
                 boolean success = TripdayDAO.updateAllTripdays(trip);
             }
-        }
+        } 
         response.setContentType("application/json");
         response.getWriter().println(result);
 

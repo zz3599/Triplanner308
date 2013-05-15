@@ -50,6 +50,36 @@
             var usertemplate = "<tr><td>User: <a href='#' id='user_{{id}}'>{{firstname}} {{lastname}} ({{email}})</a></td></tr>";
             var triptemplate = "<tr><td> Trip:<a href='#' id='trip_{{id}}'> {{title}} ({{startLocation}}-{{endLocation}})</a></td></tr>";
             var userid = $('#userid').val();
+            $('#sharetrip').click(function(){
+                $('#sharedialog-form').dialog('open');
+            });
+            $('#sharedialog-form').dialog({
+                autoOpen: false,
+                height: 300,
+                width: 350,
+                modal: true,
+                buttons: {
+                    "Submit": function() {
+                        var self = $(this);
+                        $.post('trip?action=share', $('#sharetripform').serialize()).success(function(text){
+                           if(text === 'success'){
+                               self.dialog( "close" );
+                               $('#sharetriperrors').text('');
+                           } else {
+                               $('#sharetriperrors').text('Errors');
+                           }
+                        });
+                    },
+                    Cancel: function() {
+                        $(this).dialog("close");
+                    }
+                }});
+            $('#loggedin').hover(function() { //hover in
+                $(this).text('')
+                        .append($('<a>', {href: 'logout', text: 'Log out?'}));
+            }, function() {//hover out
+                $(this).text('Logged in as').remove('a');
+            });
             $('#search').keyup(function() {
                 var input = $("#search").val();
                 if (!input) {
@@ -133,10 +163,10 @@
             });
             $('#createwaypoint').click(function() {
                 var elem = $(Mustache.render(app.timeline.WAYPOINTTEMPLATE, {location: ''}))
-                        .appendTo($('#waypointsortable'));;
+                        .appendTo($('#waypointsortable'));
+                ;
                 new google.maps.places.Autocomplete(elem.find('.settingInput2')[0]);
             });
-
             $('#newtripbutton').click(function() {
                 $('#newtripinfo').toggle(100).siblings().hide();
             });
@@ -191,7 +221,6 @@
                 parent.find('input#triped').val(this.getAttribute('end')).removeClass('hasDatepicker');
                 parent.find('input#tripdesc').val(this.getAttribute('description'));
                 $('#tripeditform').show();
-
 //                        .append("<div class='span6'>\
 //                                <span id='photoprogress'></span>\
 //                                <label for=thumbnails'>Photo (click for album)</label><div id='thumbnails' class='span12'></div></div>"
@@ -263,10 +292,8 @@
                     app.stopSpinner();
                     $('#photoprogress').text('done');
                     var parent = $('#thumbnails');
-
                     completed = true;
                     var photo = JSON.parse(e.target.responseText);
-
                     if ($.isEmptyObject(photo))
                         return;
                     var img = $('<div>', {
