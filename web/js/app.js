@@ -46,10 +46,31 @@
             });
         },
         initHandlers: function() {
+            var youtemplate = "<tr><td>User: <a href='#'>{{firstname}} {{lastname}} ({{email}}) - YOU!</a></td></tr>";
+            var usertemplate = "<tr><td>User: <a href='#' id='user_{{id}}'>{{firstname}} {{lastname}} ({{email}})</a></td></tr>";
+            var triptemplate = "<tr><td> Trip:<a href='#' id='trip_{{id}}'> {{title}} ({{startLocation}}-{{endLocation}})</a></td></tr>";
+            var userid = $('#userid').val();
             $('#search').keyup(function() {
                 var input = $("#search").val();
+                if (!input) {
+                    $('#searchresults').empty();
+                    return;
+                }
                 $.get('search', {'search': input}).success(function(data) {
                     console.log(data);
+                    $('#searchresults').empty();
+                    $.each(data.users, function(i, e) {
+                        var user; 
+                        if(e.id == userid) 
+                            user = $(Mustache.render(youtemplate, e));
+                        else 
+                            user = $(Mustache.render(usertemplate, e));
+                        $('#searchresults').append(user);
+                    });
+                    $.each(data.trips, function(i, e) {
+                        var trip = $(Mustache.render(triptemplate, e))
+                        $('#searchresults').append(trip);
+                    });
                 });
             });
             $('#viewalbum').click(function() {
@@ -258,8 +279,6 @@
                         height: '70px'
                     }))).hide();
                     img.appendTo(parent);
-
-
                 }
             }
             app.initSpinner('hero');

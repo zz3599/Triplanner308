@@ -54,11 +54,16 @@
         </div>
 
         <div class="container-fluid" id="container-fluid">
+            <table id="searchresults" style="z-index:1000;">
+
+            </table>
             <div class="row-fluid">
+
                 <div class="span2">
                     <!--Sidebar content-->
                     <div class="well sidebar-nav">
                         <ul class="nav nav-list">
+                            <input id="userid" type="hidden" value="<c:out value="${user.id}"></c:out>">
                             <li class="nav-header">Your Trips</li>
                             <div id="yourtrips">
 
@@ -102,7 +107,7 @@
                                 Photo event: <input type='text' name='eventdescription' id='eventdescription' class="settingInput" readonly>
                                 Photo date: <input type='text' name='photoday' id='photoday' class="settingInput" readonly>
                                 <input type='submit' id='addphoto' value='Add photo'></form>
-                                
+
                         </div>
                         <div id="timelineinfo" style="display:none;">
                             <form id="tripdayform">
@@ -125,9 +130,9 @@
                                 <input type="button" id="editevents" value="Edit events/hotel">
                                 <div id="errors"></div>
                             </form>
-                            
-                                
-                            
+
+
+
                         </div>
                     </div>
                 </div>
@@ -159,11 +164,11 @@
                         <div class="row-fluid">
                             <div id="mapwrapper"  class="span12">
                                 <div style="height:500px;" id="map-canvas">
-                                    
+
                                 </div>
                             </div>
                         </div>
-                            <div id="thumbnails"></div>
+                        <div id="thumbnails"></div>
                     </div><!--/row-->                    
                 </div>
             </div>

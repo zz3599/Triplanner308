@@ -36,7 +36,7 @@ public class TripDAO implements Serializable {
         try {
             Connection connection = DB.getConnection();
             PreparedStatement ps = connection.prepareStatement(SEARCHTRIP);
-            ps.setString(1, search);
+            ps.setString(1, "%" + search + "%");
             List<Trip> trips = new ArrayList<Trip>();
             ResultSet rs = ps.executeQuery();
             while(rs.next()){
