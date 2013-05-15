@@ -342,6 +342,6 @@ span.required:after{
     margin: 10px 5px 0 0;
 }
 
-#map_canvas img {
+#map-canvas img {
     max-width: none;
 }

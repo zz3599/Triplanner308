@@ -166,7 +166,9 @@
                         </div>
                         <div class="row-fluid">
                             <div id="mapwrapper"  class="span12">
-                                <div style="height:500px;" id="map-canvas"/>
+                                <div style="height:500px;" id="map-canvas">
+                                    
+                                </div>
                             </div>
                         </div>
                             <div id="thumbnails"></div>
