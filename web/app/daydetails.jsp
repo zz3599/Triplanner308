@@ -88,7 +88,7 @@
                     <div class="hero-unit" id="hero">
                         <div class="row-fluid">
                             <div class="span4">
-                                <span>Trip details for 
+                                <span class="form">Trip details for 
                                     <fmt:formatDate pattern="M-d-yyyy" 
                                                     value="${tripday.date}" />
                                 </span><br>
@@ -97,11 +97,13 @@
                                     <input id="tripdayid" name="tripdayid" value="<c:out value="${tripday.id}"></c:out>" type="hidden">
                                     <input id="daynum" name="daynum" value="<c:out value="${tripday.daynum}"></c:out>" type="hidden">
                                     <input id="date" name="date" value="<c:out value="${tripday.date}"></c:out>" type="hidden">
-                                    Start Location: <input id="startlocation" name="startlocation" value="<c:out value="${tripday.startLocation}"></c:out>" readonly><br>
-                                    End Location:  <input id="endlocation" name="endlocation" value="<c:out value="${tripday.endLocation}" ></c:out>"readonly><br>
-                                    Description: <input id="description" name="description" value="<c:out value="${tripday.comment}"></c:out>" readonly><br>
-                                    <button type="button" id="editday">Edit Day</button>
-                                    <button type="button" id="submitday">Done</button>
+                                    <input id="startlocation" name="startlocation" value="<c:out value="${tripday.startLocation}"></c:out>" type="hidden">
+                                    <input id="endlocation" name="endlocation" value="<c:out value="${tripday.endLocation}" ></c:out>"type="hidden">
+                                    <input id="description" name="description" value="<c:out value="${tripday.comment}"></c:out>" type="hidden">
+                                    <span class="form">Start Location: <c:out value="${tripday.startLocation}"></c:out></span><br>
+                                    <span class="form">End Location:<c:out value="${tripday.endLocation}"></c:out> </span> <br>
+                                    <span class="form">Description:<c:out value="${tripday.comment}"></c:out> </span> <br>
+                                    
                                 </form>
                             </div>
                             <div class="span4">
@@ -123,8 +125,8 @@
                                 <form id="hotelform">
                                     <input id="eventid" name="eventid" type="hidden">
                                     Location: <input id="hotellocation" name="location"  readonly><br>
-                                    <button type="button" id="editevent">Edit Event</button>
-                                    <button type="button" id="submitevent">Done</button>
+                                    <button type="button" id="edithotel">Edit Hotel</button>
+                                    <button type="button" id="submithotel">Done</button>
                                 </form>
                             </div>
                         </div>

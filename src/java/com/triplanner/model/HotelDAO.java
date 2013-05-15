@@ -20,7 +20,7 @@ import java.util.List;
 public class HotelDAO {
     private static final String CREATEHOTEL = "insert into hotels (tripid, tripdayid, location) values " 
             + "(?, ?, ?)";
-    private static final String SELECTHOTELBYDAY = "select * from hotels where tripid=? amd tripdayid=?";
+    private static final String SELECTHOTELBYDAY = "select * from hotels where tripid=? and tripdayid=?";
     private static final String SELECTHOTELBYTRIP = "select * from hotels where tripid=?";
     
     public static List<Hotel> getAllHotelsByDay(int tripid, int tripdayid){

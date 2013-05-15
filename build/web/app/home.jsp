@@ -129,7 +129,7 @@
                                 </ul>
                                 <input type="button" id="createwaypoint" value="Add waypoint">
                                 <input type="submit" id="updatewaypoints" value="Done">
-                                <input type="button" id="editevents" value="Edit events">
+                                <input type="button" id="editevents" value="Edit events/hotel">
                                 <div id="errors"></div>
                             </form>
                             

@@ -1,17 +1,17 @@
 ;
 (function(world) {
     var daydetails = {
+        HOTELS: 'hotel',
         EVENTS: 'events',
+        WAYPOINT: 'waypoint',
         EVENTTEMPLATE: '<li id="{{id}}" starttime="{{startTime}}" endtime="{{endTime}}" startlocation="{{startLocation}}" endlocation="{{endLocation}}" comment="{{comment}}" tripdayid="{{tripdayid}}"><a href="#">{{comment}}</a></li>',
         WAYPOINTTEMPLATE: '<li class="ui-state-default"><span class="ui-icon ui-icon-arrowthick-2-n-s"></span><input type="text" class="settingInput2" value="{{location}}" name="locations[]" /><button type="button" class="deletestop">delete</button></li>',
-        WAYPOINT: 'waypoint',
         waypoints: [], // waypoints of the particular day
         events: [], //events for the particular day
         eventmarkers: [], //markers for events
         yourevents: $('#yourevents'),
         editevent: false, //flag for whether the event has been edited
         edittrip: false, //flag for whether the trip has been edited
-        dayForm: $('#dayeditform'),
         init: function() {
             this.eventForm = $('#eventform');
             this.date = new Date($('#date').val());
@@ -23,9 +23,17 @@
             daydetails.initMap();
         },
         initHandlers: function() {
+            $('#submithotel').click(function(e) {
+                e.preventDefault();
+                daydetails.initSpinner('hero');
+                $.post(daydetails.HOTELS, $('#hotelform').serialize()).success(function(data) {
+                    daydetails.stopSpinner();
+                    $('#hotellocation').val(data.location);
+                });
+            });
             $('#submitevent').click(function(e) {
                 e.preventDefault();
-                var ok = daydetails.editevent && $('#eventstartlocation').val()  &&
+                var ok = daydetails.editevent && $('#eventstartlocation').val() &&
                         $('#eventdescription').val() && $('#eventstarttime').val() && $('#eventendtime').val();
                 if (!ok) {
                     $('#errors').text('Fields invalid');
@@ -38,7 +46,7 @@
                 daydetails.initSpinner('hero');
                 $.post(daydetails.EVENTS + action, $('#eventform').serialize()).success(function(data) {
                     daydetails.stopSpinner();
-                    if(action.indexOf('update') !== -1){
+                    if (action.indexOf('update') !== -1) {
                         $('#' + eventid).attr('startlocation', data.startLocation).attr('endlocation', data.endLocation).
                                 attr('starttime', data.startTime).attr('endtime', data.endTime).attr('comment', data.comment).
                                 find('a').text(data.comment);
@@ -72,15 +80,6 @@
                 daydetails.eventForm.find('input').attr('readonly', true);
                 daydetails.editevent = false;
             });
-            $('#editday').click(function() {
-                daydetails.dayForm.find('input').attr('readonly', function(i, attr) {
-                    if (attr === 'readonly')
-                        daydetails.edittrip = true;
-                    else
-                        daydetails.edittrip = false;
-                    return !attr;
-                });
-            });
             $('#editevent').click(function() {
                 daydetails.eventForm.find('input').attr('readonly', function(i, attr) {
                     if (attr === 'readonly')
@@ -90,14 +89,26 @@
                     return !attr;
                 });
             });
+            $('#edithotel').click(function() {
+                var readonly = $('#hotellocation').attr('readonly');
+                $('#hotellocation').attr('readonly', readonly ? false : true);
+            });
 
         },
         initData: function() {
             this.tripid = $('#tripid').val();
             this.tripdayid = $('#tripdayid').val();
             this.initSpinner('hero');
-            $.get(daydetails.EVENTS + "?action=day", {'tripdayid': $('#tripdayid').val()}).success(function(data){
-                $.each(data, function(i, elem){
+            $.get(daydetails.HOTELS + '?action=day').success(function(data) {
+                if ($.isEmptyObject(data))
+                    return;
+                $.each(data, function(i, e) {
+                    $('#hotellocation').val(e.location);
+                });
+
+            });
+            $.get(daydetails.EVENTS + "?action=day", {'tripdayid': $('#tripdayid').val()}).success(function(data) {
+                $.each(data, function(i, elem) {
                     $(Mustache.render(daydetails.EVENTTEMPLATE, elem)).appendTo($('#yourevents'));
                 });
             });
@@ -177,6 +188,7 @@
             //autocomplete
             new google.maps.places.Autocomplete(document.getElementById('eventstartlocation'));
             new google.maps.places.Autocomplete(document.getElementById('eventendlocation'));
+            new google.maps.places.Autocomplete(document.getElementById('hotellocation'));
             function addMarker() {
                 daydetails.updateMarkers();
             }

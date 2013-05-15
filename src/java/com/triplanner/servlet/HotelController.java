@@ -23,13 +23,13 @@ public class HotelController {
 
     public static void doHotelsGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        int tripid = Integer.parseInt(request.getParameter("tripid"));
-        String tripdayid_str = request.getParameter("tripdayid");
+        String action = request.getParameter("action");
+        int tripid = (Integer)request.getSession().getAttribute("tripid");
+        int tripdayid = ((Tripday)(request.getSession().getAttribute("tripday"))).getId();
         List<Hotel> hotels = null;
-        if (tripdayid_str == null || tripdayid_str.equals("")) {
+        if (action.equals("trip")) {
             hotels = HotelDAO.getAllHotelsByTrip(tripid);
         } else {
-            int tripdayid = Integer.parseInt(request.getParameter("tripdayid"));
             hotels = HotelDAO.getAllHotelsByDay(tripid, tripdayid);
         }
         JSONArray o = new JSONArray();
@@ -38,6 +38,7 @@ public class HotelController {
                 o.put(h.toJSON());
             }
         }
+        response.setContentType("application/json");
         response.getWriter().println(o);
     }
 
@@ -52,6 +53,7 @@ public class HotelController {
         if (hotel != null) {
             o = hotel.toJSON();
         }
+        response.setContentType("application/json");
         response.getWriter().println(o);
     }
 }
