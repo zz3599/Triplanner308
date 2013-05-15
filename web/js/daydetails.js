@@ -223,8 +223,9 @@
                         height: '70px'
                     }))).hide();
                     img.appendTo(parent);
-
-
+                    if(parent.find('img').length === 1){
+                        daydetails.firstimage = img;
+                    }
                 }
             }
             daydetails.initSpinner('hero');

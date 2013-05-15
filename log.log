@@ -1,0 +1,53 @@
+* 7712b2a : can share trips, and cleaning up friends feature
+* 8268be6 : more autocompletes
+* b7f085d : call lat() and lng() not .kb and .lb !!
+* 7f8d02e : search function more
+* c779bdc : search results logged in console
+* 5c742e9 : fix bootstrap conflict with gmap
+* 57167cd : why does it look so shitty
+* e2cd80a : photos for markers
+* 024b2fd : fixes here and there
+* 5ade2c0 : hotels + a bit of styling
+* 1aa19cf : re-added the erroneously deleted updatetripday method
+* 999d833 : add events fine
+* 823a7a7 : zoom
+* 5dd5230 : start migration of each day to a separate page to make editing events easier
+* 8d1a7e5 : updates
+* cb9d15e : 0.1?
+* 70e3231 : waypoints on route instead of just markers
+* 1bebc38 : waypoints API up
+* 582fef8 : added controller framework
+* 6fbbdae : basic hotels
+* 80788e0 : waypoints dao
+* 28b2e8e : abstractentity and waypoints
+* 5949b93 : missing imgs
+* 7de3e10 : durr
+* 32ccfb6 : fix silly bug
+* 8e68007 : all photos are resized before being stored
+* 28fd5a5 : lightbox for photos works
+* 18b7a8b : spinner
+* 6e4a594 : so no more 2 photos at the same time bug
+* 8678f8b : fix some bugs with event add
+* 1c0510e : photo uploading working; weird behavior after ajax load when uploaded photo appears 2x
+* e86e036 : added photos controller and works (need to link)
+* 275f739 : file upload works; the obtrusive upload form in hero is only for easier access
+* 3cc38ef : ui change for display day info; set the next day's start to the previous day's end
+* 55e24b1 : remove private files
+*   c00a6b8 : Merge branch 'master' of https://github.com/zz3599/Triplanner308
+|\  
+| * a1d0447 : fixed some bugs
+| * db62ab0 : description shows up now
+| * 0ff4577 : more stuff
+| * 9d0160e : moar
+* | 6f08a14 : mine
+* | d33b263 : search UI done
+|/  
+* e2f547c : refactored controller into separate files for each table
+* fe90327 : directions for the map
+* 175c380 : can update days
+* 04ab53b : more ui -> events dialog shows up
+* d3d96d5 : triggers for the timeline to show correct dates for trip; update the map with the location
+* 0ebbb5f : ui
+* d9c17de : Basic geocodign, maps added
+* 9ef9276 : bootstrap and timeline
+* 26cecab : init

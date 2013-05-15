@@ -7,6 +7,7 @@ package com.triplanner.servlet;
 import com.triplanner.entities.Friendrequest;
 import com.triplanner.entities.User;
 import com.triplanner.model.FriendrequestDAO;
+import com.triplanner.model.UserDAO;
 import com.triplanner.service.PollService;
 import java.io.IOException;
 import java.util.List;
@@ -17,6 +18,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.json.JSONArray;
+import org.json.JSONObject;
 
 /**
  * This controller servlet provides interface between the web page and the
@@ -39,7 +41,9 @@ import org.json.JSONArray;
     "/app/daydetails",
     "/app/search",
     "/app/friendpoll",
-    "/app/friendrequests"
+    "/app/friendrequests",
+    "/app/user",
+    "/app/respond" //to friend request
 },
         asyncSupported = true)
 @MultipartConfig
@@ -95,6 +99,22 @@ public class ControllerServlet extends HttpServlet {
             }
             response.setContentType("application/json");
             response.getWriter().println(a);
+        } else if(resource.equals("/user")){
+            int userid = Integer.parseInt(request.getParameter("id"));
+            User user = UserDAO.getUser(userid);
+            JSONObject o = user.toJSON();
+            response.setContentType("application/json");
+            response.getWriter().println(o);
+        } else if(resource.contains("respond")){
+            String action = request.getParameter("action");
+            int user1 = ((User)request.getSession().getAttribute("user")).id;
+            int user2 = Integer.parseInt(request.getParameter("user2"));
+            int requestid = Integer.parseInt(request.getParameter("requestid"));
+            if(action.equals("accept")){
+                FriendrequestDAO.acceptFriend(requestid, user1, user2);
+            } else if(action.equals("decline")){
+                FriendrequestDAO.declineFriend(requestid);
+            }
         }
     }
     

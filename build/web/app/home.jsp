@@ -70,7 +70,7 @@
 
                             </div>
                             <li class="nav-header">Your Friends</li>
-                            <li><a href="#">Link</a></li>
+                            
                         </ul>
                     </div>
                     <div id="controls">
@@ -139,6 +139,7 @@
                 </div>
 
                 <div class="span10">
+                    <div id="friendrequests"></div>
                     <div class="hero-unit" id="hero">
                         <form id="tripeditform">
                             <div class="span6">

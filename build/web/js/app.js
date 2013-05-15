@@ -31,6 +31,8 @@
             app.initHandlers();
             app.initTimepickers($('#startTime'), $('#endTime'), null, null);
             app.stopSpinner();
+            
+            //app.poll();
         },
         initData: function() {
             $.get(app.TRIPURL, function(data) {
@@ -44,13 +46,32 @@
                     elem.appendTo($('#yourtrips'));
                 });
             });
+            var friendrequesttemplate = "<div><a href='respond?user2={{id}}'>{{firstname}} {{lastname}} wants to be friends</a> </div>";
+            $.get('friendrequests').success(function(data){
+                $.each(data, function(i, e){
+                    $.get('user', {'id': e.user1}).success(function(data2){
+                        var elem = $(Mustache.render(friendrequesttemplate, data2));
+                        var href = elem.find('a').attr('href') + '&requestid=' +  e.id + '&action=accept';
+                        elem.find('a').attr('href', href);
+                        elem.appendTo($('#friendrequests'));
+                    });
+                });
+            });
+        },
+        poll: function() {
+            $.get('friendpoll').success(function(data) {
+                
+                app.poll();
+            }).error(function() {
+                app.poll();
+            });
         },
         initHandlers: function() {
             var youtemplate = "<tr><td>User: <a href='#'>{{firstname}} {{lastname}} ({{email}}) - YOU!</a></td></tr>";
             var usertemplate = "<tr><td>User: <a href='#' id='user_{{id}}'>{{firstname}} {{lastname}} ({{email}})</a></td></tr>";
             var triptemplate = "<tr><td> Trip:<a href='#' id='trip_{{id}}'> {{title}} ({{startLocation}}-{{endLocation}})</a></td></tr>";
             var userid = $('#userid').val();
-            $('#sharetrip').click(function(){
+            $('#sharetrip').click(function() {
                 $('#sharedialog-form').dialog('open');
             });
             $('#sharedialog-form').dialog({
@@ -61,13 +82,13 @@
                 buttons: {
                     "Submit": function() {
                         var self = $(this);
-                        $.post('trip?action=share', $('#sharetripform').serialize()).success(function(text){
-                           if(text === 'success'){
-                               self.dialog( "close" );
-                               $('#sharetriperrors').text('');
-                           } else {
-                               $('#sharetriperrors').text('Errors');
-                           }
+                        $.post('trip?action=share', $('#sharetripform').serialize()).success(function(text) {
+                            if (text === 'success') {
+                                self.dialog("close");
+                                $('#sharetriperrors').text('');
+                            } else {
+                                $('#sharetriperrors').text('Errors');
+                            }
                         });
                     },
                     Cancel: function() {
@@ -91,10 +112,17 @@
                     $('#searchresults').empty();
                     $.each(data.users, function(i, e) {
                         var user;
-                        if (e.id == userid)
+                        if (e.id == userid) {
                             user = $(Mustache.render(youtemplate, e));
-                        else
+                        }
+                        else {
                             user = $(Mustache.render(usertemplate, e));
+                            user.click(function() {
+                                //friend request 
+                                var userid = user.find('a').attr('id').split('_')[1];
+                                $.post('friendpoll', {'userid': userid});
+                            })
+                        }
                         $('#searchresults').append(user);
                     });
                     $.each(data.trips, function(i, e) {

@@ -25,7 +25,6 @@ import org.json.JSONObject;
  * @author brook
  */
 public class TripController {
-
     public static void doTripsGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         User user = (User) request.getSession().getAttribute("user");

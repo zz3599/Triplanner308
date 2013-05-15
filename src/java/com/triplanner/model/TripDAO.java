@@ -33,6 +33,7 @@ public class TripDAO implements Serializable {
     private static final String SEARCHTRIP = "Select * from trips where title like ?";
     private static final String UPDATESHARE = "Update trips set shared=? where id=?";
     
+    
     public static boolean updateShareTrip(int tripid, int shareval){
         try {
             Connection connection = DB.getConnection();

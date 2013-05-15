@@ -24,12 +24,26 @@ public class UserDAO implements Serializable {
             + "where id=?";
     private static final String SEARCHUSER = "Select * from users where (firstname like ? or lastname like ?) "
             + "and authority=1";
-    
+    private static final String SELECTUSER = "Select * from users where id =?";
     //User type enum 
     enum Authority{
         ADMIN, USER
     }
     
+    public static User getUser(int id){
+        try {
+            Connection connection = DB.getConnection();
+            PreparedStatement ps = connection.prepareStatement(SELECTUSER);
+            ps.setInt(1, id);
+            ResultSet rs = ps.executeQuery();
+            if(rs.first()){
+               return extractUser(rs);
+            }             
+        } catch(Exception e){
+            e.printStackTrace();
+        }
+        return null;        
+    }
     
     public static List<User>searchUser(String search){
         try {
