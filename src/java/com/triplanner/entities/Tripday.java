@@ -14,7 +14,6 @@ import org.json.JSONObject;
  * @author brook
  */
 public class Tripday extends AbstractEntity{
-    private static final SimpleDateFormat formatter = new SimpleDateFormat("M-d-yyyy");
     public int tripid;
     public Timestamp date;
     public String startLocation;
@@ -28,7 +27,7 @@ public class Tripday extends AbstractEntity{
         JSONObject o = new JSONObject();
         o.put("id", this.id);
         o.put("tripid", this.tripid);
-        if(this.date != null) o.put("date", formatter.format(this.date));
+        o.put("date", this.date);
         o.put("startLocation", this.startLocation);
         o.put("endLocation", this.endLocation);
         o.put("comment", this.comment);

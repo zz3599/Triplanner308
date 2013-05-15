@@ -5,6 +5,7 @@
 package com.triplanner.servlet;
 
 import com.triplanner.entities.Hotel;
+import com.triplanner.entities.Tripday;
 import com.triplanner.model.HotelDAO;
 import java.io.IOException;
 import java.util.List;
@@ -42,8 +43,9 @@ public class HotelController {
 
     public static void doHotelsPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        int tripid = Integer.parseInt(request.getParameter("tripid"));
-        int tripdayid = Integer.parseInt(request.getParameter("tripdayid"));
+        int tripid = (Integer)request.getSession().getAttribute("tripid");
+        int tripdayid = ((Tripday)(request.getSession().getAttribute("tripday"))).getId();
+        
         String location = request.getParameter("location");
         Hotel hotel = HotelDAO.createHotel(tripid, tripdayid, location);
         JSONObject o = new JSONObject();

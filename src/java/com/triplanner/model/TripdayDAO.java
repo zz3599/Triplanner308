@@ -29,6 +29,9 @@ public class TripdayDAO implements Serializable {
     private static final String UPDATEDAY = "Update tripdays set "
             + "date=?, startlocation=?, endlocation=?, comment=?, daynum=? "
             + "where id=?";
+    private static final String UPDATENEXTDAY = "Update tripdays set "
+            + "startlocation=? where tripid=? and daynum=?";
+
     private static final String UPDATETIME = "Update tripdays set "
             + "date=? where tripid=? and daynum=?";
     private static final String ALLTRIPDAYS = "SELECT * from tripdays where tripid=? ORDER BY daynum";
@@ -98,7 +101,33 @@ public class TripdayDAO implements Serializable {
         return null;
     }
 
-    public static boolean updateTripday(Trip trip) {
+     public static Tripday updateTripday(int tripdayid, int tripid, Timestamp date, String start, String end, String comment, int daynum) {
+        try {
+            Connection connection = DB.getConnection();
+            PreparedStatement ps = connection.prepareStatement(UPDATEDAY);
+            ps.setTimestamp(1, date);
+            ps.setString(2, start);
+            ps.setString(3, end);
+            ps.setString(4, comment);
+            ps.setInt(5, daynum);
+            ps.setInt(6, tripdayid);
+            int result = ps.executeUpdate();
+            if (result == 1) {
+                //update the next tripday
+                ps = connection.prepareStatement(UPDATENEXTDAY);
+                ps.setString(1, end);
+                ps.setInt(2, tripid);
+                ps.setInt(3, daynum+1);
+                int r = ps.executeUpdate();
+                return new Tripday(tripdayid, tripid, date, start, end, comment, daynum);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+    
+    public static boolean updateAllTripdays(Trip trip) {
         try {
             Connection connection = DB.getConnection();
             PreparedStatement ps = connection.prepareStatement(ALLTRIPDAYS);

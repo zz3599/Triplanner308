@@ -302,10 +302,15 @@ input[type=button], input[type=button]:hover {
     position: absolute;
 }
 
+span.form{
+   font-size:70%;
+} 
+
 span.required:after{
     content:" *";
     color:red;
-    font-weight:bold; 
+    font-weight:bold;
+    
 }
 
 .nav-list .selected >a{

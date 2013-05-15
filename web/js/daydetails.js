@@ -1,11 +1,10 @@
 ;
 (function(world) {
     var daydetails = {
-        EVENTS: "events",
+        EVENTS: 'events',
         EVENTTEMPLATE: '<li id="{{id}}" starttime="{{startTime}}" endtime="{{endTime}}" startlocation="{{startLocation}}" endlocation="{{endLocation}}" comment="{{comment}}" tripdayid="{{tripdayid}}"><a href="#">{{comment}}</a></li>',
         WAYPOINTTEMPLATE: '<li class="ui-state-default"><span class="ui-icon ui-icon-arrowthick-2-n-s"></span><input type="text" class="settingInput2" value="{{location}}" name="locations[]" /><button type="button" class="deletestop">delete</button></li>',
-        WAYPOINT: "waypoint",
-        EVENTS: "events",
+        WAYPOINT: 'waypoint',
         waypoints: [], // waypoints of the particular day
         events: [], //events for the particular day
         eventmarkers: [], //markers for events

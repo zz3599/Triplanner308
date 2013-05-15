@@ -67,7 +67,7 @@ public class TripController {
             trip = TripDAO.updateTrip(user, title, description, startTime, endTime, startLocation, endLocation, false, tripid);
             if(trip != null){
                 result = trip.toJSON();
-                boolean success = TripdayDAO.updateTripday(trip);
+                boolean success = TripdayDAO.updateAllTripdays(trip);
             }
         }
         response.setContentType("application/json");

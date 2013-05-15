@@ -87,7 +87,7 @@
                 <div class="span10">
                     <div class="hero-unit" id="hero">
                         <div class="row-fluid">
-                            <div class="span6">
+                            <div class="span4">
                                 <span>Trip details for 
                                     <fmt:formatDate pattern="M-d-yyyy" 
                                                     value="${tripday.date}" />
@@ -104,18 +104,28 @@
                                     <button type="button" id="submitday">Done</button>
                                 </form>
                             </div>
-                            <div class="span6">
+                            <div class="span4">
+                                Event info
                                 <form id="eventform">
                                     <input id="eventid" name="eventid" type="hidden">
-                                    Start Location: <input id="eventstartlocation" name="eventstartlocation"  readonly><br>
-                                    End Location:  <input id="eventendlocation" name="eventendlocation" readonly><br>
-                                    Description: <input id="eventdescription" name="eventdescription" readonly><br>
-                                    Start Time: <input id="eventstarttime" name="eventstarttime" readonly><br>
-                                    End Time: <input id="eventendtime" name="eventendtime" readonly><br>
+                                    <span class="form required"> Start Location: </span><input id="eventstartlocation" name="eventstartlocation"  readonly><br>
+                                    <span class="form"> End Location:</span>  <input id="eventendlocation" name="eventendlocation" readonly><br>
+                                    <span class="form required"> Description:</span> <input id="eventdescription" name="eventdescription" readonly><br>
+                                    <span class="form required"> Start Time:</span> <input id="eventstarttime" name="eventstarttime" readonly><br>
+                                    <span class="form required"> End Time:</span> <input id="eventendtime" name="eventendtime" readonly><br>
                                     <button type="button" id="editevent">Edit Event</button>
                                     <button type="button" id="submitevent">Done</button>
                                 </form>
                                 <div id="errors"></div>
+                            </div>
+                            <div class="span4">
+                                Hotel info
+                                <form id="hotelform">
+                                    <input id="eventid" name="eventid" type="hidden">
+                                    Location: <input id="hotellocation" name="location"  readonly><br>
+                                    <button type="button" id="editevent">Edit Event</button>
+                                    <button type="button" id="submitevent">Done</button>
+                                </form>
                             </div>
                         </div>
                     </div>

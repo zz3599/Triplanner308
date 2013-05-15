@@ -51,15 +51,12 @@ public class TripdayController {
         String startLocation = request.getParameter("daystart");
         String endLocation = request.getParameter("dayend");
         String comment = request.getParameter("comment");
-        String date = request.getParameter("date");
-        Timestamp t = null;
-        try {
-            t = new Timestamp(ControllerServlet.jsDateFormat.parse(date).getTime());
-        } catch (Exception e) {
-        }
+        Timestamp date = Timestamp.valueOf(request.getParameter("date"));
         JSONObject o = new JSONObject();
-        if (action.equals("update") && t != null) {
-            
+        if (action.equals("update") ) {
+            Tripday updatedday = TripdayDAO.updateTripday(id, tripid, date, startLocation, endLocation, comment, daynum);
+            if(updatedday != null)
+                o = updatedday.toJSON();
         } else if (action.equals("create")) {
         }
         response.setContentType("application/json");
