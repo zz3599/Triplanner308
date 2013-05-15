@@ -137,7 +137,7 @@
                                 Hotel info
                                 <form id="hotelform">
                                     <input id="eventid" name="eventid" type="hidden">
-                                    Location: <input id="hotellocation" name="location"  readonly><br>
+                                    <span class="form">Location: </span><input id="hotellocation" name="location"  readonly><br>
                                     <button type="button" id="edithotel">Edit Hotel</button>
                                     <button type="button" id="submithotel">Done</button>
                                 </form>

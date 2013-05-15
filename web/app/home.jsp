@@ -32,6 +32,7 @@
         </script>
     </head>
     <body>
+        <div id="hiddentripid" style="display:none;" ><c:if test="${not empty tripid}"><c:out value="${tripid}"></c:out></c:if></div>
         <div class="navbar navbar-inverse navbar-fixed-top">
             <div class="navbar-inner">
                 <div class="container-fluid">
@@ -41,7 +42,7 @@
                             <span><input id="search" type="text" class="search square" style="background-color:#353232; border-color: #b3b3b3;"><input id="searchsubmit" type="button" value="Search"></span>
                         </p>
                         <p class="navbar-text pull-right">
-                            Logged in as <a href="#" class="navbar-link"><c:out value="${user.firstname}"/></a>
+                            Logged in as <a href="logout" class="navbar-link"><c:out value="${user.firstname}"/></a>
                         </p>
                         <!--                        <ul class="nav">
                                                     <li class="active"><a href="#">Home</a></li>
@@ -104,8 +105,8 @@
                                 <input type='file' id='photofile' name='file' />
                                 <input type='hidden' name='eventid' id='photoeventid' class="settingInput"/>
                                 <input type='hidden' name='tripdayid' id='phototripdayid' class="settingInput"/>
-                                Photo event: <input type='text' name='eventdescription' id='eventdescription' class="settingInput" readonly>
-                                Photo date: <input type='text' name='photoday' id='photoday' class="settingInput" readonly>
+                                <input type='hidden' name='eventdescription' id='eventdescription' class="settingInput" readonly>
+                                <input type='hidden' name='photoday' id='photoday' class="settingInput" readonly>
                                 <input type='submit' id='addphoto' value='Add photo'></form>
 
                         </div>

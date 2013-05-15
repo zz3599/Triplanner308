@@ -22,6 +22,7 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet(
         urlPatterns = {
     "/login",
+    "/app/logout",
     "/register",
     "/app/home",
     "/app/trip",
@@ -62,6 +63,9 @@ public class ControllerServlet extends HttpServlet {
             TripdayController.doTripdaysGet(request, response);
         } else if(resource.contains("search")){
             SearchController.doSearchGet(request, response);
+        } else if(resource.contains("logout")){
+            request.getSession().invalidate();
+            response.sendRedirect("../");
         }
     }
     

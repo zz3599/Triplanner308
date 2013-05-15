@@ -60,10 +60,10 @@
                     console.log(data);
                     $('#searchresults').empty();
                     $.each(data.users, function(i, e) {
-                        var user; 
-                        if(e.id == userid) 
+                        var user;
+                        if (e.id == userid)
                             user = $(Mustache.render(youtemplate, e));
-                        else 
+                        else
                             user = $(Mustache.render(usertemplate, e));
                         $('#searchresults').append(user);
                     });
@@ -132,8 +132,9 @@
                 });
             });
             $('#createwaypoint').click(function() {
-                $(Mustache.render(app.timeline.WAYPOINTTEMPLATE, {location: ''})).
-                        appendTo($('#waypointsortable'));
+                var elem = $(Mustache.render(app.timeline.WAYPOINTTEMPLATE, {location: ''}))
+                        .appendTo($('#waypointsortable'));;
+                new google.maps.places.Autocomplete(elem.find('.settingInput2')[0]);
             });
 
             $('#newtripbutton').click(function() {
@@ -262,6 +263,7 @@
                     app.stopSpinner();
                     $('#photoprogress').text('done');
                     var parent = $('#thumbnails');
+
                     completed = true;
                     var photo = JSON.parse(e.target.responseText);
 
@@ -279,6 +281,9 @@
                         height: '70px'
                     }))).hide();
                     img.appendTo(parent);
+                    if (parent.find('img').length === 1) {
+                        app.firstimage = img;
+                    }
                 }
             }
             app.initSpinner('hero');
