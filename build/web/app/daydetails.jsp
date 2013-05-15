@@ -68,20 +68,33 @@
                     <!--Sidebar content-->
                     <div class="well sidebar-nav">
                         <ul class="nav nav-list">
-                            <li class="nav-header">Your Events</li>
-                            <input type="button" id="addevent" value="Add Event">
+                            <li class="nav-header">Your Events</li>                            
                             <div id="yourevents">
                             </div>
                         </ul>
                     </div>
                     <div id="setting">
+                        <input type="button" id="addevent" value="Add Event">
+                        <input type="button" id="addphotos" value="Add photos">
+                        <input type="button" id="viewalbum" value="View Album">
                         <form id="waypointform">
                             Waypoints: <br>
                             <ul id="waypointsortable">
                             </ul>
-                            <input type="button" id="createwaypoint" value="Add waypoint">
-                            <input type="submit" id="updatewaypoints">
                         </form>
+                        <div id="uploadphotodiv" style="display:none;">
+                            Upload a photo for this day
+                            <form enctype='multipart/form-data'>
+                                <label for='description'>Photo Description</label>
+                                <input type='text' id='photodescription' name='description' class="settingInput"/>
+                                <input type='file' id='photofile' name='file' />
+                                <input type='hidden' name='eventid' id='photoeventid' class="settingInput"/>
+                                <input type='hidden' name='tripdayid' id='phototripdayid' class="settingInput" value="<c:out value="${tripday.id}"></c:out>"/>
+                                    Photo event: <input type='text' name='eventdescription' id='eventdescription' class="settingInput" readonly>
+                                    Photo date: <input type='text' name='daydescription' id='daydescription' class="settingInput" value="<fmt:formatDate pattern="M-d-yyyy" value="${tripday.date}" />" readonly>
+                                <input type='submit' id='addphoto' value='Add photo'></form>
+
+                        </div>
                     </div>
                 </div>
                 <div class="span10">
@@ -103,7 +116,7 @@
                                     <span class="form">Start Location: <c:out value="${tripday.startLocation}"></c:out></span><br>
                                     <span class="form">End Location:<c:out value="${tripday.endLocation}"></c:out> </span> <br>
                                     <span class="form">Description:<c:out value="${tripday.comment}"></c:out> </span> <br>
-                                    
+
                                 </form>
                             </div>
                             <div class="span4">
@@ -137,6 +150,7 @@
                                 <div style="height:500px;" id="map-canvas"/>
                             </div>
                         </div>
+                        <div id="thumbnails"></div>
                     </div>
                 </div>
             </div>

@@ -71,16 +71,14 @@
                             <div id="yourtrips">
 
                             </div>
-                            <li class="active"><a href="#">Link</a></li>
-
                             <li class="nav-header">Your Friends</li>
                             <li><a href="#">Link</a></li>
                         </ul>
                     </div>
                     <div id="controls">
                         <input type="button" id="newtripbutton" value="Create Trip"/>
+                        <input type="button" id="viewalbum" value="View trip album"/>
                         <input type="button" id="newphoto" value="Upload photos"/>
-
                     </div>
                     <div id="setting">
 
@@ -102,14 +100,17 @@
                             </form>
                         </div>                        
                         <div id="uploadphotodiv" style="display:none;">
+                            Upload a photo for this trip
                             <form enctype='multipart/form-data'>
                                 <label for='description'>Photo Description</label>
                                 <input type='text' id='photodescription' name='description' class="settingInput"/>
                                 <input type='file' id='photofile' name='file' />
                                 <input type='hidden' name='eventid' id='photoeventid' class="settingInput"/>
                                 <input type='hidden' name='tripdayid' id='phototripdayid' class="settingInput"/>
-                                <input type='text' name='eventdescription' id='eventdescription' class="settingInput" readonly>
+                                Photo event: <input type='text' name='eventdescription' id='eventdescription' class="settingInput" readonly>
+                                Photo date: <input type='text' name='photoday' id='photoday' class="settingInput" readonly>
                                 <input type='submit' id='addphoto' value='Add photo'></form>
+                                
                         </div>
                         <div id="timelineinfo" style="display:none;">
                             <form id="tripdayform">
@@ -162,32 +163,13 @@
                             <div id="timeline">
 
                             </div>
-                            <div id="dialog-form" title="Plan event">
-                                <p class="validateTips">All form fields are required.</p>
-                                <form id="neweventform">
-                                    <fieldset>
-                                        <input type="hidden" id="eventtripid" name="eventtripid"/>
-                                        <input type="hidden" id="eventtripdayid" name="eventtripdayid"/>
-                                        <label for="description">Description</label>
-                                        <input type="text" name="description" id="description" class="text ui-widget-content ui-corner-all" />
-                                        <label for="eventstartLocation">Start Location</label>
-                                        <input type="text" name="eventstartLocation" id="eventstartLocation" value="" class="text ui-widget-content ui-corner-all" />
-                                        <label for="eventendLocation">End Location</label>
-                                        <input type="text" name="eventendLocation" id="eventendLocation" value="" class="text ui-widget-content ui-corner-all" />
-                                        <label for="eventStart">Start Time</label>
-                                        <input type="text" name="eventStart" id="eventStart" value="" class="text ui-widget-content ui-corner-all" />
-                                        <label for="eventEnd">End Time</label>
-                                        <input type="text" name="eventEnd" id="eventEnd" value="" class="text ui-widget-content ui-corner-all" />
-                                    </fieldset>
-                                </form>
-                            </div>
-
                         </div>
                         <div class="row-fluid">
                             <div id="mapwrapper"  class="span12">
                                 <div style="height:500px;" id="map-canvas"/>
                             </div>
                         </div>
+                            <div id="thumbnails"></div>
                     </div><!--/row-->                    
                 </div>
             </div>

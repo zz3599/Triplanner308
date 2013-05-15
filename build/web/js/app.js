@@ -36,7 +36,7 @@
             $.get(app.TRIPURL, function(data) {
                 var trips = data;
                 if (trips.length === 0) {
-                    $('<p>', {text: 'No trips'}).appendTo($('#yourtrips'));
+                    $('<p>', {text: 'You have no trips'}).appendTo($('#yourtrips'));
                     return;
                 }
                 $.each(trips, function(i, e) {
@@ -46,6 +46,9 @@
             });
         },
         initHandlers: function() {
+            $('#viewalbum').click(function(){
+               app.firstimage.find('a').trigger('click');
+            });
             $('#editevents').click(function(e) {
                 e.preventDefault();
                 window.location = "daydetails.jsp";
@@ -98,6 +101,7 @@
                         waypointform.serialize()).
                         success(function(d) {
                     app.stopSpinner();
+                    waypointform.find('#errors').text('');
                 });
             });
             $('#createwaypoint').click(function() {
@@ -119,6 +123,7 @@
                 formdata.append('eventid', $('#photoeventid').val());
                 formdata.append('tripdayid', $('#phototripdayid').val());
                 formdata.append('description', $('#photodescription').val());
+                formdata.append('action', 'trip');
                 app.postPhoto(formdata);
             });
             //update the page to show the data for the particular trip
@@ -173,10 +178,12 @@
                 $.post(app.TRIPURL + '?action=add', $('#newtrip').serialize()).success(
                         function(result) {
                             app.stopSpinner();
+                            var parent = $('#yourtrips')
                             if ($.isEmptyObject(result))
                                 return;
+                            parent.find('p').remove();
                             var elem = $(Mustache.render(TRIPTEMPLATE, result));
-                            elem.appendTo($('#yourtrips'));
+                            elem.appendTo(parent);
                         });
             });
             //edit the information for a day
@@ -190,8 +197,8 @@
                         });
             });
         },
-        loadPhotos: function(type, id) {
-            $.get(app.PHOTO, {'type': type, 'id': id}).success(function(d) {
+        loadPhotos: function(action, id) {
+            $.get(app.PHOTO, {'action': action, 'id': id}).success(function(d) {
                 var data = d;
                 if ($.isEmptyObject(data))
                     return;
@@ -202,15 +209,15 @@
                     }).append($('<a>', {
                         href: e.url,
                         rel: 'lightbox[album]',
-                        title: e.comment
+                        title: e.comment || '' + '(' + e.uploadtime + ')'
                     }).append($('<img>', {
                         src: e.url,
                         width: '50px',
                         height: '70px'
                     })));
+                    if(i === 0) app.firstimage = img;
                     $('#thumbnails').append(img);
-                    if (i !== 0) //only need to show the first image as the thumbnail
-                        img.hide();
+                    img.hide();                    
                 });
             });
         },
@@ -228,7 +235,8 @@
                     $('#photoprogress').text('done');
                     var parent = $('#thumbnails');
                     completed = true;
-                    var photo = e.target.responseText;
+                    var photo = JSON.parse(e.target.responseText);
+                    
                     if ($.isEmptyObject(photo))
                         return;
                     var img = $('<div>', {
@@ -242,9 +250,8 @@
                         src: photo.url,
                         height: '70px'
                     }))).hide();
-                    if (parent.children('div').length === 0)
-                        img.show();
                     img.appendTo(parent);
+                    
 
                 }
             }

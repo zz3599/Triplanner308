@@ -52,24 +52,26 @@ public class PhotoController {
 
     public static void doUploadPost(HttpServletRequest request, HttpServletResponse response, ServletContext context)
             throws ServletException, IOException {
+        String action = request.getParameter("action");
         JSONObject o = new JSONObject();
         User user = (User) request.getSession().getAttribute("user");
         int userid = user.id;
-        String description = request.getParameter("description"); // Retrieves <input type="text" name="description">
-        String tripdayidString = request.getParameter("tripdayid");
-        String eventidString = request.getParameter("eventid");
-        Integer tripidWrap = ((Integer) request.getSession().getAttribute("tripid"));
-        if (tripidWrap == null) {
-            response.getWriter().println(o);
-            return;
+        int tripid = (Integer) request.getSession().getAttribute("tripid");     
+        Integer tripdayid = null; //both fields are null if we upload a photo with only trip granularity
+        Integer eventid = null;
+        if(action.equals("day")){
+            String tripdayidString = request.getParameter("tripdayid");
+            tripdayid = Utils.isNullOrEmpty(tripdayidString) ? null : Integer.parseInt(tripdayidString);
+        } else if(action.equals("event")){
+            String tripdayidString = request.getParameter("tripdayid");
+            tripdayid = Utils.isNullOrEmpty(tripdayidString) ? null : Integer.parseInt(tripdayidString);
+            String eventidString = request.getParameter("eventid");
+            eventid = Utils.isNullOrEmpty(eventidString) ? null : Integer.parseInt(eventidString);
         }
-        int tripid = tripidWrap.intValue();
-        Integer tripdayid = Utils.isNullOrEmpty(tripdayidString) ? null : Integer.parseInt(tripdayidString);
-        Integer eventid = Utils.isNullOrEmpty(eventidString) ? null : Integer.parseInt(eventidString);
-
+        String description = request.getParameter("description"); // Retrieves <input type="text" name="description">
         Part filePart = request.getPart("file"); // Retrieves <input type="file" name="file">
         String originalName = getFilename(filePart);
-        String extension = originalName.substring(originalName.lastIndexOf(".")+1);
+        String extension = originalName.substring(originalName.lastIndexOf(".") + 1);
         String uuid = UUID.randomUUID().toString().replace("-", "");
         String filename = uuid + "." + extension;
 
@@ -83,7 +85,7 @@ public class PhotoController {
         InputStream is = null;
         OutputStream os = null;
         String dirPath = context.getRealPath(ROOTDIR + "/" + userid);
-        if(resizedImage == null){
+        if (resizedImage == null) {
             response.getWriter().println(o);
             return;
         }
@@ -102,28 +104,28 @@ public class PhotoController {
             if (is != null) {
                 is.close();
             }
-            if (os != null) {
+            if (os != null) {;
                 os.close();
             }
-
+            
             Photo photo = PhotoDAO.uploadPhoto(url, userid, tripid, tripdayid, eventid, description, originalName);
 
             if (photo != null) {
                 o = photo.toJSON();
             }
-            response.setContentType("application/json");
+            response.setContentType("application/json");    
             response.getWriter().println(o);
         }
     }
 
     public static void doPhotoGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String requestFor = request.getParameter("type").toLowerCase();
+        String requestFor = request.getParameter("action").toLowerCase();
         int id = Integer.parseInt(request.getParameter("id"));
         List<Photo> photos = new ArrayList<Photo>();
         if (requestFor.contains("trip")) {
             photos = PhotoDAO.getTripPhotos(id);
-        } else if (requestFor.contains("tripday")) {
+        } else if (requestFor.contains("day")) {
             photos = PhotoDAO.getDayPhotos(id);
         } else if (requestFor.contains("event")) {
             photos = PhotoDAO.getEventPhotos(id);
@@ -132,6 +134,7 @@ public class PhotoController {
         for (Photo photo : photos) {
             a.put(photo.toJSON());
         }
+        response.setContentType("application/json");
         response.getWriter().println(a);
     }
 
@@ -157,7 +160,7 @@ public class PhotoController {
         }
         BufferedImage resizedImage = new BufferedImage(resizedW, resizedH, BufferedImage.TYPE_INT_RGB);
         Graphics2D g = resizedImage.createGraphics();
-        g.setRenderingHint(RenderingHints.KEY_INTERPOLATION,RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+        g.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
         g.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
         g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         g.drawImage(originalImage, 0, 0, resizedW, resizedH, null);

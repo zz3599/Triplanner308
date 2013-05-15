@@ -30,32 +30,39 @@ public class WaypointDAO {
     public static boolean updateAll(String[] locations, int tripid, int tripdayid, int prevTotal) {
         try {
             Connection connection = DB.getConnection();
-            PreparedStatement ps = connection.prepareStatement(UPDATE);
-            for (int locationnum = 0; locationnum < locations.length; locationnum++) {
-                String location = locations[locationnum];
-                ps.setString(1, location);
-                ps.setInt(2, tripid);
-                ps.setInt(3, tripdayid);
-                ps.setInt(4, locationnum);
-                ps.addBatch();
+            PreparedStatement ps = null;
+            int prevwaypoints;
+            if (locations != null) {
+                prevwaypoints = locations.length;
+                ps = connection.prepareStatement(UPDATE);
+                for (int locationnum = 0; locationnum < locations.length; locationnum++) {
+                    String location = locations[locationnum];
+                    ps.setString(1, location);
+                    ps.setInt(2, tripid);
+                    ps.setInt(3, tripdayid);
+                    ps.setInt(4, locationnum);
+                    ps.addBatch();
+                }
+                connection.setAutoCommit(false);
+                ps.executeBatch();
+                connection.commit();
+                ps.close();
+            } else {
+                prevwaypoints = 0;
             }
-            connection.setAutoCommit(false);
-            ps.executeBatch();
-            connection.commit();    
-            ps.close();
-            //delete if locations.size < prevTotal, add if greater
-            if (locations.length != prevTotal) {
-                if (locations.length < prevTotal) {
+            //delete if there are fewer waypoints than before, add if greater
+            if (prevwaypoints != prevTotal) {
+                if (prevwaypoints < prevTotal) {
                     ps = connection.prepareStatement(DELETE);
-                    for (int locationnum = locations.length; locationnum < prevTotal; locationnum++) {
+                    for (int locationnum = prevwaypoints; locationnum < prevTotal; locationnum++) {
                         ps.setInt(1, tripid);
                         ps.setInt(2, tripdayid);
                         ps.setInt(3, locationnum);
                         ps.addBatch();
                     }
-                } else if (locations.length > prevTotal) {
+                } else if (prevwaypoints > prevTotal) {
                     ps = connection.prepareStatement(CREATEWAYPOINT);
-                    for (int locationnum = prevTotal; locationnum < locations.length; locationnum++) {
+                    for (int locationnum = prevTotal; locationnum < prevwaypoints; locationnum++) {
                         ps.setInt(1, tripid);
                         ps.setInt(2, tripdayid);
                         ps.setString(3, locations[locationnum]);

@@ -5,7 +5,7 @@
         EVENTS: 'events',
         WAYPOINT: 'waypoint',
         EVENTTEMPLATE: '<li id="{{id}}" starttime="{{startTime}}" endtime="{{endTime}}" startlocation="{{startLocation}}" endlocation="{{endLocation}}" comment="{{comment}}" tripdayid="{{tripdayid}}"><a href="#">{{comment}}</a></li>',
-        WAYPOINTTEMPLATE: '<li class="ui-state-default"><span class="ui-icon ui-icon-arrowthick-2-n-s"></span><input type="text" class="settingInput2" value="{{location}}" name="locations[]" /><button type="button" class="deletestop">delete</button></li>',
+        WAYPOINTTEMPLATE: '<li><span>{{location}} </span></li>',
         waypoints: [], // waypoints of the particular day
         events: [], //events for the particular day
         eventmarkers: [], //markers for events
@@ -23,6 +23,13 @@
             daydetails.initMap();
         },
         initHandlers: function() {
+            $('#viewalbum').click(function() {
+                daydetails.firstimage.find('a').trigger('click');
+            });
+            $('#addphotos').click(function() {
+                $('#uploadphotodiv').toggle();
+                $('#waypointform').toggle();
+            });
             $('#submithotel').click(function(e) {
                 e.preventDefault();
                 daydetails.initSpinner('hero');
@@ -79,6 +86,9 @@
                 daydetails.eventForm.find('input#eventdescription').val(description);
                 daydetails.eventForm.find('input').attr('readonly', true);
                 daydetails.editevent = false;
+                $('#photoeventid').val(eventid);
+                $('#eventdescription').val(description);
+
             });
             $('#editevent').click(function() {
                 daydetails.eventForm.find('input').attr('readonly', function(i, attr) {
@@ -93,12 +103,28 @@
                 var readonly = $('#hotellocation').attr('readonly');
                 $('#hotellocation').attr('readonly', readonly ? false : true);
             });
+            $('#addphoto').click(function(e) {
+                e.preventDefault();
+                var formdata = new FormData(), file = document.getElementById('photofile').files[0], xhr;
+                formdata.append('file', file);
+                formdata.append('eventid', $('#photoeventid').val());
+                formdata.append('tripdayid', $('#phototripdayid').val());
+                formdata.append('description', $('#photodescription').val());
+                if (!!$('#photoeventid').val()) {
+                    formdata.append('action', 'event');
+                } else {
+                    formdata.append('action', 'day');
+                }
+                daydetails.postPhoto(formdata);
+            });
 
         },
         initData: function() {
             this.tripid = $('#tripid').val();
             this.tripdayid = $('#tripdayid').val();
             this.initSpinner('hero');
+            //load all photos for the specific day
+            this.loadPhotos('day', this.tripdayid);
             $.get(daydetails.HOTELS + '?action=day').success(function(data) {
                 if ($.isEmptyObject(data))
                     return;
@@ -125,6 +151,71 @@
                 $('#startlocation').trigger('change'); //this updates the map
             });
         },
+        loadPhotos: function(action, id) {
+            $.get('photo', {'action': action, 'id': id}).success(function(d) {
+                var data = d;
+                if ($.isEmptyObject(data))
+                    return;
+                $.each(data, function(i, e) {
+                    var img = $('<div>', {
+                        class: 'single',
+                        style: 'float:left;'
+                    }).append($('<a>', {
+                        href: e.url,
+                        rel: 'lightbox[album]',
+                        title: e.comment || '' + '(' + e.uploadtime + ')'
+                    }).append($('<img>', {
+                        src: e.url,
+                        width: '50px',
+                        height: '70px'
+                    })));
+                    if (i === 0)
+                        daydetails.firstimage = img;
+                    $('#thumbnails').append(img);
+                    img.hide();
+                });
+            });
+        },
+        postPhoto: function(formdata) {
+            var xhr = new XMLHttpRequest(), completed = false;
+            function onProgressHandler(e) {
+                if (e.lengthComputable) {
+                    var progress = e.loaded / e.total;
+                    //$('#photoprogress').text(progress + '%');
+                }
+            }
+            function onCompleteHandler(e) {
+                if (e.target.status === 200 && e.target.responseText && !completed) {
+                    daydetails.stopSpinner();
+                    //$('#photoprogress').text('done');
+                    var parent = $('#thumbnails');
+                    completed = true;
+                    var photo = JSON.parse(e.target.responseText);
+
+                    if ($.isEmptyObject(photo))
+                        return;
+                    var img = $('<div>', {
+                        class: 'single',
+                        style: 'float:left;'
+                    }).append($('<a>', {
+                        href: photo.url,
+                        rel: 'lightbox[album]',
+                        title: photo.comment
+                    }).append($('<img>', {
+                        src: photo.url,
+                        height: '70px'
+                    }))).hide();
+                    img.appendTo(parent);
+
+
+                }
+            }
+            daydetails.initSpinner('hero');
+            xhr.open('POST', 'photo', true);
+            xhr.upload.addEventListener('progress', onProgressHandler);
+            xhr.addEventListener('readystatechange', onCompleteHandler);
+            xhr.send(formdata);
+        },
         updateMarkers: function() {
             this.events = [];
             $.each(this.eventmarkers, function(i, elem) {
@@ -145,24 +236,28 @@
                     'starttime': starttime,
                     'endtime': endtime
                 });
-                daydetails.geocodeAddress(startlocation);
+                daydetails.geocodeAddress(startlocation, true);
                 if (endlocation)
-                    daydetails.geocodeAddress(endlocation);
+                    daydetails.geocodeAddress(endlocation, true);
             });
-            daydetails.geocodeAddress($('#eventstartlocation').val());
-            daydetails.geocodeAddress($('#eventendlocation').val());
-
-
+            //this is for new events that we have typed but not yet submitted
+            daydetails.geocodeAddress($('#eventstartlocation').val(), true);
+            daydetails.geocodeAddress($('#eventendlocation').val(), true);
+            daydetails.geocodeAddress($('#startlocation').val(), false);
+            daydetails.geocodeAddress($('#endlocation').val(), false);
         },
-        geocodeAddress: function(address) {
+        geocodeAddress: function(address, makemarker) {
             this.geocoder.geocode({'address': address}, function(results, status) {
                 if (status === google.maps.GeocoderStatus.OK) {
-                    var marker = new google.maps.Marker({
-                        map: daydetails.map,
-                        position: results[0].geometry.location
-                    });
-                    daydetails.eventmarkers.push(marker);
-                    daydetails.limits.extend(new google.maps.LatLng(marker.position.kb, marker.position.lb));
+                    if (makemarker) {
+                        var marker = new google.maps.Marker({
+                            map: daydetails.map,
+                            position: results[0].geometry.location
+                        });
+                        daydetails.eventmarkers.push(marker);
+                    }
+
+                    daydetails.limits.extend(new google.maps.LatLng(results[0].geometry.location.kb, results[0].geometry.location.lb));
                     //center on the markers
                     daydetails.map.fitBounds(daydetails.limits);
                 }
