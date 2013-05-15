@@ -152,6 +152,8 @@
             });
         },
         loadPhotos: function(action, id) {
+            //map event id's to lists of photos
+            this.eventid_photosmap = {};
             $.get('photo', {'action': action, 'id': id}).success(function(d) {
                 var data = d;
                 if ($.isEmptyObject(data))
@@ -173,6 +175,14 @@
                         daydetails.firstimage = img;
                     $('#thumbnails').append(img);
                     img.hide();
+                    var eventid = e.eventid;
+                    if (!!eventid) {
+                        if (daydetails.eventid_photosmap.eventid) {
+                            daydetails.eventid_photosmap[eventid].push(img);
+                        } else {
+                            daydetails.eventid_photosmap[eventid] = [img];
+                        }
+                    }
                 });
             });
         },
@@ -222,20 +232,27 @@
                 elem.setMap(null);
             });
             this.eventmarkers = [];
+            //map event id's to their locations
+            this.eventid_locationsmap = {};
             this.limits = new google.maps.LatLngBounds();
             $.each($('#yourevents li'), function(i, elem) {
+                var id = $(this).attr('id');
                 var startlocation = $(this).attr('startlocation');
                 var endlocation = $(this).attr('endlocation');
                 var description = $(this).attr('description');
                 var starttime = $(this).attr('starttime');
                 var endtime = $(this).attr('endtime');
-                daydetails.events.push({
+                var event = {
+                    'id': id,
                     'startlocation': startlocation,
                     'endlocation': endlocation,
                     'description': description,
                     'starttime': starttime,
                     'endtime': endtime
-                });
+                };
+                daydetails.events.push(event);
+                daydetails.eventid_locationsmap[startlocation] = event;
+                daydetails.eventid_locationsmap[endlocation] = event;
                 daydetails.geocodeAddress(startlocation, true);
                 if (endlocation)
                     daydetails.geocodeAddress(endlocation, true);
@@ -253,6 +270,23 @@
                         var marker = new google.maps.Marker({
                             map: daydetails.map,
                             position: results[0].geometry.location
+                        });
+                        google.maps.event.addListener(marker, "click", function() {
+                            var event = daydetails.eventid_locationsmap[address];
+                            if (!!event) {
+                                var photos = daydetails.eventid_photosmap[event.id];
+                                if (!!photos) {
+                                    var contentstring = '';
+                                    $.each(photos, function(i, e) {
+                                        contentstring += e.html();
+                                    });
+                                    var infowindow = new google.maps.InfoWindow({
+                                        content: contentstring,
+                                        maxWidth: 95
+                                    });
+                                    infowindow.open(daydetails.map, marker);
+                                }
+                            }
                         });
                         daydetails.eventmarkers.push(marker);
                     }
