@@ -303,14 +303,14 @@ input[type=button], input[type=button]:hover {
 }
 
 span.form{
-   font-size:70%;
+    font-size:70%;
 } 
 
 span.required:after{
     content:" *";
     color:red;
     font-weight:bold;
-    
+
 }
 
 .nav-list .selected >a{
@@ -340,4 +340,8 @@ span.required:after{
     height: 75px;
     border: 1px solid #000;
     margin: 10px 5px 0 0;
+}
+
+#map_canvas img {
+    max-width: none;
 }

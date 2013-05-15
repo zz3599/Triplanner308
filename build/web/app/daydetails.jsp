@@ -38,7 +38,7 @@
         <script src="../js/bootstrap.min.js"></script>
         <script src="../js/spin.min.js"></script>
         <script src="../js/lightbox.js"></script>
-        <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAUC9VWHP1FfCpjU5Rs-wpN7vRwSFp4-bw&sensor=true&libraries=places">
+        <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAUC9VWHP1FfCpjU5Rs-wpN7vRwSFp4-bw&v=3.exp&sensor=false&libraries=places">
         </script>
     </head>
     <body>
