@@ -11,9 +11,12 @@ package com.triplanner.model;
 import java.sql.*;
 
 public class DB {
-    private static String url = "jdbc:mysql://TriPlanner308.db.10332557.hostedresource.com:3306/TriPlanner308?zeroDateTimeBehavior=convertToNull";
-    private static String username = "TriPlanner308";
-    private static String password = "qwerAsdf!1";
+    //private static String url = "jdbc:mysql://TriPlanner308.db.10332557.hostedresource.com:3306/TriPlanner308?zeroDateTimeBehavior=convertToNull";
+    //private static String username = "TriPlanner308";
+    //private static String password = "qwerAsdf!1";
+    private static String url = "jdbc:mysql://localhost:3306/TriPlanner308";
+    private static String username = "root";
+    private static String password = "root";
 
     static {
         try {

@@ -92,8 +92,9 @@
                 daydetails.eventForm.find('input#eventdescription').val(description);
                 daydetails.eventForm.find('input').attr('readonly', true);
                 daydetails.editevent = false;
+                //update photo fields
                 $('#photoeventid').val(eventid);
-                $('#eventdescription').val(description);
+                $('#photoeventdescription').val(description);
 
             });
             $('#editevent').click(function() {
@@ -241,6 +242,7 @@
             //map event id's to their locations
             this.eventid_locationsmap = {};
             this.limits = new google.maps.LatLngBounds();
+
             $.each($('#yourevents li'), function(i, elem) {
                 var id = $(this).attr('id');
                 var startlocation = $(this).attr('startlocation');
@@ -263,6 +265,7 @@
                 if (endlocation)
                     daydetails.geocodeAddress(endlocation, true);
             });
+
             //this is for new events that we have typed but not yet submitted
             daydetails.geocodeAddress($('#eventstartlocation').val(), true);
             daydetails.geocodeAddress($('#eventendlocation').val(), true);
@@ -296,10 +299,10 @@
                         });
                         daydetails.eventmarkers.push(marker);
                     }
-
-                    daydetails.limits.extend(new google.maps.LatLng(results[0].geometry.location.kb, results[0].geometry.location.lb));
+                    daydetails.limits.extend(new google.maps.LatLng(results[0].geometry.location.lat(), results[0].geometry.location.lng()));
                     //center on the markers
                     daydetails.map.fitBounds(daydetails.limits);
+
                 }
             });
         },

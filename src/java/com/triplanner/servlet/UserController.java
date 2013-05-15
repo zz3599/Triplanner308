@@ -49,7 +49,7 @@ public class UserController {
             request.getRequestDispatcher("index.jsp").forward(request, response);
             return;
         }
-        User user = UserDAO.createUser(email, first, last, password);
+        User user = UserDAO.createUser(email.trim(), first.trim(), last.trim(), password);
         if (user == null) {
             request.setAttribute("errorMessage", "Invalid registration");
             request.getRequestDispatcher("index.jsp").forward(request, response);

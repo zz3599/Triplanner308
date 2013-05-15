@@ -90,7 +90,7 @@
                                 <input type='file' id='photofile' name='file' />
                                 <input type='hidden' name='eventid' id='photoeventid' class="settingInput"/>
                                 <input type='hidden' name='tripdayid' id='phototripdayid' class="settingInput" value="<c:out value="${tripday.id}"></c:out>"/>
-                                    Photo event: <input type='text' name='eventdescription' id='eventdescription' class="settingInput" readonly>
+                                    Photo event: <input type='text' name='eventdescription' id='photoeventdescription' class="settingInput" readonly>
                                     Photo date: <input type='text' name='daydescription' id='daydescription' class="settingInput" value="<fmt:formatDate pattern="M-d-yyyy" value="${tripday.date}" />" readonly>
                                 <input type='submit' id='addphoto' value='Add photo'></form>
 

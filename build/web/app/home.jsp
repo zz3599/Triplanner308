@@ -141,14 +141,14 @@
                     <div class="hero-unit" id="hero">
                         <form id="tripeditform">
                             <div class="span6">
-                                Trip: </label><input id="triptitle" name="title" readonly><br>
-                                Starting point:<input id="tripsl" name="startLocation" readonly><br>
-                                Ending point: <input id="tripel" name="endLocation" readonly><br>
+                                <span class="form required">Trip: </span><input id="triptitle" name="title" readonly><br>
+                                <span class="form required">Starting point:</span><input id="tripsl" name="startLocation" readonly><br>
+                                <span class="form required">Ending point: </span><input id="tripel" name="endLocation" readonly><br>
                             </div>
                             <div class="span6">
-                                Starting date: <input id="tripsd" name="startTime" readonly><br>
-                                Ending date: <input id="triped" name="endTime" readonly><br>
-                                Description: <input id="tripdesc" name="description" readonly><br>
+                                <span class="form required"> Starting date:</span> <input id="tripsd" name="startTime" readonly><br>
+                                <span class="form required"> Ending date: </span><input id="triped" name="endTime" readonly><br>
+                                <span class="form"> Description: </span> <input id="tripdesc" name="description" readonly><br>
                             </div>
                             <button type="button" id="edittrip">Edit trip</button>
                             <button type="button" id="submitedittrip">Done</button>

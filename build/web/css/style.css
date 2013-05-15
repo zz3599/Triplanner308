@@ -322,6 +322,7 @@ span.required:after{
 #hero{
     padding: 60px;
     overflow: auto;
+    background-color: #eee
 }
 
 .tripcontent{
