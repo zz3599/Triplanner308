@@ -43,7 +43,7 @@
         <div class="navbar navbar-inverse navbar-fixed-top">
             <div class="navbar-inner">
                 <div class="container-fluid">
-                    <a class="brand" href="#">Triplanner</a>
+                    <a class="brand" href="home">Triplanner</a>
                     <div class="nav-collapse collapse">
                         <p class="navbar-text pull-left" style="margin-top:5px;">
                             <span><input id="search" type="text" class="search square" style="background-color:#353232; border-color: #b3b3b3;"><input type="button" value="Search" onclick="search()"></span>
@@ -128,9 +128,13 @@
                                 <ul id="waypointsortable">
                                 </ul>
                                 <input type="button" id="createwaypoint" value="Add waypoint">
-                                <input type="submit" id="updatewaypoints">
+                                <input type="submit" id="updatewaypoints" value="Done">
+                                <input type="button" id="editevents" value="Edit events">
                                 <div id="errors"></div>
                             </form>
+                            
+                                
+                            
                         </div>
                     </div>
                 </div>

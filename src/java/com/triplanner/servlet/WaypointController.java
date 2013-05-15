@@ -42,6 +42,7 @@ public class WaypointController {
                 a.put(point.toJSON());
             }
         }
+        response.setContentType("application/json");
         response.getWriter().println(a);
     }
 
@@ -67,6 +68,7 @@ public class WaypointController {
             boolean success = WaypointDAO.updateAll(locations, tripid, tripdayid, numberwaypoints);
             System.out.println(success);
         }
+        response.setContentType("application/json");
         response.getWriter().println(o);
 
     }

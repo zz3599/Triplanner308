@@ -111,6 +111,7 @@ public class PhotoController {
             if (photo != null) {
                 o = photo.toJSON();
             }
+            response.setContentType("application/json");
             response.getWriter().println(o);
         }
     }

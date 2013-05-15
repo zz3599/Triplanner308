@@ -30,7 +30,7 @@
         },
         initData: function() {
             $.get(app.TRIPURL, function(data) {
-                var trips = JSON.parse(data);
+                var trips = data;
                 if (trips.length === 0) {
                     $('<p>', {text: 'No trips'}).appendTo($('#yourtrips'));
                     return;
@@ -42,23 +42,30 @@
             });
         },
         initHandlers: function() {
+            $('#editevents').click(function(e) {
+                e.preventDefault();
+                window.location = "daydetails.jsp";
+            });
             $('#tripeditform').hide();
             $('#edittrip').click(function() {
                 var parent = $('#tripeditform');
                 app.initTimepickers(parent.find('input#tripsd'), parent.find('input#triped'), null, null);
                 $('#tripeditform input').attr('readonly', function(i, attr) {
-                    if(attr==='readonly') app.edittrip = true;
-                    else app.edittrip = false;
+                    if (attr === 'readonly')
+                        app.edittrip = true;
+                    else
+                        app.edittrip = false;
                     return !attr;
                 });
             });
             $('#submitedittrip').click(function(e) {
                 e.preventDefault();
-                if(!app.edittrip) return;
+                if (!app.edittrip)
+                    return;
                 app.initSpinner();
                 $.post(app.TRIPURL + '?action=update', $('#tripeditform').serialize()).success(function(d) {
                     app.stopSpinner();
-                    var tripdata = JSON.parse(d);
+                    var tripdata = d;
                     app.timeline.updateInterval(new Date(tripdata.startTime), new Date(tripdata.endTime));
                 });
             });
@@ -131,12 +138,11 @@
                 app.initSpinner();
                 $.get(app.TRIPEVENTS, {'tripid': app.tripid}).success(function(result) {
                     app.stopSpinner();
-                    var d = JSON.parse(result), event;
-                    if (!d) {/*no events - show error*/
+                    if (!result) {/*no events - show error*/
                         return;
                     }
                     //set timeline start and end of the timeline
-                    app.timeline.updateIntervalAndEvents(app.timelinestart, app.timelineend, app.tripid, d);
+                    app.timeline.updateIntervalAndEvents(app.timelinestart, app.timelineend, app.tripid, result);
                 });
                 //update the hero div
                 var parent = $('.hero-unit');
@@ -163,10 +169,9 @@
                 $.post(app.TRIPURL + '?action=add', $('#newtrip').serialize()).success(
                         function(result) {
                             app.stopSpinner();
-                            var json = JSON.parse(result);
-                            if ($.isEmptyObject(json))
+                            if ($.isEmptyObject(result))
                                 return;
-                            var elem = $(Mustache.render(TRIPTEMPLATE, json));
+                            var elem = $(Mustache.render(TRIPTEMPLATE, result));
                             elem.appendTo($('#yourtrips'));
                         });
             });
@@ -183,7 +188,7 @@
         },
         loadPhotos: function(type, id) {
             $.get(app.PHOTO, {'type': type, 'id': id}).success(function(d) {
-                var data = JSON.parse(d);
+                var data = d;
                 if ($.isEmptyObject(data))
                     return;
                 $.each(data, function(i, e) {
@@ -219,7 +224,7 @@
                     $('#photoprogress').text('done');
                     var parent = $('#thumbnails');
                     completed = true;
-                    var photo = JSON.parse(e.target.responseText);
+                    var photo = e.target.responseText;
                     if ($.isEmptyObject(photo))
                         return;
                     var img = $('<div>', {
@@ -367,6 +372,7 @@
             });
         },
         initSpinner: function() {
+            var target = document.getElementById('hero');
             var opts = {
                 lines: 13, // The number of lines to draw
                 length: 20, // The length of each line
@@ -385,7 +391,6 @@
                 top: 'auto', // Top position relative to parent in px
                 left: 'auto' // Left position relative to parent in px
             };
-            var target = document.getElementById('hero');
             app.spinner = new Spinner(opts).spin(target);
         },
         stopSpinner: function() {

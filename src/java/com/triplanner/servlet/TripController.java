@@ -34,6 +34,7 @@ public class TripController {
         for (Trip trip : trips) {
             result.put(trip.toJSON());
         }
+        response.setContentType("application/json");
         response.getWriter().println(result);
     }
 
@@ -69,6 +70,7 @@ public class TripController {
                 boolean success = TripdayDAO.updateTripday(trip);
             }
         }
+        response.setContentType("application/json");
         response.getWriter().println(result);
 
     }

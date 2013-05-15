@@ -21,17 +21,27 @@ import org.json.JSONObject;
  * @author brook
  */
 public class TripdayController {
+
     public static void doTripdaysGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         Long timemillis = Long.parseLong(request.getParameter("date"));
         Timestamp tripdaystart = new Timestamp(timemillis);
         int tripid = Integer.parseInt(request.getParameter("tripid"));
         Tripday tripday = TripdayDAO.getDay(tripid, tripdaystart);
-        List<Event> events = EventDAO.getAllEventsByDay(tripday.id);       
+        
+        List<Event> events = EventDAO.getAllEventsByDay(tripday.id);
         request.getSession().setAttribute("tripday", tripday);
         request.getSession().setAttribute("events", events);
+        tripday.events = events;
+        JSONObject o = new JSONObject();
+        if (tripday != null) {
+            o = tripday.toJSON();
+        }
+        response.setContentType("application/json");
+        response.getWriter().println(o);
+
     }
-    
+
     public static void doTripdayPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String action = request.getParameter("action");
@@ -42,16 +52,17 @@ public class TripdayController {
         String endLocation = request.getParameter("dayend");
         String comment = request.getParameter("comment");
         String date = request.getParameter("date");
-        Timestamp t = null; 
-        try { 
-            t = new Timestamp(ControllerServlet.jsDateFormat.parse(date).getTime());        
+        Timestamp t = null;
+        try {
+            t = new Timestamp(ControllerServlet.jsDateFormat.parse(date).getTime());
+        } catch (Exception e) {
         }
-        catch(Exception e){}
         JSONObject o = new JSONObject();
-        if(action.equals("update") && t != null){
+        if (action.equals("update") && t != null) {
             
-        } else if(action.equals("create")){
+        } else if (action.equals("create")) {
         }
+        response.setContentType("application/json");
         response.getWriter().println(o);
     }
 }

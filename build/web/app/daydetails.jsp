@@ -45,7 +45,7 @@
         <div class="navbar navbar-inverse navbar-fixed-top">
             <div class="navbar-inner">
                 <div class="container-fluid">
-                    <a class="brand" href="#">Triplanner</a>
+                    <a class="brand" href="home">Triplanner</a>
                     <div class="nav-collapse collapse">
                         <p class="navbar-text pull-left" style="margin-top:5px;">
                             <span><input id="search" type="text" class="search square" style="background-color:#353232; border-color: #b3b3b3;"><input type="button" value="Search" onclick="search()"></span>
@@ -78,26 +78,53 @@
                                     </li>
                                 </c:forEach>
                             </div>
-                            <li class="active"><a href="#">Link</a></li>
-
-                            <li class="nav-header">Sidebar</li>
-                            <li><a href="#">Link</a></li>
                         </ul>
+                    </div>
+                    <div id="setting">
+                        <form id="waypointform">
+                            Waypoints: <br>
+                            <ul id="waypointsortable">
+                            </ul>
+                            <input type="button" id="createwaypoint" value="Add waypoint">
+                            <input type="submit" id="updatewaypoints">
+                            <div id="errors"></div>
+                        </form>
                     </div>
                 </div>
                 <div class="span10">
-                    <div class="hero-unit">
-                        <span>Trip details for 
-                            <fmt:formatDate pattern="M-d-yyyy" 
-                                            value="${tripday.date}" />
-                        </span><br>
-                        <form id="dayeditform">
-                            Start Location: <input id="startlocation" name="startlocation" value="<c:out value="${tripday.startLocation}"></c:out>" readonly><br>
-                            End Location:  <input id="endlocation" name="endlocation" value="<c:out value="${tripday.endLocation}" ></c:out>"readonly><br>
-                            Description: <input id="description" name="description" value="<c:out value="${tripday.comment}"></c:out>" readonly><br>
-                            <button type="button" id="editday">Edit Day</button>
-                            <button type="button" id="submitday">Done</button>
-                        </form>
+                    <div class="hero-unit" id="hero">
+                        <div class="row-fluid">
+                            <div class="span6">
+                                <span>Trip details for 
+                                    <fmt:formatDate pattern="M-d-yyyy" 
+                                                    value="${tripday.date}" />
+                                </span><br>
+                                <form id="dayeditform">
+                                    <input id="tripid" name="tripid" value="<c:out value="${tripday.tripid}"></c:out>" type="hidden">
+                                    <input id="tripdayid" name="tripdayid" value="<c:out value="${tripday.id}"></c:out>" type="hidden">
+                                    <input id="daynum" name="daynum" value="<c:out value="${tripday.daynum}"></c:out>" type="hidden">
+                                    <input id="date" name="date" value="<c:out value="${tripday.date}"></c:out>" type="hidden">
+                                    Start Location: <input id="startlocation" name="startlocation" value="<c:out value="${tripday.startLocation}"></c:out>" readonly><br>
+                                    End Location:  <input id="endlocation" name="endlocation" value="<c:out value="${tripday.endLocation}" ></c:out>"readonly><br>
+                                    Description: <input id="description" name="description" value="<c:out value="${tripday.comment}"></c:out>" readonly><br>
+                                    <button type="button" id="editday">Edit Day</button>
+                                    <button type="button" id="submitday">Done</button>
+                                </form>
+                            </div>
+                            <div class="span6">
+                                <form id="eventform">
+                                    <input id="eventid" name="eventid" type="hidden">
+                                    <input id="eventtripdayid" name="tripdayid"  type="hidden">
+                                    Start Location: <input id="eventstartlocation" name="startlocation"  readonly><br>
+                                    End Location:  <input id="eventendlocation" name="endlocation" readonly><br>
+                                    Description: <input id="eventdescription" name="description" readonly><br>
+                                    Start Time: <input id="eventstarttime" name="starttime" readonly><br>
+                                    End Time: <input id="eventendtime" name="endtime" readonly><br>
+                                    <button type="button" id="editevent">Edit Event</button>
+                                    <button type="button" id="submitevent">Done</button>
+                                </form>
+                            </div>
+                        </div>
                     </div>
                     <div class="row-fluid">
                         <div class="row-fluid">

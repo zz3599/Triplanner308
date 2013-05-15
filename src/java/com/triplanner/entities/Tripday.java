@@ -33,6 +33,7 @@ public class Tripday extends AbstractEntity{
         o.put("endLocation", this.endLocation);
         o.put("comment", this.comment);
         o.put("daynum", this.daynum);
+        o.put("events", this.events);
         return o;
     }
     
@@ -68,6 +69,10 @@ public class Tripday extends AbstractEntity{
 
     public int getDaynum() {
         return daynum;
+    }
+    
+    public List<Event> getEvents(){
+        return events;
     }
 
     public void setId(int id) {

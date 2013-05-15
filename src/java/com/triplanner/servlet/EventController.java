@@ -20,6 +20,7 @@ import org.json.JSONObject;
  * @author brook
  */
 public class EventController {
+
     public static void doTripsEventsGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         int tripid = Integer.parseInt(request.getParameter("tripid"));
@@ -31,11 +32,13 @@ public class EventController {
                 o.put(e.toJSON());
             }
         }
+        response.setContentType("application/json");
         response.getWriter().println(o);
     }
-    
+
     public static void doEventPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        String action = request.getParameter("action");
         int tripid = Integer.parseInt(request.getParameter("eventtripid"));
         int tripdayid = Integer.parseInt(request.getParameter("eventtripdayid"));
         String startLocation = request.getParameter("eventstartLocation");
@@ -43,11 +46,18 @@ public class EventController {
         Timestamp startTime = Timestamp.valueOf(request.getParameter("eventStart"));
         Timestamp endTime = Timestamp.valueOf(request.getParameter("eventEnd"));
         String comment = request.getParameter("description");
-        Event newEvent = EventDAO.createEvent(tripid, tripdayid, startTime, endTime, 0, comment, startLocation, endLocation);
+        Event newEvent = null;
+        if (action.equals("add")) {
+            newEvent = EventDAO.createEvent(tripid, tripdayid, startTime, endTime, 0, comment, startLocation, endLocation);
+        } else if(action.equals("update")){
+            int eventid = Integer.parseInt(request.getParameter("eventid"));
+            newEvent = EventDAO.updateEvent(eventid, tripid, tripdayid, startTime, endTime, startLocation, endLocation, comment);
+        }
         JSONObject o = new JSONObject();
         if (newEvent != null) {
             o = newEvent.toJSON();
         }
+        response.setContentType("application/json");
         response.getWriter().println(o);
     }
 }

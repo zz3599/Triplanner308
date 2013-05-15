@@ -23,7 +23,7 @@ import java.util.List;
 public class EventDAO implements Serializable{
     private static final String CREATEEVENT = "Insert into events (tripid, tripdayid, starttime, endtime, eventtype, comment, startlocation, endlocation)"
             + " values (?, ?, ?, ?, ?, ?, ?, ?)";
-    private static final String UPDATEEVENT = "Update events set starttime=?, endtime=?, eventtype=?, comment=? "
+    private static final String UPDATEEVENT = "Update events set starttime=?, endtime=?, startlocation=?, endlocation=?, comment=? "
             + "where id=?";
     private static final String SELECTEVENTSBYDAY = "Select * from events where tripdayid=? order by starttime";
     private static final String SELECTEVENTSBYTRIP  = "Select * from events where tripid=? order by starttime";
@@ -87,19 +87,20 @@ public class EventDAO implements Serializable{
         return null;        
     }
     
-    public static Event updateEvent(Event event, Timestamp start, Timestamp end, String startLocation, String endLocation, 
-            int eventType, String comment){
+    public static Event updateEvent(int eventid, int tripid, int tripdayid, Timestamp start, Timestamp end, String startLocation, String endLocation, 
+            String comment){
         try {
             Connection connection = DB.getConnection();
             PreparedStatement ps = connection.prepareStatement(UPDATEEVENT);           
             ps.setTimestamp(1, start);
             ps.setTimestamp(2, end);
-            ps.setInt(3, eventType);
-            ps.setString(4, comment);
-            ps.setInt(5, event.id);
+            ps.setString(3, startLocation);
+            ps.setString(4, endLocation);
+            ps.setString(5, comment);
+            ps.setInt(6, eventid);
             int result = ps.executeUpdate();
-            if(result == 1){
-               return new Event(event.id, event.tripid, event.tripdayid, start, end, startLocation, endLocation, eventType, comment);
+            if(result == 1){    
+               return new Event(eventid, tripid, tripdayid, start, end, startLocation, endLocation, 0, comment);
             }             
         } catch(Exception e){
             e.printStackTrace();
