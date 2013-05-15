@@ -29,10 +29,10 @@ public class TripdayController {
         int tripid = Integer.parseInt(request.getParameter("tripid"));
         Tripday tripday = TripdayDAO.getDay(tripid, tripdaystart);
         
-        List<Event> events = EventDAO.getAllEventsByDay(tripday.id);
+        //List<Event> events = EventDAO.getAllEventsByDay(tripday.id);
         request.getSession().setAttribute("tripday", tripday);
-        request.getSession().setAttribute("events", events);
-        tripday.events = events;
+        //request.getSession().setAttribute("events", events);
+        //tripday.events = events;
         JSONObject o = new JSONObject();
         if (tripday != null) {
             o = tripday.toJSON();

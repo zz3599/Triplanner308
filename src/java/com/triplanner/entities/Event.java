@@ -29,8 +29,8 @@ public class Event extends AbstractEntity{
         o.put("id", id);
         o.put("tripid", tripid);
         o.put("tripdayid", tripdayid);
-        o.put("startTime", formatter.format(startTime));
-        o.put("endTime", formatter.format(endTime));
+        o.put("startTime", startTime);
+        o.put("endTime", endTime);
         o.put("startLocation", startLocation);
         o.put("endLocation", endLocation);
         o.put("eventType", eventType);

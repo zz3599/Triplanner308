@@ -20,9 +20,13 @@
         eventid: null,
         timeline: null,
         init: function() {
-            app.initSpinner();
+            app.initSpinner('hero');
             app.initCalendar();
-            app.initMap();
+            navigator.geolocation.getCurrentPosition(GetLocation);
+            function GetLocation(location) {
+                var lat = location.coords.latitude, long = location.coords.longitude;
+                app.initMap(lat, long);
+            }
             app.initData();
             app.initHandlers();
             app.initTimepickers($('#startTime'), $('#endTime'), null, null);
@@ -62,7 +66,7 @@
                 e.preventDefault();
                 if (!app.edittrip)
                     return;
-                app.initSpinner();
+                app.initSpinner('hero');
                 $.post(app.TRIPURL + '?action=update', $('#tripeditform').serialize()).success(function(d) {
                     app.stopSpinner();
                     var tripdata = d;
@@ -89,7 +93,7 @@
                         return;
                     }
                 }
-                app.initSpinner();
+                app.initSpinner('map-canvas');
                 $.post(app.WAYPOINT + "?action=update&tripid=" + app.timeline.tripid + "&tripdayid=" + app.timeline.tripdayid,
                         waypointform.serialize()).
                         success(function(d) {
@@ -135,8 +139,8 @@
                 //$('#daystart').val(app.startLocation).trigger('change');
                 $(this).addClass('selected');
                 //get all events for the trip and update timeline
-                app.initSpinner();
-                $.get(app.TRIPEVENTS, {'tripid': app.tripid}).success(function(result) {
+                app.initSpinner('hero');
+                $.get(app.TRIPEVENTS + '?action=trip', {'tripid': app.tripid}).success(function(result) {
                     app.stopSpinner();
                     if (!result) {/*no events - show error*/
                         return;
@@ -165,7 +169,7 @@
             //create new trip handler
             $('#createtrip').click(function(e) {
                 e.preventDefault();
-                app.initSpinner();
+                app.initSpinner('hero');
                 $.post(app.TRIPURL + '?action=add', $('#newtrip').serialize()).success(
                         function(result) {
                             app.stopSpinner();
@@ -178,7 +182,7 @@
             //edit the information for a day
             $('#editday').click(function(e) {
                 e.preventDefault();
-                app.initSpinner();
+                app.initSpinner('hero');
                 $.post(app.TRIPDAY + '?action=update', $('#tripdayform').serialize()).success(
                         function(result) {
                             app.stopSpinner();
@@ -244,7 +248,7 @@
 
                 }
             }
-            app.initSpinner();
+            app.initSpinner('hero');
             xhr.open('POST', app.PHOTO, true);
             xhr.upload.addEventListener('progress', onProgressHandler);
             xhr.addEventListener('readystatechange', onCompleteHandler);
@@ -301,10 +305,10 @@
             startTime.datetimepicker(startTimeProps);
             endTime.datetimepicker(endTimeProps);
         },
-        initMap: function() {
+        initMap: function(lat, long) {
             var self = this;
             var mapOptions = {
-                center: new google.maps.LatLng(40.7, -74.1),
+                center: new google.maps.LatLng(lat, long),
                 zoom: 5,
                 mapTypeId: google.maps.MapTypeId.ROADMAP
             };
@@ -317,7 +321,10 @@
             $('#endLocation').keyup(codeAddress).change(codeAddress).focus(codeAddress);
             $('#daystart').keyup(codeAddress).change(codeAddress).focus(codeAddress);
             $('#dayend').keyup(codeAddress).change(codeAddress).focus(codeAddress);
-
+            new google.maps.places.Autocomplete(document.getElementById('startLocation'));
+            new google.maps.places.Autocomplete(document.getElementById('endLocation'));
+            new google.maps.places.Autocomplete(document.getElementById('daystart'));
+            new google.maps.places.Autocomplete(document.getElementById('dayend'));
             function codeAddress() {
                 var startaddress, endaddress;
                 if (this.name.toLowerCase().indexOf('day') !== -1) {
@@ -371,8 +378,8 @@
                 }
             });
         },
-        initSpinner: function() {
-            var target = document.getElementById('hero');
+        initSpinner: function(elemid) {
+            var target = document.getElementById(elemid);
             var opts = {
                 lines: 13, // The number of lines to draw
                 length: 20, // The length of each line

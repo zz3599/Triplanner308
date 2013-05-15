@@ -28,7 +28,7 @@
         <script src="../js/bootstrap.min.js"></script>
         <script src="../js/spin.min.js"></script>
         <script src="../js/lightbox.js"></script>
-        <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAUC9VWHP1FfCpjU5Rs-wpN7vRwSFp4-bw&sensor=true">
+        <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAUC9VWHP1FfCpjU5Rs-wpN7vRwSFp4-bw&sensor=true&libraries=places">
         </script>
         <script type="text/javascript">
             function search() {
@@ -73,7 +73,7 @@
                             </div>
                             <li class="active"><a href="#">Link</a></li>
 
-                            <li class="nav-header">Sidebar</li>
+                            <li class="nav-header">Your Friends</li>
                             <li><a href="#">Link</a></li>
                         </ul>
                     </div>

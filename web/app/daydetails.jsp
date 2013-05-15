@@ -38,7 +38,7 @@
         <script src="../js/bootstrap.min.js"></script>
         <script src="../js/spin.min.js"></script>
         <script src="../js/lightbox.js"></script>
-        <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAUC9VWHP1FfCpjU5Rs-wpN7vRwSFp4-bw&sensor=true">
+        <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAUC9VWHP1FfCpjU5Rs-wpN7vRwSFp4-bw&sensor=true&libraries=places">
         </script>
     </head>
     <body>
@@ -69,14 +69,8 @@
                     <div class="well sidebar-nav">
                         <ul class="nav nav-list">
                             <li class="nav-header">Your Events</li>
+                            <input type="button" id="addevent" value="Add Event">
                             <div id="yourevents">
-                                <c:forEach items="${events}" var="e">
-                                    <li id="event_${e.id}" starttime="${e.startTime}" endtime="${e.endTime}" 
-                                        startlocation="${e.startLocation}" endlocation="${e.endLocation}" 
-                                        comment="${e.comment}" tripdayid="${e.tripdayid}" >
-                                        <a href="#">${e.comment}</a>
-                                    </li>
-                                </c:forEach>
                             </div>
                         </ul>
                     </div>
@@ -87,7 +81,6 @@
                             </ul>
                             <input type="button" id="createwaypoint" value="Add waypoint">
                             <input type="submit" id="updatewaypoints">
-                            <div id="errors"></div>
                         </form>
                     </div>
                 </div>
@@ -114,15 +107,15 @@
                             <div class="span6">
                                 <form id="eventform">
                                     <input id="eventid" name="eventid" type="hidden">
-                                    <input id="eventtripdayid" name="tripdayid"  type="hidden">
-                                    Start Location: <input id="eventstartlocation" name="startlocation"  readonly><br>
-                                    End Location:  <input id="eventendlocation" name="endlocation" readonly><br>
-                                    Description: <input id="eventdescription" name="description" readonly><br>
-                                    Start Time: <input id="eventstarttime" name="starttime" readonly><br>
-                                    End Time: <input id="eventendtime" name="endtime" readonly><br>
+                                    Start Location: <input id="eventstartlocation" name="eventstartlocation"  readonly><br>
+                                    End Location:  <input id="eventendlocation" name="eventendlocation" readonly><br>
+                                    Description: <input id="eventdescription" name="eventdescription" readonly><br>
+                                    Start Time: <input id="eventstarttime" name="eventstarttime" readonly><br>
+                                    End Time: <input id="eventendtime" name="eventendtime" readonly><br>
                                     <button type="button" id="editevent">Edit Event</button>
                                     <button type="button" id="submitevent">Done</button>
                                 </form>
+                                <div id="errors"></div>
                             </div>
                         </div>
                     </div>
