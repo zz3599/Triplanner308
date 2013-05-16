@@ -54,6 +54,12 @@
                         var href = elem.find('a').attr('href') + '&requestid=' +  e.id + '&action=accept';
                         elem.find('a').attr('href', href);
                         elem.appendTo($('#friendrequests'));
+                        elem.find('a').click(function(e){
+                            e.preventDefault();
+                            $.get($(this).attr('href')).success(function(){
+                                alert('you are now friends!');
+                            })
+                        })
                     });
                 });
             });
